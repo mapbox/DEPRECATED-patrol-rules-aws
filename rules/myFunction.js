@@ -21,6 +21,7 @@ module.exports.config = {
   ]
 };
 
-module.exports.fn = function(event, context) {
+module.exports.fn = function(event, callback) {
   console.log(process.env.githubToken);
+  console.log(event);
 };

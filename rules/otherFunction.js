@@ -17,6 +17,6 @@ module.exports.config = {
   ]
 };
 
-module.exports.fn = function(event, context) {
+module.exports.fn = function(event, callback) {
   console.log('called otherFunction');
 };
