@@ -1,0 +1,43 @@
+{
+  "name": "crowsnest-public",
+  "version": "0.0.0",
+  "description": "This repo will be made public and renamed to crowsnest.",
+  "main": "index.js",
+  "engines": {
+    "node": "0.10.38"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mapbox/crowsnest-public.git"
+  },
+  "scripts": {
+    "pretest": "jshint index.js test && jscs index.js test",
+    "test": "tape test/*.test.js"
+  },
+  "dependencies": {
+    "streambot": "3.3.2"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.1.35",
+    "jscs": "^1.11.3",
+    "jshint": "^2.6.3",
+    "tape": "^3.5.0"
+  },
+  "jscsConfig": {
+    "preset": "airbnb",
+    "requireCamelCaseOrUpperCaseIdentifiers": null
+  },
+  "jshintConfig": {
+    "node": true,
+    "globalstrict": false,
+    "undef": true,
+    "unused": true,
+    "noarg": true
+  },
+  "author": "Mapbox, Inc.",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/mapbox/crowsnest-public/issues"
+  },
+  "homepage": "https://github.com/mapbox/crowsnest-public"
+}
