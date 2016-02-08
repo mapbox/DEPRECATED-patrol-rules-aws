@@ -19,4 +19,5 @@ module.exports.config = {
 
 module.exports.fn = function(event, callback) {
   console.log('called otherFunction');
+  this.success('SUCCESS');
 };
