@@ -18,7 +18,6 @@ tape('Rule implementations', function(t) {
   t.end();
 });
 
-
 tape('parameter unit tests', function(t) {
   t.throws(
     function() {
@@ -241,19 +240,19 @@ tape('cloudwatch unit tests', function(t) {
   );
 
   var alarms = cloudwatch({name: 'myFunction'});
-  t.notEqual(alarms.myFunctionErrors, undefined, 'Errors alarm is set');
-  t.notEqual(alarms.myFunctionNoInvocations, undefined, 'NoInvocations alarm is set');
+  t.notEqual(alarms.myFunctionAlarmErrors, undefined, 'Errors alarm is set');
+  t.notEqual(alarms.myFunctionAlarmNoInvocations, undefined, 'NoInvocations alarm is set');
   t.equal(
-    alarms.myFunctionErrors.Properties.ComparisonOperator,
+    alarms.myFunctionAlarmErrors.Properties.ComparisonOperator,
     'GreaterThanThreshold', 'Uses correct comparison');
   t.equal(
-    alarms.myFunctionNoInvocations.Properties.ComparisonOperator,
+    alarms.myFunctionAlarmNoInvocations.Properties.ComparisonOperator,
     'LessThanThreshold', 'Uses correct comparison');
   t.equal(
-    alarms.myFunctionErrors.Properties.MetricName,
+    alarms.myFunctionAlarmErrors.Properties.MetricName,
     'Errors', 'Uses correct metric name');
   t.equal(
-    alarms.myFunctionNoInvocations.Properties.MetricName,
+    alarms.myFunctionAlarmNoInvocations.Properties.MetricName,
     'Invocations', 'Uses correct metric name');
 
   t.end();
