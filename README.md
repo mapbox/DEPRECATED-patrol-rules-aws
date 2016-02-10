@@ -30,7 +30,7 @@ Rules are a .js file in ./rules which:
 - export a function which will be run on AWS Lambda.  The function should be exported to `module.exports.fn`
   - first param is `event`
   - second param is `callback`
-  - AWS Lambda `context` is bound to `this` inside your `fn` when run on Lambda.
+  - call `callback` in standard node.js style when the function is done (callback(err, message))
 - define configuration as an object, exported to `module.exports.config`
   - `name` string name of what you call your function.
   - `parameters` lets you pass configuration to the specific Lambda function.  Theses parameters become parameters on the CloudFormation template, and environment variables within the Lambda function when it runs.
