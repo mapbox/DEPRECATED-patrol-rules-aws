@@ -5,6 +5,7 @@ var context = {
 };
 
 var myFunction = require('../rules/myFunction');
+
 myFunction.fn = myFunction.fn.bind(context);
 
 test('example test', function(t) {
