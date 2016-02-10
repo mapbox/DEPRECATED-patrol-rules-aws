@@ -12,7 +12,7 @@
   },
   "scripts": {
     "pretest": "jshint index.js && jscs index.js",
-    "test": "tape test/*.test.js"
+    "test": "tape test/*.test.js test/**/*.test.js"
   },
   "dependencies": {
     "streambot": "3.3.2"

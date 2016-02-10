@@ -4,7 +4,7 @@ var context = {
   succeed: function() {}
 };
 
-var myFunction = require('../rules/myFunction');
+var myFunction = require('../../rules/myFunction');
 
 myFunction.fn = myFunction.fn.bind(context);
 
