@@ -24,5 +24,5 @@ module.exports.config = {
 module.exports.fn = function(event, callback) {
   console.log(process.env.githubToken);
   console.log(event);
-  this.succeed('SUCCESS');
+  callback(err, 'myFunction was called');
 };
