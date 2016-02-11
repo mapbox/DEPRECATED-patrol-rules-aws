@@ -10,16 +10,21 @@ module.exports.config = {
 
 module.exports.fn = function(event, callback) {
 
-  var blacklisted = process.env.blacklistedRoles.split(/\s*,\s*/);
+  var blacklisted = module.exports.splitOnComma(process.env.blacklistedRoles);
   var assumedRoleArn = event.detail.requestParameters.roleArn;
   var userName = event.detail.userIdentity.userName;
+
   // Check for fuzzy match
-  blacklisted.forEach(function(role) {
-    if (assumedRoleArn.indexOf(role) > -1) {
-      // TODO Log to cloudwatch logs
-      // TODO Publish to SNS Topic
-      return callback(null, 'Blacklisted role ' + role + ' assumed by ' + userName);
-    }
+  var match = blacklisted.filter(function(role) {
+    return assumedRoleArn.indexOf(role) > -1;
   });
-  callback(null, 'Blacklisted role was not assumed');
+
+  if (match.length > 0)
+    callback(null, 'Blacklisted role ' + match[0] + ' assumed by ' + userName);
+  else
+    callback(null, 'Blacklisted role was not assumed');
+};
+
+module.exports.splitOnComma = function(str) {
+  return str.split(/\s*,\s*/);
 };
