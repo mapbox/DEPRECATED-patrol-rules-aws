@@ -193,6 +193,15 @@
                       ]
                     ]
                   }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "sns:Publish"
+                  ],
+                  "Resource": {
+                    "Ref": "AlarmSNSTopic"
+                  }
                 }
               ]
             }
