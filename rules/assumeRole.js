@@ -16,6 +16,8 @@ module.exports.fn = function(event, callback) {
   // Check for fuzzy match
   blacklisted.forEach(function(role) {
     if (assumedRoleArn.indexOf(role) > -1) {
+      // TODO Log to cloudwatch logs
+      // TODO Publish to SNS Topic
       return callback(null, 'Blacklisted role ' + role + ' assumed by ' + userName);
     }
   });
