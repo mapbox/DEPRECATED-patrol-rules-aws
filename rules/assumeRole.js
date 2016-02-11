@@ -16,8 +16,8 @@ module.exports.fn = function(event, callback) {
   // Check for fuzzy match
   blacklisted.forEach(function(role) {
     if (assumedRoleArn.indexOf(role) > -1) {
-      return callback(err, 'Blacklisted role ' + role + ' assumed by ' + userName);
+      return callback(null, 'Blacklisted role ' + role + ' assumed by ' + userName);
     }
   });
-  callback(err, 'Blacklisted role was not assumed');
+  callback(null, 'Blacklisted role was not assumed');
 };
