@@ -12,7 +12,7 @@ module.exports.fn = function(event, callback) {
 
   var blacklisted = process.env.blacklistedRoles.split(/\s*,\s*/);
   var assumedRoleArn = event.detail.requestParameters.roleArn;
-  var userName = detail.userIdentity.userName;
+  var userName = event.detail.userIdentity.userName;
   // Check for fuzzy match
   blacklisted.forEach(function(role) {
     if (assumedRoleArn.indexOf(role) > -1) {
