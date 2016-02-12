@@ -187,14 +187,27 @@ tape('streambotEnv unit tests', function(t) {
 
   );
 
-  var noStreambotEnv;
+  var onlyGlobalStreambotEnv;
 
   t.doesNotThrow(
     function() {
-      noStreambotEnv = streambotEnv({name: 'myLambda'});
+      onlyGlobalStreambotEnv = streambotEnv({name: 'myFunction'});
     }, null, 'Does not throw if no parameters');
 
-  t.equal(noStreambotEnv, undefined, 'No streambotEnv if no parameters');
+  t.deepEqual(onlyGlobalStreambotEnv, {
+      "Type": "Custom::StreambotEnv",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "StreambotEnv"
+        },
+        "FunctionName": {
+          "Ref": "myFunction"
+        },
+        "CrowsnestAlarmSNSTopic": {
+          "Ref": "CrowsnestAlarmSNSTopic"
+        }
+      }
+    }, 'Only global streambotEnv if no parameters');
 
   var validStreambotEnv = streambotEnv({
     name: 'myFunction',
@@ -224,6 +237,9 @@ tape('streambotEnv unit tests', function(t) {
         },
         "param2": {
           "Ref": "param2"
+        },
+        "CrowsnestAlarmSNSTopic": {
+          "Ref": "CrowsnestAlarmSNSTopic"
         }
       }
     }

@@ -61,6 +61,20 @@
         "Timeout": 60
       }
     },
+    "StreambotEnvsimple": {
+      "Type": "Custom::StreambotEnv",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "StreambotEnv"
+        },
+        "FunctionName": {
+          "Ref": "simple"
+        },
+        "CrowsnestAlarmSNSTopic": {
+          "Ref": "CrowsnestAlarmSNSTopic"
+        }
+      }
+    },
     "simpleAlarmErrors": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
@@ -71,12 +85,12 @@
         "Period": "60",
         "AlarmActions": [
           {
-            "Ref": "AlarmSNSTopic"
+            "Ref": "CrowsnestAlarmSNSTopic"
           }
         ],
         "InsufficientDataActions": [
           {
-            "Ref": "AlarmSNSTopic"
+            "Ref": "CrowsnestAlarmSNSTopic"
           }
         ],
         "Namespace": "AWS/Lambda",
@@ -102,12 +116,12 @@
         "Period": "60",
         "AlarmActions": [
           {
-            "Ref": "AlarmSNSTopic"
+            "Ref": "CrowsnestAlarmSNSTopic"
           }
         ],
         "InsufficientDataActions": [
           {
-            "Ref": "AlarmSNSTopic"
+            "Ref": "CrowsnestAlarmSNSTopic"
           }
         ],
         "Namespace": "AWS/Lambda",
@@ -175,7 +189,7 @@
                     "sns:Publish"
                   ],
                   "Resource": {
-                    "Ref": "AlarmSNSTopic"
+                    "Ref": "CrowsnestAlarmSNSTopic"
                   }
                 }
               ]
@@ -184,7 +198,7 @@
         ]
       }
     },
-    "AlarmSNSTopic": {
+    "CrowsnestAlarmSNSTopic": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
         "TopicName": {
