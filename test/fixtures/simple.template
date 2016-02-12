@@ -88,11 +88,6 @@
             "Ref": "CrowsnestAlarmSNSTopic"
           }
         ],
-        "InsufficientDataActions": [
-          {
-            "Ref": "CrowsnestAlarmSNSTopic"
-          }
-        ],
         "Namespace": "AWS/Lambda",
         "Dimensions": [
           {
@@ -115,11 +110,6 @@
         "AlarmDescription": "https://github.com/mapbox/crowsnest-public/blob/master/alarms.md#NoInvocations",
         "Period": "60",
         "AlarmActions": [
-          {
-            "Ref": "CrowsnestAlarmSNSTopic"
-          }
-        ],
-        "InsufficientDataActions": [
           {
             "Ref": "CrowsnestAlarmSNSTopic"
           }
