@@ -21,12 +21,17 @@ module.exports.fn = function(event, callback) {
     return assumedRoleArn.indexOf(role) > -1;
   });
 
-  if (match.length > 0)
-    message('Blacklisted role ' + match[0] + ' assumed by ' + userName, function(err, result) {
+  if (match.length > 0) {
+    var notif = {
+      subject: 'Blacklisted role assumed',
+      body: 'Blacklisted role ' + match[0] + ' assumed by ' + userName
+    };
+    message(notif, function(err, result) {
       callback(err, result);
     });
-  else
+  } else {
     callback(null, 'Blacklisted role was not assumed');
+  }
 };
 
 module.exports.splitOnComma = function(str) {
