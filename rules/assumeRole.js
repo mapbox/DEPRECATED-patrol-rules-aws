@@ -1,3 +1,5 @@
+var message = require('../lib/message');
+
 module.exports.config = {
   name: 'assumeRole',
   parameters: {
@@ -20,7 +22,9 @@ module.exports.fn = function(event, callback) {
   });
 
   if (match.length > 0)
-    callback(null, 'Blacklisted role ' + match[0] + ' assumed by ' + userName);
+    message('Blacklisted role ' + match[0] + ' assumed by ' + userName, function(err, result) {
+      callback(err, result);
+    });
   else
     callback(null, 'Blacklisted role was not assumed');
 };
