@@ -23,7 +23,7 @@ module.exports.fn = function(event, callback) {
 
   if (match.length > 0) {
     var notif = {
-      subject: 'Blacklisted role assumed',
+      subject: 'Blacklisted role ' + match[0]  + ' assumed',
       body: 'Blacklisted role ' + match[0] + ' assumed by ' + userName
     };
     message(notif, function(err, result) {
