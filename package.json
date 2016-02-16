@@ -15,10 +15,11 @@
     "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js"
   },
   "dependencies": {
-    "streambot": "3.4.0"
+    "streambot": "3.4.0",
+    "queue-async": "1.0.7"
   },
   "devDependencies": {
-    "aws-sdk": "^2.1.35",
+    "aws-sdk": "^2.2.35",
     "jscs": "^1.11.3",
     "jshint": "^2.6.3",
     "tape": "^3.5.0"
