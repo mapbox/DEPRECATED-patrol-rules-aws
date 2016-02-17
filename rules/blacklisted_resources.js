@@ -7,7 +7,7 @@ module.exports.config = {
   parameters: {
     'blacklistedResources': {
       'Type': 'String',
-      'Description': 'Comma separated list of blacklisted resources',
+      'Description': 'Comma separated list of ARNs to blacklist. Any policy document that grants access to these ARNs will trigger a notification.',
     }
   }
 };
