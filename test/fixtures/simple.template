@@ -181,6 +181,13 @@
                   "Resource": {
                     "Ref": "CrowsnestAlarmSNSTopic"
                   }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "iam:SimulateCustomPolicy"
+                  ],
+                  "Resource": "*"
                 }
               ]
             }
