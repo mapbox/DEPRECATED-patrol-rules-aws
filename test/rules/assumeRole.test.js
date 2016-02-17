@@ -3,30 +3,6 @@ var test = require('tape');
 var rule = require('../../rules/assumeRole');
 var fn = rule.fn;
 var name = rule.config.name;
-var splitOnComma = rule.splitOnComma;
-
-test('splitOnComma unit tests', function(t) {
-
-  t.deepEqual(
-    splitOnComma('foo, bar'),
-    ['foo', 'bar'],
-    'split string with comma'
-  );
-
-  t.deepEqual(
-    splitOnComma('foo'),
-    ['foo'],
-    'split string with no comma'
-  );
-
-  t.deepEqual(
-    splitOnComma('foo,bar'),
-    ['foo', 'bar'],
-    'split string with comma and no space'
-  );
-
-  t.end();
-});
 
 test('assumeRole rule', function(t) {
 

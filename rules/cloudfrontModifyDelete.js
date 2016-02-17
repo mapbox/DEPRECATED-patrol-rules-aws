@@ -1,4 +1,5 @@
 var message = require('../lib/message');
+var utils = require('../lib/utils');
 
 module.exports.config = {
   name: 'cloudfrontModifyDelete',
@@ -16,8 +17,8 @@ module.exports.config = {
 
 module.exports.fn = function(event, callback) {
 
-  var protectedEvents = module.exports.splitOnComma(process.env.protectedEvents);
-  var protectedDistributions = module.exports.splitOnComma(process.env.protectedDistributions);
+  var protectedEvents = utils.splitOnComma(process.env.protectedEvents);
+  var protectedDistributions = utils.splitOnComma(process.env.protectedDistributions);
   var eventDistribution = event.detail.requestParameters.id;
   var eventName = event.detail.eventName; 
 
@@ -48,8 +49,4 @@ module.exports.fn = function(event, callback) {
   } else {
     callback(null, 'Protected CloudFront distribution was not updated');
   }
-};
-
-module.exports.splitOnComma = function(str) {
-  return str.split(/\s*,\s*/);
 };
