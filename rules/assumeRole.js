@@ -1,4 +1,5 @@
 var message = require('../lib/message');
+var utils = require('../lib/utils');
 
 module.exports.config = {
   name: 'assumeRole',
@@ -12,7 +13,7 @@ module.exports.config = {
 
 module.exports.fn = function(event, callback) {
 
-  var blacklisted = module.exports.splitOnComma(process.env.blacklistedRoles);
+  var blacklisted = utils.splitOnComma(process.env.blacklistedRoles);
   var assumedRoleArn = event.detail.requestParameters.roleArn;
   var userName = event.detail.userIdentity.userName;
 
@@ -32,8 +33,4 @@ module.exports.fn = function(event, callback) {
   } else {
     callback(null, 'Blacklisted role was not assumed');
   }
-};
-
-module.exports.splitOnComma = function(str) {
-  return str.split(/\s*,\s*/);
 };

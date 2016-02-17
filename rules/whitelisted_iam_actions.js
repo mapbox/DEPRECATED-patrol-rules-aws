@@ -1,4 +1,5 @@
 var message = require('../lib/message');
+var utils = require('../lib/utils');
 
 module.exports.config = {
   name: 'whitelistedIAMActions',
@@ -12,10 +13,10 @@ module.exports.config = {
 
 module.exports.fn = function(event, callback) {
 
-  var whitelisted = module.exports.splitOnComma(process.env.whitelistedActions);
+  var whitelisted = utils.splitOnComma(process.env.whitelistedActions);
   var document = JSON.parse(event.detail.requestParameters.policyDocument);
   var userName = event.detail.userIdentity.userName;
-  var blacklistedServices = module.exports.splitOnComma(process.env.blacklistedServices);
+  var blacklistedServices = utils.splitOnComma(process.env.blacklistedServices);
 
   // build list of actions used.
   var actions = [];
@@ -52,8 +53,4 @@ module.exports.fn = function(event, callback) {
     callback(null, 'Blacklisted action was not used in policy');
   }
 
-};
-
-module.exports.splitOnComma = function(str) {
-  return str.split(/\s*,\s*/);
 };
