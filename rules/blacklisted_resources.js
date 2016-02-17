@@ -30,14 +30,9 @@ module.exports.fn = function(event, callback) {
     var resourceService = resource.split(':')[2];
     parsed.Statement.forEach(function(policy) {
       var actions = [];
-      var notActions = [];
       if (policy.Effect == 'Allow' && policy.Action) {
         actions = typeof policy.Action == 'string' ? [policy.Action] : policy.Action;
       }
-      if (policy.Effect == 'Deny' && policy.NotAction) {
-        notActions = typeof policy.NotAction == 'string' ? [policy.NotAction] : policy.NotAction;
-      }
-      actions = actions.concat(notActions);
       actions.forEach(function(action) {
         var policyService = action.split(':')[0];
         if (resourceService === policyService) {
@@ -54,52 +49,38 @@ module.exports.fn = function(event, callback) {
     });
   });
 
-/*
-    var notif = {
-      subject: 'Blacklisted role ' + match[0]  + ' assumed',
-      body: 'Blacklisted role ' + match[0] + ' assumed by ' + userName
-    };
-    message(notif, function(err, result) {
-      callback(err, result);
-    });
-
-{ ResponseMetadata: { RequestId: '3ccfd957-d468-11e5-adff-adc2befee9dd' },
-  EvaluationResults: 
-   [ { EvalActionName: 's3:*',
-       EvalResourceName: 'arn:aws:s3:::foo/bar/baz',
-       EvalDecision: 'implicitDeny',
-       MatchedStatements: [],
-       MissingContextValues: [],
-       ResourceSpecificResults: [] } ],
-  IsTruncated: false }
-
-*/
-
   q.awaitAll(function(err, data) {
     if (err) return callback(err);
+    var matches = [];
+    var truncated = false;
     data.forEach(function(response) {
       // Warn on truncation.  Build paging support if this is hit.
-      if (response.IsTruncated) {
-        message({
-          subject: 'Blacklisted resources rule results truncated',
-          body: 'Blacklisted resources rule results were truncated. Paging ' +
-            'is not currently supported.'
-        }, function(err, res) {
-            callback(err, res);
-        });
-      }
-      var matches = [];
+      if (response.IsTruncated) truncated = true;
       response.EvaluationResults.forEach(function(result) {
         if (result.EvalDecision === 'allowed') {
           matches.push(result.EvalResourceName);
         }
       });
-      message({
+    });
+
+    // Report
+    var q = queue(1);
+    if (truncated) {
+      q.defer(message, {
+        subject: 'Blacklisted resources rule results truncated',
+        body: 'Blacklisted resources rule results were truncated. Paging ' +
+            'is not currently supported.'
+        }
+      );
+    }
+    if (matches.length) {
+      q.defer(message, {
         subject: 'Policy allows access to blacklisted resources: ' + matches.join(', '),
         body: JSON.stringify(event)
-      }, function(err, res) {
-
       });
+    }
+    q.awaitAll(function(err, ret) {
+      callback(err, ret);
     });
   });
 
