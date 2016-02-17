@@ -5,7 +5,7 @@ var message = require('../lib/message');
 module.exports.config = {
   name: 'blacklistedResources',
   parameters: {
-    'blacklistedResources': {
+    'blacklistedResourceArns': {
       'Type': 'String',
       'Description': 'Comma separated list of ARNs to blacklist. Any policy document that grants access to these ARNs will trigger a notification.',
     }
