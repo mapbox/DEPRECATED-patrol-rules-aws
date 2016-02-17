@@ -5,7 +5,7 @@ var message = require('../lib/message');
 module.exports.config = {
   name: 'blacklistedResources',
   parameters: {
-    'blacklistedResources': {
+    'blacklistedResourceArns': {
       'Type': 'String',
       'Description': 'Comma separated list of ARNs to blacklist. Any policy document that grants access to these ARNs will trigger a notification.',
     }
@@ -16,7 +16,7 @@ module.exports.fn = function(event, callback) {
 
   var iam = new AWS.IAM();
   var q = queue(1);
-  var blacklisted = module.exports.splitOnComma(process.env.blacklistedResources);
+  var blacklisted = module.exports.splitOnComma(process.env.blacklistedResourceArns);
   var document = event.detail.requestParameters.policyDocument;
   var parsed = JSON.parse(document);
 
