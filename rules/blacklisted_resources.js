@@ -1,6 +1,7 @@
 var AWS = require('aws-sdk');
 var queue = require('queue-async');
 var message = require('../lib/message');
+var utils = require('../lib/utils');
 
 module.exports.config = {
   name: 'blacklistedResources',
@@ -35,7 +36,8 @@ module.exports.fn = function(event, callback) {
 
   var iam = new AWS.IAM();
   var q = queue(1);
-  var blacklisted = module.exports.splitOnComma(process.env.blacklistedResourceArns);
+
+  var blacklisted = utils.splitOnComma(process.env.blacklistedResourceArns);
   var document = event.detail.requestParameters.policyDocument;
   var parsed = JSON.parse(document);
 
@@ -103,8 +105,4 @@ module.exports.fn = function(event, callback) {
     });
   });
 
-};
-
-module.exports.splitOnComma = function(str) {
-  return str.split(/\s*,\s*/);
 };
