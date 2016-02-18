@@ -6,6 +6,8 @@ var name = rule.config.name;
 
 test('blacklisted_resources rule', function(t) {
 
+  t.plan(12);
+
   process.env.blacklistedResourceArns = 'arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar';
 
   var event = {
@@ -187,7 +189,5 @@ test('blacklisted_resources rule', function(t) {
       'Policy allows access to blacklisted resources: arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar',
       'Matches kinesis and s3 blacklisted resources');
   });
-
-  t.end();
 
 });
