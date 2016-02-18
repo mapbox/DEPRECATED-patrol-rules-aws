@@ -1,0 +1,53 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Crow's nest Travis user",
+  "Resources": {
+    "TravisUser": {
+      "Type": "AWS::IAM::User",
+      "Properties": {
+        "Policies": [
+          {
+            "PolicyName": "BuildCrowsNest",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Resource": [
+                    "*"
+                  ],
+                  "Action": [
+                    "iam:SimulateCustomPolicy"
+                  ],
+                  "Effect": "Allow"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "TravisUserAccessKey": {
+      "Type": "AWS::IAM::AccessKey",
+      "Properties": {
+        "UserName": {
+          "Ref": "TravisUser"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "AccessKeyId": {
+      "Value": {
+        "Ref": "TravisUserAccessKey"
+      }
+    },
+    "SecretAccessKey": {
+      "Value": {
+        "Fn::GetAtt": [
+          "TravisUserAccessKey",
+          "SecretAccessKey"
+        ]
+      }
+    }
+  }
+}
