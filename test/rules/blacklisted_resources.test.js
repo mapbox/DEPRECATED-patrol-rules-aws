@@ -6,6 +6,8 @@ var name = rule.config.name;
 
 test('blacklisted_resources rule', function(t) {
 
+  process.env.blacklistedResourceArns = 'arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar';
+
   var event = {
     "detail": {
       "userIdentity": {
@@ -30,9 +32,9 @@ test('blacklisted_resources rule', function(t) {
   };
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docNoMatch);
-  process.env.blacklistedResources = 'arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar';
 
   fn(event, function(err, message) {
+    t.error(err, 'No error when calling ' + name);
     t.deepEqual(message, [], 'No matched blacklisted resources');
   });
 
@@ -51,7 +53,6 @@ test('blacklisted_resources rule', function(t) {
   };
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docMatch);
-  process.env.blacklistedResources = 'arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar';
 
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
@@ -81,7 +82,6 @@ test('blacklisted_resources rule', function(t) {
   };
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docMixed);
-  process.env.blacklistedResources = 'arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar';
 
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
@@ -111,7 +111,6 @@ test('blacklisted_resources rule', function(t) {
   };
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docFuzzyMatch);
-  process.env.blacklistedResources = 'arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar';
 
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
@@ -141,7 +140,7 @@ test('blacklisted_resources rule', function(t) {
   };
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docKinesisMatch);
-  process.env.blacklistedResources = 'arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar';
+  process.env.blacklistedResourceArns = 'arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar';
 
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
@@ -180,7 +179,7 @@ test('blacklisted_resources rule', function(t) {
   };
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docTwoMatches);
-  process.env.blacklistedResources = 'arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar';
+  process.env.blacklistedResourceArns = 'arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar';
 
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
