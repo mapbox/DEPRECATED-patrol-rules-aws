@@ -50,7 +50,7 @@ module.exports.fn = function(event, callback) {
       callback(err, result);
     });
   } else {
-    callback(null, 'Blacklisted action was not used in policy');
+    callback(null, 'Blacklisted IAM action was not used in policy');
   }
 
 };
