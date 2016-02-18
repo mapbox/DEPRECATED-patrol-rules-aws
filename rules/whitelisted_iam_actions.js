@@ -6,7 +6,7 @@ module.exports.config = {
   parameters: {
     'whitelistedActions': {
       'Type': 'String',
-      'Description': 'Comma separated list of whitelisted actions',
+      'Description': 'Comma separated list of whitelisted IAM actions',
     }
   }
 };
