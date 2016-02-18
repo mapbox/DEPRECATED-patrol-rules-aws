@@ -4,9 +4,13 @@ var utils = require('../lib/utils');
 module.exports.config = {
   name: 'whitelistedIAMActions',
   parameters: {
+    'blacklistedServices': {
+      'Type': 'String',
+      'Description': 'Comma separated list of services to blacklist',
+    },
     'whitelistedActions': {
       'Type': 'String',
-      'Description': 'Comma separated list of whitelisted actions',
+      'Description': 'Comma separated list of actions to whitelist among the blacklisted services',
     }
   },
   eventRule: {
