@@ -35,6 +35,8 @@ Rules are a .js file in ./rules which:
   - `name` string name of what you call your function.
   - `parameters` lets you pass configuration to the specific Lambda function.  Theses parameters become parameters on the CloudFormation template, and environment variables within the Lambda function when it runs.
   - `statements` an array of IAM policy statements which will be added to the IAM role your Lambda function runs as.
+  - `eventRule` an object which contains an `eventPattern` object
+    - `eventPattern` an object which contains a CloudWatch Event Rule [Event Pattern](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CloudWatchEventsandEventPatterns.html)
 
 See ./examples for an example config and fn.
 
@@ -52,6 +54,10 @@ Create a .zip of the repo, exclude .git, and upload to the path formed by:
 ## Deploy as CloudFormation stack
 
 - Deploy with [cfn-config](https://github.com/mapbox/cfn-config)
+
+## Create rules
+
+`node rules.js` will create CloudWatch Event Rules and lambda targets for each rule in `./rules`, so long as that rule specifies an eventRule.eventPattern object
 
 # TODO
 
