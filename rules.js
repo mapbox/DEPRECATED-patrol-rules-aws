@@ -20,7 +20,7 @@ q.awaitAll(function(err) {
 });
 
 function createEventRules(callback) {
-  var iq = queue();
+  var q = queue();
   rules.forEach(function(rule) {
     if (rule.config.eventRule) {
       var name = stackName + '-' + rule.config.name;
@@ -38,7 +38,7 @@ function createEventRules(callback) {
           }
         ]
       };
-      iq.defer(function(next) {
+      q.defer(function(next) {
         cwe.putRule(ruleParams, function(err, res) {
           if (err) return next(err);
           cwe.putTargets(targetParams, function(err, res) {
@@ -48,7 +48,7 @@ function createEventRules(callback) {
       });
     }
   });
-  iq.awaitAll(function(err) {
+  q.awaitAll(function(err) {
     callback(err);
   });
 }
