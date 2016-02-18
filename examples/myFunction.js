@@ -18,7 +18,25 @@ module.exports.config = {
       ],
       "Resource": "arn:aws:s3:::mySuperDuperBucket"
     }
-  ]
+  ],
+  eventRule: {
+    eventPattern:{
+      "detail-type": [
+        "AWS API Call via CloudTrail"
+      ],
+      "detail": {
+        "eventSource": [
+          "cloudfront.amazonaws.com"
+        ],
+        "eventName": [
+          "UpdateDistribution",
+          "DeleteDistribution",
+          "UpdateDistribution2016_01_28",
+          "DeleteDistribution2016_01_28"
+        ]
+      }
+    }
+  }
 };
 
 module.exports.fn = function(event, callback) {

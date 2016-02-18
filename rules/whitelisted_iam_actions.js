@@ -8,6 +8,25 @@ module.exports.config = {
       'Type': 'String',
       'Description': 'Comma separated list of whitelisted actions',
     }
+  },
+  eventRule: {
+    eventPattern:{
+      "detail-type": [
+        "AWS API Call via CloudTrail"
+      ],
+      "detail": {
+        "eventSource": [
+          "iam.amazonaws.com"
+        ],
+        "eventName": [
+          "CreatePolicy",
+          "CreatePolicyVersion",
+          "PutGroupPolicy",
+          "PutRolePolicy",
+          "PutUserPolicy"
+        ]
+      }
+    }
   }
 };
 

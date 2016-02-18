@@ -8,6 +8,18 @@ module.exports.config = {
       'Type': 'String',
       'Description': 'Comma separated list of blacklisted CouldTrail event names',
     }
+  },
+  eventRule: {
+    eventPattern:{
+      "detail-type": [
+        "AWS API Call via CloudTrail"
+      ],
+      "detail": {
+        "eventSource": [
+          "cloudtrail.amazonaws.com"
+        ]
+      }
+    }
   }
 };
 

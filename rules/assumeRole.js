@@ -8,6 +8,21 @@ module.exports.config = {
       'Type': 'String',
       'Description': 'Comma separated list of blacklisted roles',
     }
+  },
+  eventRule: {
+    eventPattern: {
+      "detail-type": [
+        "AWS API Call via CloudTrail"
+      ],
+      "detail": {
+        "eventSource": [
+          "sts.amazonaws.com"
+        ],
+        "eventName": [
+          "AssumeRole"
+        ]
+      }
+    }
   }
 };
 
