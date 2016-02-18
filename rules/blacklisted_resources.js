@@ -9,6 +9,24 @@ module.exports.config = {
       'Type': 'String',
       'Description': 'Comma separated list of ARNs to blacklist. Any policy document that grants access to these ARNs will trigger a notification.',
     }
+  },
+  eventRule: {
+    eventPattern:{
+      "detail-type": [
+        "AWS API Call via CloudTrail"
+      ],
+      "detail": {
+        "eventSource": [
+          "iam.amazonaws.com"
+        ],
+        "eventName": [
+          "CreatePolicy",
+          "PutGroupPolicy",
+          "PutRolePolicy",
+          "PutUserPolicy"
+        ]
+      }
+    }
   }
 };
 
