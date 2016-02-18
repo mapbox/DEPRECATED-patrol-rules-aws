@@ -21,6 +21,7 @@ module.exports.config = {
         ],
         "eventName": [
           "CreatePolicy",
+          "CreatePolicyVersion",
           "PutGroupPolicy",
           "PutRolePolicy",
           "PutUserPolicy"
