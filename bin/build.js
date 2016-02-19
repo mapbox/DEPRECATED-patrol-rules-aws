@@ -1,7 +1,9 @@
-var path = require('path');
-var lambdaCfn = require('./lib/lambda-cfn');
+#!/usr/bin/env node
 
-var crowsnest = require('./index')({
+var path = require('path');
+var lambdaCfn = require('../lib/lambda-cfn');
+
+var crowsnest = require('../index')({
   rulesPath: path.join(__dirname, 'rules')
 });
 
