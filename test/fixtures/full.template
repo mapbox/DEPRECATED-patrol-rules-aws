@@ -69,6 +69,24 @@
         "Timeout": 60
       }
     },
+    "fullPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "full",
+            "Arn"
+          ]
+        },
+        "Action": [
+          "lambda:InvokeFunction"
+        ],
+        "Principal": "events.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId"
+        }
+      }
+    },
     "StreambotEnvfull": {
       "Type": "Custom::StreambotEnv",
       "Properties": {

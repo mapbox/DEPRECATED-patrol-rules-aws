@@ -61,6 +61,24 @@
         "Timeout": 60
       }
     },
+    "simplePermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "simple",
+            "Arn"
+          ]
+        },
+        "Action": [
+          "lambda:InvokeFunction"
+        ],
+        "Principal": "events.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId"
+        }
+      }
+    },
     "StreambotEnvsimple": {
       "Type": "Custom::StreambotEnv",
       "Properties": {

@@ -3,6 +3,7 @@ var lambdaCfn = require('../lib/lambda-cfn');
 
 var parameters = lambdaCfn.parameters;
 var lambda = lambdaCfn.lambda;
+var lambdaPermission = lambdaCfn.lambdaPermission;
 var policy = lambdaCfn.policy;
 var streambotEnv = lambdaCfn.streambotEnv;
 var cloudwatch = lambdaCfn.cloudwatch;
@@ -52,6 +53,21 @@ tape('lambda unit tests', function(t) {
 
   var def = lambda({name: 'myHandler'});
   t.equal(def.Properties.Handler, 'index.myHandler', 'Lambda handler correctly named');
+  t.end();
+
+});
+
+tape('lambda permission unit tests', function(t) {
+
+  t.throws(
+    function() {
+      lambda({});
+    }, /name property required/, 'Fail when no name property'
+
+  );
+
+  var def = lambdaPermission({name: 'myHandler'});
+  t.equal(def.Properties.FunctionName["Fn::GetAtt"][0], 'myHandler', 'Lambda handler correctly named');
   t.end();
 
 });
