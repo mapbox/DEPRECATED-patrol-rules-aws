@@ -15,8 +15,8 @@
     "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js"
   },
   "bin": {
-    "build": "./bin/build.js",
-    "rules": "./bin/rules.js"
+    "crowsnest-build": "./bin/build.js",
+    "crowsnest-rules": "./bin/rules.js"
   },
   "dependencies": {
     "streambot": "3.4.0",
