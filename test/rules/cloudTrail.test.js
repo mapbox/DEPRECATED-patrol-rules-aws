@@ -14,10 +14,7 @@ test('cloudTrail rule', function(t) {
   var newTrailEvent = {
     "detail": {
       "eventSource": "cloudtrail.amazonaws.com",
-      "eventName": "UndocumentedEvent",
-      "requestParameters": {
-        "name": 'arn:aws:cloudtrail:us-east-1:12345678901:trail:bob-cloudtrail'
-      }
+      "eventName": "UndocumentedEvent"
     }
   };
 
@@ -42,17 +39,14 @@ function createTest(eventName, t) {
   var event = {
     "detail": {
       "eventSource": "cloudtrail.amazonaws.com",
-      "eventName": eventName,
-      "requestParameters": {
-        "name": 'arn:aws:cloudtrail:us-east-1:12345678901:trail:bob-cloudtrail'
-      }
+      "eventName": eventName
     }
   };
 
   fn(event, function(err, message) {
     t.deepEqual(message, {
-      body: eventName + ' called on arn:aws:cloudtrail:us-east-1:12345678901:trail:bob-cloudtrail',
-      subject: eventName + ' called on arn:aws:cloudtrail:us-east-1:12345678901:trail:bob-cloudtrail'
+      body: eventName + ' - CloudTrail',
+      subject: eventName + ' - CloudTrail'
     }, 'Matches ' + eventName + ' CloudTrail event');
   });
 

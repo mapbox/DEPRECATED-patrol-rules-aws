@@ -34,7 +34,7 @@ module.exports.fn = function(event, callback) {
 
   var blacklisted = utils.splitOnComma(process.env.blacklistedEvents);
   var couldTrailEvent = event.detail.eventName;
-  var cloudTrailARN = event.detail.requestParameters.name;
+  //var cloudTrailARN = event.detail.requestParameters.name;
 
   // Check for fuzzy match
   var match = blacklisted.filter(function(event) {
@@ -43,8 +43,8 @@ module.exports.fn = function(event, callback) {
 
   if (match.length > 0) {
     var notif = {
-      subject: couldTrailEvent + ' called on ' + cloudTrailARN,
-      body: couldTrailEvent + ' called on ' + cloudTrailARN
+      subject: couldTrailEvent + ' - CloudTrail',
+      body: couldTrailEvent + ' - CloudTrail'
     };
     message(notif, function(err, result) {
       callback(err, result);
