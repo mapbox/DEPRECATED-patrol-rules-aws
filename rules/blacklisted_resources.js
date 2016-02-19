@@ -96,7 +96,7 @@ module.exports.fn = function(event, callback) {
     }
     if (matches.length) {
       q.defer(message, {
-        subject: 'Policy allows access to blacklisted resources: ' + matches.join(', '),
+        subject: 'Policy allows access to blacklisted resources',
         body: event
       });
     }
