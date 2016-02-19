@@ -27,7 +27,7 @@ module.exports.fn = function(event, callback) {
 
   var blacklisted = utils.splitOnComma(process.env.blacklistedEvents);
   var couldTrailEvent = event.detail.eventName;
-  var cloudTrailARN = event.requestParameters.name;
+  var cloudTrailARN = event.detail.requestParameters.name;
 
   // Check for fuzzy match
   var match = blacklisted.filter(function(event) {

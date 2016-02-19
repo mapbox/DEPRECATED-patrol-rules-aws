@@ -14,10 +14,10 @@ test('cloudTrail rule', function(t) {
   var newTrailEvent = {
     "detail": {
       "eventSource": "cloudtrail.amazonaws.com",
-      "eventName": "UndocumentedEvent"
-    },
-    "requestParameters": {
-      "name": 'arn:aws:cloudtrail:us-east-1:12345678901:trail:bob-cloudtrail'
+      "eventName": "UndocumentedEvent",
+      "requestParameters": {
+        "name": 'arn:aws:cloudtrail:us-east-1:12345678901:trail:bob-cloudtrail'
+      }
     }
   };
 
@@ -42,10 +42,10 @@ function createTest(eventName, t) {
   var event = {
     "detail": {
       "eventSource": "cloudtrail.amazonaws.com",
-      "eventName": eventName
-    },
-    "requestParameters": {
-      "name": 'arn:aws:cloudtrail:us-east-1:12345678901:trail:bob-cloudtrail'
+      "eventName": eventName,
+      "requestParameters": {
+        "name": 'arn:aws:cloudtrail:us-east-1:12345678901:trail:bob-cloudtrail'
+      }
     }
   };
 
