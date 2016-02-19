@@ -59,7 +59,7 @@ test('blacklisted_resources rule', function(t) {
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-      'Policy allows access to blacklisted resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
+      'Policy allows access to blacklisted resources',
       'No matched blacklisted resources');
   });
 
@@ -88,7 +88,7 @@ test('blacklisted_resources rule', function(t) {
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-      'Policy allows access to blacklisted resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
+      'Policy allows access to blacklisted resources',
       'No matched blacklisted resources');
   });
 
@@ -117,7 +117,7 @@ test('blacklisted_resources rule', function(t) {
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-      'Policy allows access to blacklisted resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
+      'Policy allows access to blacklisted resources',
       'Matches fuzzy match S3 blacklisted resources');
   });
 
@@ -147,7 +147,7 @@ test('blacklisted_resources rule', function(t) {
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-      'Policy allows access to blacklisted resources: arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*',
+      'Policy allows access to blacklisted resources',
       'Matches kinesis blacklisted resources');
   });
 
@@ -186,7 +186,7 @@ test('blacklisted_resources rule', function(t) {
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-      'Policy allows access to blacklisted resources: arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar',
+      'Policy allows access to blacklisted resources',
       'Matches kinesis and s3 blacklisted resources');
   });
 
