@@ -17,7 +17,14 @@ module.exports.config = {
       "detail": {
         "eventSource": [
           "cloudtrail.amazonaws.com"
-        ]
+        ],
+      "eventName": [
+        "CreateTrail",
+        "DeleteTrail",
+        "StartLogging",
+        "StopLogging",
+        "UpdateTrail"
+      ]
       }
     }
   }
