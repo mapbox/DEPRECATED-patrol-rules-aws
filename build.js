@@ -1,6 +1,11 @@
+var path = require('path');
 var lambdaCfn = require('./lib/lambda-cfn');
 
-var rules = require('./index').rules;
+var crowsnest = require('./index')({
+  rulesPath: path.join(__dirname, 'rules')
+});
+
+var rules = crowsnest.rules;
 var built = [];
 
 rules.forEach(function(rule) {
