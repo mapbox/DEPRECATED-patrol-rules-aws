@@ -35,6 +35,8 @@ module.exports.config = {
 };
 
 module.exports.fn = function(event, callback) {
+  if (event.detail.errorCode)
+    return callback(null, event.detail.errorMessage);
 
   var whitelisted = utils.splitOnComma(process.env.whitelistedActions);
   var document = JSON.parse(event.detail.requestParameters.policyDocument);

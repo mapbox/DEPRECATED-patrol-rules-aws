@@ -98,6 +98,19 @@ test('whitelisted_iam_actions rule', function(t) {
     t.equal(undefined, undefined, 'No alarm on whitelisted action');
   });
 
+  var event = {
+    "detail": {
+      errorCode: "AccessDenied",
+      errorMessage: "This is the error message"
+    }
+  };
+
+  fn(event, function(err, message) {
+    t.error(err, 'No error when calling ' + name);
+    t.equal(message, 'This is the error message',
+      'errorMessage is returned in callback');
+  });
+
   t.end();
 
 });

@@ -6,7 +6,7 @@ var name = rule.config.name;
 
 test('blacklisted_resources rule', function(t) {
 
-  t.plan(12);
+  t.plan(14);
 
   process.env.blacklistedResourceArns = 'arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar';
 
@@ -188,6 +188,19 @@ test('blacklisted_resources rule', function(t) {
     t.equal(message[0].subject,
       'Policy allows access to blacklisted resources',
       'Matches kinesis and s3 blacklisted resources');
+  });
+
+  var event = {
+    "detail": {
+      errorCode: "AccessDenied",
+      errorMessage: "This is the error message"
+    }
+  };
+
+  fn(event, function(err, message) {
+    t.error(err, 'No error when calling ' + name);
+    t.equal(message, 'This is the error message',
+      'errorMessage is returned in callback');
   });
 
 });

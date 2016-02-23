@@ -31,6 +31,8 @@ module.exports.config = {
 };
 
 module.exports.fn = function(event, callback) {
+  if (event.detail.errorCode)
+    return callback(null, event.detail.errorMessage);
 
   var blacklisted = utils.splitOnComma(process.env.blacklistedEvents);
   var couldTrailEvent = event.detail.eventName;
