@@ -22,10 +22,13 @@ test('assumeRole rule', function(t) {
 
   fn(event, function(err, message) {
     t.error(err, 'No error when calling ' + name);
-    t.deepEqual(message, {
-      body: 'Blacklisted role Administrator assumed by bob',
-      subject: 'Blacklisted role Administrator assumed'
-    }, 'Matches blacklisted Administrator role');
+
+    if (JSON.stringify(message.body).match(/Blacklisted role Administrator assumed by bob/)) {
+      t.pass('Matches blacklisted Administrator role');
+    } else {
+      t.fail('Does not match blacklisted Administrator role');
+    }
+
   });
 
   var event = {
