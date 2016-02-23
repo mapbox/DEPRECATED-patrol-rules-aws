@@ -98,7 +98,10 @@ module.exports.fn = function(event, callback) {
     if (matches.length) {
       q.defer(message, {
         subject: 'Policy allows access to blacklisted resources',
-        body: event
+        body: {
+          subjectFull: 'Policy allows access to blacklisted resources: ' + matches.join(', '),
+          event: event
+        }
       });
     }
     q.awaitAll(function(err, ret) {
