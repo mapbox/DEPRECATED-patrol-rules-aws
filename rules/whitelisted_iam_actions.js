@@ -57,11 +57,8 @@ module.exports.fn = function(event, callback) {
     var parts = pair.split(':');
     var service = parts[0];
     var action = parts[1];
-    // Disallow * no matter what
-    if (action === '*')
-      violations.push(pair);
     // Check if a blacklisted service, and not on the whitelist
-    else if (blacklistedServices.indexOf(service) > -1 && whitelisted.indexOf(pair) < 0) {
+    if (blacklistedServices.indexOf(service) > -1 && whitelisted.indexOf(pair) < 0) {
       violations.push(pair);
     }
   });
