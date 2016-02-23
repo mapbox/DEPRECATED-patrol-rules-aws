@@ -6,7 +6,7 @@ var name = rule.config.name;
 
 test('blacklisted_resources rule', function(t) {
 
-  t.plan(14);
+  t.plan(18);
 
   process.env.blacklistedResourceArns = 'arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar';
 
@@ -60,7 +60,10 @@ test('blacklisted_resources rule', function(t) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
       'Policy allows access to blacklisted resources',
-      'No matched blacklisted resources');
+      'Matches blacklisted resources');
+    t.equal(message[0].body.subjectFull,
+      'Policy allows access to blacklisted resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
+      'subjectFull lists matched blacklisted resources');
   });
 
   var docMixed = {
@@ -90,6 +93,9 @@ test('blacklisted_resources rule', function(t) {
     t.equal(message[0].subject,
       'Policy allows access to blacklisted resources',
       'No matched blacklisted resources');
+    t.equal(message[0].body.subjectFull,
+      'Policy allows access to blacklisted resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
+      'subjectFull lists matched blacklisted resources');
   });
 
   var docFuzzyMatch = {
@@ -149,6 +155,9 @@ test('blacklisted_resources rule', function(t) {
     t.equal(message[0].subject,
       'Policy allows access to blacklisted resources',
       'Matches kinesis blacklisted resources');
+    t.equal(message[0].body.subjectFull,
+      'Policy allows access to blacklisted resources: arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*',
+      'subjectFull lists matched blacklisted resources');
   });
 
   var docTwoMatches = {
@@ -188,6 +197,9 @@ test('blacklisted_resources rule', function(t) {
     t.equal(message[0].subject,
       'Policy allows access to blacklisted resources',
       'Matches kinesis and s3 blacklisted resources');
+    t.equal(message[0].body.subjectFull,
+      'Policy allows access to blacklisted resources: arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar',
+      'subjectFull lists matched blacklisted resources');
   });
 
   var event = {
