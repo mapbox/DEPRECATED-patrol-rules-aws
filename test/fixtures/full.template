@@ -69,6 +69,39 @@
         "Timeout": 60
       }
     },
+    "fullPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "full",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:aws:events:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":rule/",
+              {
+                "Ref": "AWS::StackName"
+              },
+              "*"
+            ]
+          ]
+        }
+      }
+    },
     "StreambotEnvfull": {
       "Type": "Custom::StreambotEnv",
       "Properties": {
