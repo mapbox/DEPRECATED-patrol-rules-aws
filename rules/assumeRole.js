@@ -41,7 +41,8 @@ module.exports.fn = function(event, callback) {
   if (match.length > 0) {
     var notif = {
       subject: 'Blacklisted role ' + match[0]  + ' assumed',
-      body: 'Blacklisted role ' + match[0] + ' assumed by ' + userName
+      body: 'Blacklisted role ' + match[0] + ' assumed by ' + userName + "\n\n" +
+        JSON.stringify(event, null, 2)
     };
     message(notif, function(err, result) {
       callback(err, result);
