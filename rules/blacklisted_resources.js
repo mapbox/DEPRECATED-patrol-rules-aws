@@ -33,7 +33,8 @@ module.exports.config = {
 };
 
 module.exports.fn = function(event, callback) {
-
+  if (event.detail.errorCode)
+    return callback(null, event.detail.errorMessage);
   var iam = new AWS.IAM();
   var q = queue(1);
 
@@ -96,8 +97,11 @@ module.exports.fn = function(event, callback) {
     }
     if (matches.length) {
       q.defer(message, {
-        subject: 'Policy allows access to blacklisted resources: ' + matches.join(', '),
-        body: event
+        subject: 'Policy allows access to blacklisted resources',
+        body: {
+          subjectFull: 'Policy allows access to blacklisted resources: ' + matches.join(', '),
+          event: event
+        }
       });
     }
     q.awaitAll(function(err, ret) {

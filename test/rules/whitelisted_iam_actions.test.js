@@ -53,7 +53,7 @@ test('whitelisted_iam_actions rule', function(t) {
   process.env.blacklistedServices = 'iam, cloudtrail';
 
   fn(event, function(err, message) {
-    t.equal(message.subject, 'Blacklisted actions cloudtrail:* iam:* ec2:* iam:PutUserPolicy used in policy',
+    t.equal(message.subject, 'Blacklisted actions cloudtrail:* iam:* iam:PutUserPolicy used in policy',
       'Alarms on multiple blacklist matches');
   });
 
@@ -96,6 +96,19 @@ test('whitelisted_iam_actions rule', function(t) {
 
   fn(event, function(err, message) {
     t.equal(undefined, undefined, 'No alarm on whitelisted action');
+  });
+
+  var event = {
+    "detail": {
+      errorCode: "AccessDenied",
+      errorMessage: "This is the error message"
+    }
+  };
+
+  fn(event, function(err, message) {
+    t.error(err, 'No error when calling ' + name);
+    t.equal(message, 'This is the error message',
+      'errorMessage is returned in callback');
   });
 
   t.end();

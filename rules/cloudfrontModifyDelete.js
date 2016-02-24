@@ -34,11 +34,13 @@ module.exports.config = {
 };
 
 module.exports.fn = function(event, callback) {
+  if (event.detail.errorCode)
+    return callback(null, event.detail.errorMessage);
 
   var protectedEvents = utils.splitOnComma(process.env.protectedEvents);
   var protectedDistributions = utils.splitOnComma(process.env.protectedDistributions);
   var eventDistribution = event.detail.requestParameters.id;
-  var eventName = event.detail.eventName; 
+  var eventName = event.detail.eventName;
 
   // Check for fuzzy match for protected CloudFront distributions
   var distributionMatch = protectedDistributions.filter(function(distribution) {

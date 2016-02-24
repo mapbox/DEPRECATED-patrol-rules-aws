@@ -17,17 +17,26 @@ module.exports.config = {
       "detail": {
         "eventSource": [
           "cloudtrail.amazonaws.com"
-        ]
+        ],
+      "eventName": [
+        "CreateTrail",
+        "DeleteTrail",
+        "StartLogging",
+        "StopLogging",
+        "UpdateTrail"
+      ]
       }
     }
   }
 };
 
 module.exports.fn = function(event, callback) {
+  if (event.detail.errorCode)
+    return callback(null, event.detail.errorMessage);
 
   var blacklisted = utils.splitOnComma(process.env.blacklistedEvents);
   var couldTrailEvent = event.detail.eventName;
-  var cloudTrailARN = event.requestParameters.name;
+  //var cloudTrailARN = event.detail.requestParameters.name;
 
   // Check for fuzzy match
   var match = blacklisted.filter(function(event) {
@@ -36,8 +45,8 @@ module.exports.fn = function(event, callback) {
 
   if (match.length > 0) {
     var notif = {
-      subject: couldTrailEvent + ' called on ' + cloudTrailARN,
-      body: couldTrailEvent + ' called on ' + cloudTrailARN
+      subject: couldTrailEvent + ' - CloudTrail',
+      body: couldTrailEvent + ' - CloudTrail'
     };
     message(notif, function(err, result) {
       callback(err, result);
