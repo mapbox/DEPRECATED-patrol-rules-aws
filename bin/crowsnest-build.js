@@ -1,6 +1,8 @@
-var lambdaCfn = require('./lib/lambda-cfn');
+#!/usr/bin/env node
 
-var rules = require('./index').rules;
+var lambdaCfn = require('../lib/lambda-cfn');
+
+var rules = require('../index').rules;
 var built = [];
 
 rules.forEach(function(rule) {

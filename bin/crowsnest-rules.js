@@ -1,6 +1,8 @@
+#!/usr/bin/env node
+
 var AWS = require('aws-sdk');
 var queue = require('queue-async');
-var rules = require('./index').rules;
+var rules = require('../index').rules;
 
 if (!process.argv[2])
   throw new Error('Must provide name of CloudFormation stack as first argument');
