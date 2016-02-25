@@ -58,8 +58,14 @@ function createTest(eventName, t) {
 
   fn(event, function(err, message) {
     t.deepEqual(message, {
-      body: eventName + ' - CloudTrail',
-      subject: eventName + ' - CloudTrail'
+      subject: 'Blacklisted CloudTrail event ' + eventName + ' called',
+      summary: 'Blacklisted CloudTrail event ' + eventName + ' called',
+      event: {
+        "detail": {
+          "eventSource": "cloudtrail.amazonaws.com",
+          "eventName": eventName
+        }
+      }
     }, 'Matches ' + eventName + ' CloudTrail event');
   });
 

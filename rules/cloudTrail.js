@@ -45,8 +45,9 @@ module.exports.fn = function(event, callback) {
 
   if (match.length > 0) {
     var notif = {
-      subject: couldTrailEvent + ' - CloudTrail',
-      body: couldTrailEvent + ' - CloudTrail'
+      subject: 'Blacklisted CloudTrail event ' + couldTrailEvent + ' called',
+      summary: 'Blacklisted CloudTrail event ' + couldTrailEvent + ' called',
+      event: event
     };
     message(notif, function(err, result) {
       callback(err, result);

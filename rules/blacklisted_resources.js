@@ -90,7 +90,7 @@ module.exports.fn = function(event, callback) {
     if (truncated) {
       q.defer(message, {
         subject: 'Blacklisted resources rule results truncated',
-        body: 'Blacklisted resources rule results were truncated. Paging ' +
+        summary: 'Blacklisted resources rule results were truncated. Paging ' +
             'is not currently supported.'
         }
       );
@@ -98,10 +98,8 @@ module.exports.fn = function(event, callback) {
     if (matches.length) {
       q.defer(message, {
         subject: 'Policy allows access to blacklisted resources',
-        body: {
-          subjectFull: 'Policy allows access to blacklisted resources: ' + matches.join(', '),
-          event: event
-        }
+        summary: 'Policy allows access to blacklisted resources: ' + matches.join(', '),
+        event: event
       });
     }
     q.awaitAll(function(err, ret) {

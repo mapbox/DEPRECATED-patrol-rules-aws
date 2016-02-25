@@ -65,8 +65,9 @@ module.exports.fn = function(event, callback) {
 
   if (violations.length > 0) {
     var notif = {
-      subject: 'Blacklisted actions ' + violations.join(' ') + ' used in policy',
-      body: event
+      subject: 'Blacklisted actions used in policy',
+      summary: 'Blacklisted actions ' + violations.join(' ') + ' used in policy',
+      event: event
     };
     message(notif, function(err, result) {
       callback(err, result);

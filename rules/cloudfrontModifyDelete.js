@@ -57,7 +57,8 @@ module.exports.fn = function(event, callback) {
     if(eventsMatch.length > 0) {
       var notif = {
         subject: eventName + ' called on protected CloudFront distribution ' + eventDistribution,
-        body: eventName + ' called on protected CloudFront distribution ' + eventDistribution
+        summary: eventName + ' called on protected CloudFront distribution ' + eventDistribution,
+        event: event
       };
       message(notif, function(err, result) {
         callback(err, result);
