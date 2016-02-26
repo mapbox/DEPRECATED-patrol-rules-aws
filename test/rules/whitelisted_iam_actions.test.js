@@ -53,7 +53,9 @@ test('whitelisted_iam_actions rule', function(t) {
   process.env.blacklistedServices = 'iam, cloudtrail';
 
   fn(event, function(err, message) {
-    t.equal(message.subject, 'Blacklisted actions cloudtrail:* iam:* iam:PutUserPolicy used in policy',
+    t.equal(message.subject, 'Blacklisted actions used in policy',
+      'Alarms on multiple blacklist matches');
+    t.equal(message.summary, 'Blacklisted actions cloudtrail:* iam:* iam:PutUserPolicy used in policy',
       'Alarms on multiple blacklist matches');
   });
 
@@ -77,7 +79,9 @@ test('whitelisted_iam_actions rule', function(t) {
   event.detail.requestParameters.policyDocument = JSON.stringify(docWhitelistedBlacklisted);
 
   fn(event, function(err, message) {
-    t.equal(message.subject, 'Blacklisted actions iam:PutUserPolicy used in policy',
+    t.equal(message.subject, 'Blacklisted actions used in policy',
+      'Alarms on multiple blacklist matches');
+    t.equal(message.summary, 'Blacklisted actions iam:PutUserPolicy used in policy',
       'Alarms on multiple blacklist matches');
   });
 

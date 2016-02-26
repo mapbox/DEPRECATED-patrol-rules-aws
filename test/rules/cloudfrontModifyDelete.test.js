@@ -52,8 +52,17 @@ test('cloudfrontModifyDelete rule', function(t) {
 
   fn(updateProtectedDistributionEvent, function(err, message) {
     t.deepEqual(message, {
-      body: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
-      subject: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56'
+      subject: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
+      summary: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
+      event: {
+        "detail": {
+          "eventSource": "cloudfront.amazonaws.com",
+          "eventName": "UpdateDistribution",
+          "requestParameters": {
+            "id": "ABCD1234FGHJ56"
+          }
+        }
+      }
     }, 'Matches UpdateDistribution event against protected CloudFront distribution');
   });
 
@@ -69,8 +78,17 @@ test('cloudfrontModifyDelete rule', function(t) {
 
   fn(deleteProtectedDistributionEvent, function(err, message) {
     t.deepEqual(message, {
-      body: 'DeleteDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
-      subject: 'DeleteDistribution called on protected CloudFront distribution ABCD1234FGHJ56'
+      subject: 'DeleteDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
+      summary: 'DeleteDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
+      event: {
+        "detail": {
+          "eventSource": "cloudfront.amazonaws.com",
+          "eventName": "DeleteDistribution",
+          "requestParameters": {
+            "id": "ABCD1234FGHJ56"
+          }
+        }
+      }
     }, 'Matches DeleteDistribution event against protected CloudFront distribution');
   });
 
