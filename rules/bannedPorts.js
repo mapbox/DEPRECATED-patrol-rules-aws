@@ -83,10 +83,11 @@ module.exports.fn = function(event, callback) {
   }
 };
 
-module.exports.getBannedPorts = function(allowedPorts, rules) {
+module.exports.getBannedPorts = getBannedPorts;
+function getBannedPorts(allowedPorts, rules) {
   var bannedPorts = [];
   rules.forEach(function(rule) {
-    var ranges = rule.IpRanges.items ? rule.IpRanges.items : rule.IpRanges;
+    var ranges = rule.ipRanges.items ? rule.ipRanges.items : rule.ipRanges;
     ranges.forEach(function(range) {
       if (range.CidrIp === '0.0.0.0/0') {
         var openPorts = [];
