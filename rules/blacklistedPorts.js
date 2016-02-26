@@ -2,7 +2,7 @@ var message = require('../lib/message');
 var utils = require('../lib/utils');
 
 module.exports.config = {
-  name: 'blacklistedPorts',
+  name: 'bannedPorts',
   parameters: {
     'allowedPorts': {
       'Type': 'String',
@@ -32,48 +32,76 @@ module.exports.fn = function(event, callback) {
 
   var allowedPorts = process.env.allowedPorts;
 
-  // Scheduled based event
+  // Scheduled based trigger
   if (event['detail-type'] == 'Scheduled Event') {
-    // XXX run in each region. right now just runs in us-east-1
     var AWS = require('aws-sdk');
     var ec2 = new AWS.EC2({region: 'us-east-1'});
 
-    ec2.describeSecurityGroups(function(err, data) {
-      if (err) throw err;
-      data.SecurityGroups.forEach(function(sg) {
-        // IpPermissions are inbound rules
-        var rules = sg.IpPermissions;
-        if (rules.length) {
-          rules.forEach(function(rule) {
-            rule.IpRanges.forEach(function(range) {
-              if (range.CidrIp === '0.0.0.0/0') {
-                var blacklistedPorts = getBlacklistedPorts(allowedPorts, rule);
-                if (blacklistedPorts.length)
-                  console.log(sg);
-                // XXX do something
+    ec2.describeRegions(function(err, data) {
+      if (err) return callback(err);
+      data.Regions.forEach(function(regionDetail) {
+        var ec2 = new AWS.EC2({region: regionDetail.RegionName});
+        ec2.describeSecurityGroups(function(err, data) {
+          if (err) return callback(err);
+          data.SecurityGroups.forEach(function(sg) {
+            // IpPermissions are inbound rules
+            if (sg.IpPermissions.length) {
+              var bannedPorts = getBannedPorts(allowedPorts, rules);
+              if (bannedPorts.length) {
+                var notif = {
+                  subject: 'Banned ports used in security group',
+                  summary: 'Banned ports used in security group: ' + bannedPorts.join(', '),
+                  event: event
+                };
+                message(notif, function(err, result) {
+                  callback(err, result);
+                });
+              } else {
+                callback(null, 'Banned ports were not used in security group');
               }
-            });
+            }
           });
-        }
+        });
       });
     });
   } else {
-    // Trigger based event
-    
+    // Event-based trigger
+    var rules = event.detail.requestParameters.ipPermissions.items;
+    var bannedPorts = getBannedPorts(allowedPorts, rules);
+    if (bannedPorts.length) {
+      var notif = {
+        subject: 'Banned ports used in security group',
+        summary: 'Banned ports used in security group: ' + bannedPorts.join(', '),
+        event: event
+      };
+      message(notif, function(err, result) {
+        callback(err, result);
+      });
+    } else {
+      callback(null, 'Banned ports were not used in security group');
+    }
   }
-
 };
 
-module.exports.getBlacklistedPorts = function(allowedPorts, rule) {
-  var openPorts = [];
-  var i = rule.FromPort;
-  var j = rule.ToPort;
-  while (j >= i) {
-    openPorts.push(j);
-    j--;
-  }
-  allowedPorts.forEach(function(allowed) {
-    openPorts.splice(openPorts.indexOf(allowed), 1);
+module.exports.getBannedPorts = function(allowedPorts, rules) {
+  var bannedPorts = [];
+  rules.forEach(function(rule) {
+    var ranges = rule.IpRanges.items ? rule.IpRanges.items : rule.IpRanges;
+    ranges.forEach(function(range) {
+      if (range.CidrIp === '0.0.0.0/0') {
+        var openPorts = [];
+        var i = rule.FromPort;
+        var j = rule.ToPort;
+        while (j >= i) {
+          openPorts.push(j);
+          j--;
+        }
+        allowedPorts.forEach(function(allowed) {
+          openPorts.splice(openPorts.indexOf(allowed), 1);
+        });
+        bannedPorts = bannedPorts.concat(openPorts);
+      }
+    });
   });
-  return openPorts;
+  return bannedPorts;
 };
