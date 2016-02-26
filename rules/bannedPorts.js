@@ -30,7 +30,7 @@ module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
-  var allowedPorts = process.env.allowedPorts;
+  var allowedPorts = utils.splitOnComma(process.env.allowedPorts);
 
   // Scheduled based trigger
   if (event['detail-type'] == 'Scheduled Event') {
@@ -46,7 +46,7 @@ module.exports.fn = function(event, callback) {
           data.SecurityGroups.forEach(function(sg) {
             // IpPermissions are inbound rules
             if (sg.IpPermissions.length) {
-              var bannedPorts = getBannedPorts(allowedPorts, rules);
+              var bannedPorts = getBannedPorts(allowedPorts, sg.IpPermissions);
               if (bannedPorts.length) {
                 var notif = {
                   subject: 'Banned ports used in security group',
@@ -87,22 +87,26 @@ module.exports.getBannedPorts = getBannedPorts;
 function getBannedPorts(allowedPorts, rules) {
   var bannedPorts = [];
   rules.forEach(function(rule) {
-    var ranges = rule.ipRanges.items ? rule.ipRanges.items : rule.ipRanges;
+    // ec2 API and cloudtrail events use different structures
+    // cloudtrail uses `items` property in front of arrays
+    var ranges = rule.ipRanges ? rule.ipRanges.items : rule.IpRanges;
     ranges.forEach(function(range) {
-      if (range.CidrIp === '0.0.0.0/0') {
+      if (range.CidrIp === '0.0.0.0/0' || range.cidrIp === '0.0.0.0/0') {
         var openPorts = [];
-        var i = rule.FromPort;
-        var j = rule.ToPort;
+        var i = rule.FromPort || rule.fromPort;
+        var j = rule.ToPort || rule.toPort;
         while (j >= i) {
           openPorts.push(j);
           j--;
         }
         allowedPorts.forEach(function(allowed) {
-          openPorts.splice(openPorts.indexOf(allowed), 1);
+          var index = openPorts.indexOf(parseInt(allowed, 10));
+          if (index > -1)
+            openPorts.splice(openPorts.indexOf(parseInt(allowed, 10)), 1);
         });
         bannedPorts = bannedPorts.concat(openPorts);
       }
     });
   });
-  return bannedPorts;
-};
+  return bannedPorts.sort();
+}
