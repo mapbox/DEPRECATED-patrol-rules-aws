@@ -90,8 +90,11 @@ function getBannedPorts(allowedPorts, rules) {
     // ec2 API and cloudtrail events use different structures
     // cloudtrail uses `items` property in front of arrays
     var ranges = rule.ipRanges ? rule.ipRanges.items : rule.IpRanges;
+    var groups = rule.UserIdGroupPairs || rule.userIdGroupPairs;
     ranges.forEach(function(range) {
-      if (range.CidrIp === '0.0.0.0/0' || range.cidrIp === '0.0.0.0/0') {
+      var cidrip = range.CidrIp || range.cidrIp;
+      // Open to world and not using security groups
+      if (cidrip === '0.0.0.0/0' || groups.length) {
         var openPorts = [];
         var i = rule.FromPort || rule.fromPort;
         var j = rule.ToPort || rule.toPort;
