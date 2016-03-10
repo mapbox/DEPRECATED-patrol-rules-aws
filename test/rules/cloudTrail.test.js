@@ -1,5 +1,5 @@
 var test = require('tape');
-var utils = require('../../lib/utils');
+var splitOnComma = require('lambda-cfn').splitOnComma;
 
 var rule = require('../../rules/cloudTrail');
 var fn = rule.fn;
@@ -8,7 +8,7 @@ var name = rule.config.name;
 test('cloudTrail rule', function(t) {
 
   process.env.blacklistedEvents = "CreateTrail, DeleteTrail, StartLogging, StopLogging, UpdateTrail";
-  var blacklisted = utils.splitOnComma(process.env.blacklistedEvents);
+  var blacklisted = splitOnComma(process.env.blacklistedEvents);
 
   // Event for unexpected change to API, especially a new or renamed CloudTrail event
   var newTrailEvent = {

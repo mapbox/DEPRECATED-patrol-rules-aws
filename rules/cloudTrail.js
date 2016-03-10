@@ -1,8 +1,9 @@
-var message = require('../lib/message');
-var utils = require('../lib/utils');
+var message = require('lambda-cfn').message;
+var splitOnComma = require('lambda-cfn').splitOnComma;
 
 module.exports.config = {
   name: 'cloudTrail',
+  sourcePath: 'rules/cloudTrail.js',
   parameters: {
     'blacklistedEvents': {
       'Type': 'String',
@@ -34,7 +35,7 @@ module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
-  var blacklisted = utils.splitOnComma(process.env.blacklistedEvents);
+  var blacklisted = splitOnComma(process.env.blacklistedEvents);
   var couldTrailEvent = event.detail.eventName;
   //var cloudTrailARN = event.detail.requestParameters.name;
 

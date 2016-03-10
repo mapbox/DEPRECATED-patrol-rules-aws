@@ -1,10 +1,11 @@
 var AWS = require('aws-sdk');
 var queue = require('queue-async');
-var message = require('../lib/message');
-var utils = require('../lib/utils');
+var message = require('lambda-cfn').message;
+var splitOnComma = require('lambda-cfn').splitOnComma;
 
 module.exports.config = {
   name: 'blacklistedResources',
+  sourcePath: 'rules/blacklisted_resources.js',
   parameters: {
     'blacklistedResourceArns': {
       'Type': 'String',
@@ -38,7 +39,7 @@ module.exports.fn = function(event, callback) {
   var iam = new AWS.IAM();
   var q = queue(1);
 
-  var blacklisted = utils.splitOnComma(process.env.blacklistedResourceArns);
+  var blacklisted = splitOnComma(process.env.blacklistedResourceArns);
   var document = event.detail.requestParameters.policyDocument;
   var parsed = JSON.parse(document);
 
