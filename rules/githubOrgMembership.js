@@ -10,15 +10,15 @@ module.exports.config = {
     snsRule: {}
 };
 
-module.exports.fn = function(event, context, callback) {
+module.exports.fn = function(context, event, callback) {
     if (event) {
         console.log("Received webhook");
         var notif = {
-            subject: 'Test hook on ' + context.functionName,
-            summary: 'Test hook on ' + context.functionName,
+            subject: 'Test hook on ' + this.functionName,
+            summary: 'Test hook on ' + this.functionName,
             event: event
         };
-        message(notif,function(err,result) {
+        message(notif, function(err,result) {
             callback(err,result);
         });
     } else {
