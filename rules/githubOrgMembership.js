@@ -3,7 +3,7 @@ var queue = require('queue-async');
 var message = require('../lib/message');
 var utils = require('../lib/utils');
 
-var name = 'githubOrgMembership'
+var name = 'githubOrgMembership';
 
 module.exports.config = {
     name: name,
@@ -12,12 +12,13 @@ module.exports.config = {
 
 module.exports.fn = function(event, context, callback) {
     if (event) {
+        console.log("Received webhook");
         var notif = {
             subject: 'Test hook on ' + context.functionName,
             summary: 'Test hook on ' + context.functionName,
             event: event
         };
-        message(notif,function(err,results) {
+        message(notif,function(err,result) {
             callback(err,result);
         });
     } else {
