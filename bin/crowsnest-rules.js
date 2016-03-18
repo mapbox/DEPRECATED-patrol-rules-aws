@@ -67,7 +67,7 @@ function getStackResources(callback) {
     if (err) throw err;
       // Decorate rules with info needed to create Event Rules
       rules.forEach(function(rule, i) {
-        if (rule.config && rule.config.eventRule) {
+          if (rule.config && (rule.config.eventRule || rule.config.scheduledRule)) {
           data.StackResources.forEach(function(e) {
             if (e.ResourceType === 'AWS::Lambda::Function' &&
               e.LogicalResourceId === rule.config.name) {
@@ -76,7 +76,9 @@ function getStackResources(callback) {
                   if (err) return next(err);
                   rules[i].roleArn = lambdaData.Configuration.Role;
                   rules[i].id = lambdaData.Configuration.FunctionName;
-                  rules[i].arn = lambdaData.Configuration.FunctionArn;
+                    rules[i].arn = lambdaData.Configuration.FunctionArn;
+                    console.log(JSON.stringify(rules[i]));
+                    console.log('');
                   next(err);
                 });
               });
