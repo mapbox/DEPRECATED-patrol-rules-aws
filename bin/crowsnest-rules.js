@@ -21,7 +21,6 @@ q.awaitAll(function(err) {
   else console.log('CloudWatch Event Rules created');
 });
 
-
 function createEventRules(callback) {
   var q = queue();
   rules.forEach(function(rule) {
