@@ -24,13 +24,17 @@ q.awaitAll(function(err) {
 function createEventRules(callback) {
   var q = queue();
   rules.forEach(function(rule) {
-    if (rule.config.eventRule) {
+    if (rule.config.eventRule || rule.config.scheduledRule) {
       var name = stackName + '-' + rule.config.name;
-      var ruleParams = {
-        Name: name,
-        EventPattern: JSON.stringify(rule.config.eventRule.eventPattern),
-        RoleArn: rule.roleArn
-      };
+        var ruleParams = {
+            Name: name,
+            RoleArn: rule.roleArn
+        };
+        if (rule.config.eventRule) {
+            ruleParams.EventPattern =  JSON.stringify(rule.config.eventRule.eventPattern);
+        } else {
+            ruleParams.ScheduleExpression = rule.config.scheduledRule;
+        }
       var targetParams = {
         Rule: name,
         Targets: [
