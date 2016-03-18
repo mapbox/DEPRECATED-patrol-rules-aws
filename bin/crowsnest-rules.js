@@ -31,7 +31,7 @@ function createEventRules(callback) {
             RoleArn: rule.roleArn
         };
         if (rule.config.eventRule) {
-            ruleParams.EventPattern =  JSON.stringify(rule.config.eventRule.eventPattern);
+            ruleParams.EventPattern = JSON.stringify(rule.config.eventRule.eventPattern);
         } else {
             ruleParams.ScheduleExpression = rule.config.scheduledRule;
         }
