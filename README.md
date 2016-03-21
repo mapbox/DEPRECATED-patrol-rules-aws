@@ -1,27 +1,38 @@
-# crowsnest-public
+# Crowsnest
 
-This repo will be made public and renamed to crowsnest.
+Crowsnest is a rule-based security and monitoring framework leveraging AWS Lambda to support CloudWatch Events, scheduled and SNS based rules. The goal of Crowsnest is to simplify the creation and maintenance of security alerts across a wide variety of services such as AWS and Github. It is Nodejs based, and currently only supports  rule logic written in javascript.
 
-# Synopsis
+## Core technologies
+- [AWS Lambda](http://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
+- [AWS CloudWatch Events](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/WhatIsCloudWatchEvents.html)
+- [AWS Cloudformation](http://aws.amazon.com/documentation/cloudformation/?icmpid=docs_menu_internal)
+- [AWS SNS](http://docs.aws.amazon.com/sns/latest/dg/welcome.html)
+- [Nodejs](https://nodejs.org/en/)
+- [Streambot](https://github.com/mapbox/streambot)
+- [cfn-config](https://github.com/mapbox/cfn-config/)
 
-The goal of Crowsnest is to make it easy to define and deploy AWS Lambda functions, as well as offer a base set of Lambda functions aimed at security and best practice monitoring.
+## Supported rule types
+- **AWS CloudWatch Events:** triggered when AWS resources tranisition state or when AWS API calls are made.
+- **Scheduled:** periodically trigger the Lambda.
+- **SNS:** subscribe the Lambda to an SNS queue.
 
-# How does it make it easy
+## How does Crowsnest help create and manage rule sets?
 
-- Mechanism to quickly define CloudFormation templating for a Lambda function
-- Pass configuration to Lambda functions as CloudFormation parameters.  Uses [streambot](https://github.com/mapbox/streambot)
-- Define basic CloudWatch alarms
-- Define a base IAM role and let you add additional policy statements to it
-- Build a single CloudFormation template and deploy it with `cfn-config`
+- Creates and maintains the CloudFormation template for the Crowsnest Lambda function
+- Using Streambot, Cloudformation parameters are passed to Lambda functions.
+- Creates and maintains Cloudwatch alarms for lambda invocation errors and no invocations.
+- Defines a default, expandable base IAM role for Lambda.
+- Builds a single CloudFormation template for deployment with `cfn-config`
 
-# How to use
+## How to use
 
 The workflow for using Crowsnest is:
 
 - Define functions in the ./rules directory, following the spec. below.
-- Use the `build` command to wrap these functions into a CloudFormation template
+- Use the `bin/crowsnest-build.js` command to wrap these functions into a CloudFormation template
 - Upload the package / lambda functions to a designated S3 location
 - Deploy the CloudFormation template
+- Build and deploy the CloudWatch Event rules with `bin/crowsnest-rules.js`
 
 ## Define functions
 
@@ -43,7 +54,7 @@ See ./examples for an example config and fn.
 
 ## Build the template
 
-`node build.js > myCfnTemplate.template`
+`node bin/crowsnest-build.js > myCfnTemplate.template`
 
 ## Upload the package
 
@@ -57,7 +68,12 @@ Create a .zip of the repo, exclude .git, and upload to the path formed by:
 
 ## Create rules
 
-`node rules.js` will create CloudWatch Event Rules and lambda targets for each rule in `./rules`, so long as that rule specifies an eventRule.eventPattern object
+`node bin/crowsnest-rules.js` will create CloudWatch Event Rules and lambda targets for each rule in `./rules`, so long as that rule specifies an eventRule.eventPattern object
+
+## Additional documentation
+- [Known limitations and workarounds](limitations-workarounds.md)
+- Service architecture diagram
+- Troubleshooting and diagnosis
 
 # TODO
 
