@@ -1,4 +1,4 @@
-# crowsnest-public
+# crowsnest-rules-aws
 
 This repo will be made public and renamed to crowsnest.
 
