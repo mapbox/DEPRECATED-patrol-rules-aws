@@ -5,7 +5,7 @@ var splitOnComma = require('lambda-cfn').splitOnComma;
 
 module.exports.config = {
   name: 'blacklistedResources',
-  sourcePath: 'rules/blacklisted_resources.js',
+  sourcePath: 'rules/blacklistedResources.js',
   parameters: {
     'blacklistedResourceArns': {
       'Type': 'String',
