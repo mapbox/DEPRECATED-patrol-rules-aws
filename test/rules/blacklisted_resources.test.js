@@ -1,10 +1,10 @@
 var test = require('tape');
 
-var rule = require('../../rules/blacklisted_resources.js');
+var rule = require('../../rules/blacklistedResources.js');
 var fn = rule.fn;
 var name = rule.config.name;
 
-test('blacklisted_resources rule', function(t) {
+test('blacklistedResources rule', function(t) {
 
   t.plan(18);
 

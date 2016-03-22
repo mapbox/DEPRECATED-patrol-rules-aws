@@ -1,10 +1,10 @@
 var test = require('tape');
 
-var rule = require('../../rules/whitelisted_iam_actions.js');
+var rule = require('../../rules/whitelistedIAMActions.js');
 var fn = rule.fn;
 var name = rule.config.name;
 
-test('whitelisted_iam_actions rule', function(t) {
+test('whitelistedIAMActions rule', function(t) {
 
   var event = {
     "detail": {

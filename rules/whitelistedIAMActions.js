@@ -3,7 +3,7 @@ var splitOnComma = require('lambda-cfn').splitOnComma;
 
 module.exports.config = {
   name: 'whitelistedIAMActions',
-  sourcePath: 'rules/whitelisted_iam_actions.js',
+  sourcePath: 'rules/whitelistedIAMActions.js',
   parameters: {
     'blacklistedServices': {
       'Type': 'String',
