@@ -1,14 +1,14 @@
 {
-  "name": "crowsnest-public",
+  "name": "crowsnest-rules-aws",
   "version": "0.0.0",
-  "description": "This repo will be made public and renamed to crowsnest.",
+  "description": "AWS rules for Crowsnest",
   "main": "index.js",
   "engines": {
     "node": "0.10.38"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mapbox/crowsnest-public.git"
+    "url": "https://github.com/mapbox/crowsnest-rules-aws.git"
   },
   "scripts": {
     "pretest": "jshint index.js && jscs index.js",
@@ -40,7 +40,7 @@
   "author": "Mapbox, Inc.",
   "license": "BSD",
   "bugs": {
-    "url": "https://github.com/mapbox/crowsnest-public/issues"
+    "url": "https://github.com/mapbox/crowsnest-rules-aws/issues"
   },
-  "homepage": "https://github.com/mapbox/crowsnest-public"
+  "homepage": "https://github.com/mapbox/crowsnest-rules-aws"
 }
