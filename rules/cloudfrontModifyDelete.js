@@ -1,8 +1,9 @@
-var message = require('../lib/message');
-var utils = require('../lib/utils');
+var message = require('lambda-cfn').message;
+var splitOnComma = require('lambda-cfn').splitOnComma;
 
 module.exports.config = {
   name: 'cloudfrontModifyDelete',
+  sourcePath: 'rules/cloudfrontModifyDelete.js',
   parameters: {
     'protectedEvents': {
       'Type': 'String',
@@ -37,8 +38,8 @@ module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
-  var protectedEvents = utils.splitOnComma(process.env.protectedEvents);
-  var protectedDistributions = utils.splitOnComma(process.env.protectedDistributions);
+  var protectedEvents = splitOnComma(process.env.protectedEvents);
+  var protectedDistributions = splitOnComma(process.env.protectedDistributions);
   var eventDistribution = event.detail.requestParameters.id;
   var eventName = event.detail.eventName;
 

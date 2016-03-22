@@ -1,8 +1,9 @@
-var message = require('../lib/message');
-var utils = require('../lib/utils');
+var message = require('lambda-cfn').message;
+var splitOnComma = require('lambda-cfn').splitOnComma;
 
 module.exports.config = {
   name: 'whitelistedIAMActions',
+  sourcePath: 'rules/whitelisted_iam_actions.js',
   parameters: {
     'blacklistedServices': {
       'Type': 'String',
@@ -38,10 +39,10 @@ module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
-  var whitelisted = utils.splitOnComma(process.env.whitelistedActions);
+  var whitelisted = splitOnComma(process.env.whitelistedActions);
   var document = JSON.parse(event.detail.requestParameters.policyDocument);
   var userName = event.detail.userIdentity.userName;
-  var blacklistedServices = utils.splitOnComma(process.env.blacklistedServices);
+  var blacklistedServices = splitOnComma(process.env.blacklistedServices);
 
   // build list of actions used.
   var actions = [];
