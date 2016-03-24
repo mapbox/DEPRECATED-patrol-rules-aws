@@ -215,7 +215,6 @@ test('bannedPorts rule', function(t) {
   process.env.allowedPorts = '30001';
 
   fn(event, function(err, message) {
-    console.log(message);
     t.error(err, 'No error when calling ' + name);
   });
   t.end();
