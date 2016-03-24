@@ -1,5 +1,5 @@
-var message = require('../lib/message');
-var utils = require('../lib/utils');
+var message = require('lambda-cfn').message;
+var splitOnComma = require('lambda-cfn').splitOnComma;
 
 module.exports.config = {
   name: 'bannedPorts',
@@ -30,7 +30,7 @@ module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
-  var allowedPorts = utils.splitOnComma(process.env.allowedPorts);
+  var allowedPorts = splitOnComma(process.env.allowedPorts);
 
   // Scheduled based trigger
   if (event['detail-type'] == 'Scheduled Event') {
