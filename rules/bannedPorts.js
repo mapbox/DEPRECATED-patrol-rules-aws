@@ -9,6 +9,16 @@ module.exports.config = {
       'Description': 'Comma separated list of allowed open ports',
     }
   },
+  statements: [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeRegions",
+        "ec2:DescribeSecurityGroups"
+      ],
+      "Resource": "*"
+    }
+  ],
   eventRule: {
     eventPattern: {
       "detail-type": [
