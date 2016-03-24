@@ -46,6 +46,7 @@ module.exports.fn = function(event, callback) {
   if (event['detail-type'] == 'Scheduled Event') {
     var AWS = require('aws-sdk');
     var ec2 = new AWS.EC2({region: 'us-east-1'});
+    var securityGroups = [];
 
     ec2.describeRegions(function(err, data) {
       if (err) return callback(err);
@@ -57,23 +58,24 @@ module.exports.fn = function(event, callback) {
             // IpPermissions are inbound rules
             if (sg.IpPermissions.length) {
               var bannedPorts = getBannedPorts(allowedPorts, sg.IpPermissions);
-              if (bannedPorts.length) {
-                var notif = {
-                  subject: 'Banned ports used in security group',
-                  summary: 'Banned ports used in security group: ' + bannedPorts.join(', '),
-                  event: event
-                };
-                message(notif, function(err, result) {
-                  callback(err, result);
-                });
-              } else {
-                callback(null, 'Banned ports were not used in security group');
-              }
+              if (bannedPorts.length) securityGroups.push(sg);
             }
           });
         });
       });
     });
+    if (securityGroups.length) {
+      var notif = {
+        subject: 'Banned ports used in security group',
+        summary: 'Banned ports used in security group',
+        event: securityGroups
+      };
+      message(notif, function(err, result) {
+        callback(err, result);
+      });
+    } else {
+      callback(null, 'Banned ports were not used in security group');
+    }
   } else {
     // Event-based trigger
     var rules = event.detail.requestParameters.ipPermissions.items;
