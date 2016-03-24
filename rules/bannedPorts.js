@@ -1,3 +1,4 @@
+var queue = require('queue-async');
 var message = require('lambda-cfn').message;
 var splitOnComma = require('lambda-cfn').splitOnComma;
 
@@ -42,40 +43,52 @@ module.exports.fn = function(event, callback) {
 
   var allowedPorts = splitOnComma(process.env.allowedPorts);
 
+  // list all the regions
+  // for each region
+  // list all the security groups, analyze them, catch violations
+  // finally, send the message
+
   // Scheduled based trigger
   if (event['detail-type'] == 'Scheduled Event') {
     var AWS = require('aws-sdk');
     var ec2 = new AWS.EC2({region: 'us-east-1'});
+    var q = queue();
     var securityGroups = [];
 
     ec2.describeRegions(function(err, data) {
       if (err) return callback(err);
       data.Regions.forEach(function(regionDetail) {
-        var ec2 = new AWS.EC2({region: regionDetail.RegionName});
-        ec2.describeSecurityGroups(function(err, data) {
-          if (err) return callback(err);
-          data.SecurityGroups.forEach(function(sg) {
-            // IpPermissions are inbound rules
-            if (sg.IpPermissions.length) {
-              var bannedPorts = getBannedPorts(allowedPorts, sg.IpPermissions);
-              if (bannedPorts.length) securityGroups.push(sg);
-            }
+        q.defer(function(next) {
+          var ec2 = new AWS.EC2({region: regionDetail.RegionName});
+          ec2.describeSecurityGroups(function(err, data) {
+            if (err) return next(err);
+            data.SecurityGroups.forEach(function(sg) {
+              // IpPermissions are inbound rules
+              if (sg.IpPermissions.length) {
+                var bannedPorts = getBannedPorts(allowedPorts, sg.IpPermissions);
+                if (bannedPorts.length) securityGroups.push(sg);
+                next();
+              }
+            });
           });
+        });
+        q.awaitAll(function(err) {
+          if (err) return callback(err);
+          if (securityGroups.length) {
+            var notif = {
+              subject: 'Banned ports used in security group',
+              summary: 'Banned ports used in security group',
+              event: securityGroups
+            };
+            message(notif, function(err, result) {
+              callback(err, result);
+            });
+          } else {
+            callback(null, 'Banned ports were not used in security group');
+          }
         });
       });
     });
-    if (securityGroups.length) {
-      var notif = {
-        subject: 'Banned ports used in security group',
-        summary: 'Banned ports used in security group',
-        event: securityGroups
-      };
-      message(notif, function(err, result) {
-        callback(err, result);
-      });
-    } else {
-      callback(null, 'Banned ports were not used in security group');
-    }
   } else {
     // Event-based trigger
     var rules = event.detail.requestParameters.ipPermissions.items;
