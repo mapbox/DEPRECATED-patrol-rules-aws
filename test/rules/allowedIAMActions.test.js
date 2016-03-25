@@ -1,10 +1,10 @@
 var test = require('tape');
 
-var rule = require('../../rules/whitelistedIAMActions.js');
+var rule = require('../../rules/allowedIAMActions.js');
 var fn = rule.fn;
 var name = rule.config.name;
 
-test('whitelistedIAMActions rule', function(t) {
+test('allowedIAMActions rule', function(t) {
 
   var event = {
     "detail": {
@@ -49,17 +49,17 @@ test('whitelistedIAMActions rule', function(t) {
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docMixed);
 
-  process.env.whitelistedActions = 'iam:PassRole';
-  process.env.blacklistedServices = 'iam, cloudtrail';
+  process.env.allowedActions = 'iam:PassRole';
+  process.env.restrictedServices = 'iam, cloudtrail';
 
   fn(event, function(err, message) {
-    t.equal(message.subject, 'Blacklisted actions used in policy',
-      'Alarms on multiple blacklist matches');
-    t.equal(message.summary, 'Blacklisted actions cloudtrail:* iam:* iam:PutUserPolicy used in policy',
-      'Alarms on multiple blacklist matches');
+    t.equal(message.subject, 'Disallowed actions used in policy',
+      'Alarms on multiple disallowed matches');
+    t.equal(message.summary, 'Disallowed actions cloudtrail:* iam:* iam:PutUserPolicy used in policy',
+      'Alarms on multiple disallowed matches');
   });
 
-  var docWhitelistedBlacklisted = {
+  var docAllowedRestricted = {
     Statement: [
       {
         Effect: "Allow",
@@ -76,16 +76,16 @@ test('whitelistedIAMActions rule', function(t) {
     ]
   };
 
-  event.detail.requestParameters.policyDocument = JSON.stringify(docWhitelistedBlacklisted);
+  event.detail.requestParameters.policyDocument = JSON.stringify(docAllowedRestricted);
 
   fn(event, function(err, message) {
-    t.equal(message.subject, 'Blacklisted actions used in policy',
-      'Alarms on multiple blacklist matches');
-    t.equal(message.summary, 'Blacklisted actions iam:PutUserPolicy used in policy',
-      'Alarms on multiple blacklist matches');
+    t.equal(message.subject, 'Disallowed actions used in policy',
+      'Alarms on multiple disallowed matches');
+    t.equal(message.summary, 'Disallowed actions iam:PutUserPolicy used in policy',
+      'Alarms on multiple disallowed matches');
   });
 
-  var docWhitelisted = {
+  var docAllowed = {
     Statement: [
       {
         Effect: "Allow",
@@ -96,10 +96,10 @@ test('whitelistedIAMActions rule', function(t) {
     ]
   };
 
-  event.detail.requestParameters.policyDocument = JSON.stringify(docWhitelisted);
+  event.detail.requestParameters.policyDocument = JSON.stringify(docAllowed);
 
   fn(event, function(err, message) {
-    t.equal(undefined, undefined, 'No alarm on whitelisted action');
+    t.equal(undefined, undefined, 'No alarm on allowed action');
   });
 
   var event = {

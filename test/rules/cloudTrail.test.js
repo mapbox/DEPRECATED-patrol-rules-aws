@@ -7,8 +7,8 @@ var name = rule.config.name;
 
 test('cloudTrail rule', function(t) {
 
-  process.env.blacklistedEvents = "CreateTrail, DeleteTrail, StartLogging, StopLogging, UpdateTrail";
-  var blacklisted = splitOnComma(process.env.blacklistedEvents);
+  process.env.disallowedEvents = "CreateTrail, DeleteTrail, StartLogging, StopLogging, UpdateTrail";
+  var disallowed = splitOnComma(process.env.disallowedEvents);
 
   // Event for unexpected change to API, especially a new or renamed CloudTrail event
   var newTrailEvent = {
@@ -20,11 +20,11 @@ test('cloudTrail rule', function(t) {
 
   fn(newTrailEvent, function(err, message) {
     t.error(err, 'No error when calling ' + name);
-    t.equal(message, 'Blacklisted CloudTrail event was not called',
-      'Blacklisted CloudTrail event was not called');
+    t.equal(message, 'Disallowed CloudTrail event was not called',
+      'Disallowed CloudTrail event was not called');
   });
 
-  blacklisted.filter(function(event) {
+  disallowed.filter(function(event) {
 
     createTest(event, t);
 
@@ -58,8 +58,8 @@ function createTest(eventName, t) {
 
   fn(event, function(err, message) {
     t.deepEqual(message, {
-      subject: 'Blacklisted CloudTrail event ' + eventName + ' called',
-      summary: 'Blacklisted CloudTrail event ' + eventName + ' called',
+      subject: 'Disallowed CloudTrail event ' + eventName + ' called',
+      summary: 'Disallowed CloudTrail event ' + eventName + ' called',
       event: {
         "detail": {
           "eventSource": "cloudtrail.amazonaws.com",

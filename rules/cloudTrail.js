@@ -5,9 +5,9 @@ module.exports.config = {
   name: 'cloudTrail',
   sourcePath: 'rules/cloudTrail.js',
   parameters: {
-    blacklistedEvents: {
+    disallowedEvents: {
       Type: 'String',
-      Description: 'Comma separated list of blacklisted CouldTrail event names'
+      Description: 'Comma separated list of disallowed CouldTrail event names'
     }
   },
   eventRule: {
@@ -35,24 +35,24 @@ module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
-  var blacklisted = splitOnComma(process.env.blacklistedEvents);
+  var disallowed = splitOnComma(process.env.disallowedEvents);
   var couldTrailEvent = event.detail.eventName;
 
   // Check for fuzzy match
-  var match = blacklisted.filter(function(event) {
+  var match = disallowed.filter(function(event) {
     return couldTrailEvent.indexOf(event) > -1;
   });
 
   if (match.length > 0) {
     var notif = {
-      subject: 'Blacklisted CloudTrail event ' + couldTrailEvent + ' called',
-      summary: 'Blacklisted CloudTrail event ' + couldTrailEvent + ' called',
+      subject: 'Disallowed CloudTrail event ' + couldTrailEvent + ' called',
+      summary: 'Disallowed CloudTrail event ' + couldTrailEvent + ' called',
       event: event
     };
     message(notif, function(err, result) {
       callback(err, result);
     });
   } else {
-    callback(null, 'Blacklisted CloudTrail event was not called');
+    callback(null, 'Disallowed CloudTrail event was not called');
   }
 };

@@ -1,14 +1,14 @@
 var test = require('tape');
 
-var rule = require('../../rules/blacklistedResources.js');
+var rule = require('../../rules/disallowedResources.js');
 var fn = rule.fn;
 var name = rule.config.name;
 
-test('blacklistedResources rule', function(t) {
+test('disallowedResources rule', function(t) {
 
   t.plan(18);
 
-  process.env.blacklistedResourceArns = 'arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar';
+  process.env.disallowedResourceArns = 'arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar';
 
   var event = {
     "detail": {
@@ -37,7 +37,7 @@ test('blacklistedResources rule', function(t) {
 
   fn(event, function(err, message) {
     t.error(err, 'No error when calling ' + name);
-    t.deepEqual(message, [], 'No matched blacklisted resources');
+    t.deepEqual(message, [], 'No matched disallowed resources');
   });
 
   var docMatch = {
@@ -59,11 +59,11 @@ test('blacklistedResources rule', function(t) {
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-      'Policy allows access to blacklisted resources',
-      'Matches blacklisted resources');
+      'Policy allows access to disallowed resources',
+      'Matches disallowed resources');
     t.equal(message[0].summary,
-      'Policy allows access to blacklisted resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
-      'summary lists matched blacklisted resources');
+      'Policy allows access to disallowed resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
+      'summary lists matched disallowed resources');
   });
 
   var docMixed = {
@@ -91,11 +91,11 @@ test('blacklistedResources rule', function(t) {
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-      'Policy allows access to blacklisted resources',
-      'No matched blacklisted resources');
+      'Policy allows access to disallowed resources',
+      'No matched disallowed resources');
     t.equal(message[0].summary,
-      'Policy allows access to blacklisted resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
-      'subjectFull lists matched blacklisted resources');
+      'Policy allows access to disallowed resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
+      'subjectFull lists matched disallowed resources');
   });
 
   var docFuzzyMatch = {
@@ -123,8 +123,8 @@ test('blacklistedResources rule', function(t) {
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-      'Policy allows access to blacklisted resources',
-      'Matches fuzzy match S3 blacklisted resources');
+      'Policy allows access to disallowed resources',
+      'Matches fuzzy match S3 disallowed resources');
   });
 
   var docKinesisMatch = {
@@ -148,16 +148,16 @@ test('blacklistedResources rule', function(t) {
   };
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docKinesisMatch);
-  process.env.blacklistedResourceArns = 'arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar';
+  process.env.disallowedResourceArns = 'arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar';
 
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-      'Policy allows access to blacklisted resources',
-      'Matches kinesis blacklisted resources');
+      'Policy allows access to disallowed resources',
+      'Matches kinesis disallowed resources');
     t.equal(message[0].summary,
-      'Policy allows access to blacklisted resources: arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*',
-      'subjectFull lists matched blacklisted resources');
+      'Policy allows access to disallowed resources: arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*',
+      'subjectFull lists matched disallowed resources');
   });
 
   var docTwoMatches = {
@@ -190,16 +190,16 @@ test('blacklistedResources rule', function(t) {
   };
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docTwoMatches);
-  process.env.blacklistedResourceArns = 'arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar';
+  process.env.disallowedResourceArns = 'arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar';
 
   fn(event, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-      'Policy allows access to blacklisted resources',
-      'Matches kinesis and s3 blacklisted resources');
+      'Policy allows access to disallowed resources',
+      'Matches kinesis and s3 disallowed resources');
     t.equal(message[0].summary,
-      'Policy allows access to blacklisted resources: arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar',
-      'subjectFull lists matched blacklisted resources');
+      'Policy allows access to disallowed resources: arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar',
+      'subjectFull lists matched disallowed resources');
   });
 
   var event = {
