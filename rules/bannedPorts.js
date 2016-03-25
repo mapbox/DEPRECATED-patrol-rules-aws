@@ -67,9 +67,9 @@ module.exports.fn = function(event, callback) {
               if (sg.IpPermissions.length) {
                 var bannedPorts = getBannedPorts(allowedPorts, sg.IpPermissions);
                 if (bannedPorts.length) securityGroups.push(sg);
-                next();
               }
             });
+            next();
           });
         });
       });
