@@ -66,7 +66,14 @@ module.exports.fn = function(event, callback) {
               // IpPermissions are inbound rules
               if (sg.IpPermissions.length) {
                 var bannedPorts = getBannedPorts(allowedPorts, sg.IpPermissions);
-                if (bannedPorts.length) securityGroups.push(sg);
+                if (bannedPorts.length) {
+                  securityGroups.push({
+                    Region: regionDetail.RegionName,
+                    GroupName: sg.GroupName,
+                    GroupId: sg.GroupId,
+                    Description: sg.Description
+                  });
+                }
               }
             });
             next();
