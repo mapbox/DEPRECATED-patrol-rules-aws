@@ -72,21 +72,21 @@ module.exports.fn = function(event, callback) {
             });
           });
         });
-        q.awaitAll(function(err) {
-          if (err) return callback(err);
-          if (securityGroups.length) {
-            var notif = {
-              subject: 'Banned ports used in security group',
-              summary: 'Banned ports used in security group',
-              event: securityGroups
-            };
-            message(notif, function(err, result) {
-              callback(err, result);
-            });
-          } else {
-            callback(null, 'Banned ports were not used in security group');
-          }
-        });
+      });
+      q.awaitAll(function(err) {
+        if (err) return callback(err);
+        if (securityGroups.length) {
+          var notif = {
+            subject: 'Banned ports used in ' + securityGroups.length  + ' security groups',
+            summary: 'Banned ports used in ' + securityGroups.length  + ' security groups',
+            event: securityGroups
+          };
+          message(notif, function(err, result) {
+            callback(err, result);
+          });
+        } else {
+          callback(null, 'Banned ports were not used in security group');
+        }
       });
     });
   } else {
