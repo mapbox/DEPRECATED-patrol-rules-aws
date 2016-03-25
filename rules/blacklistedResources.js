@@ -7,26 +7,26 @@ module.exports.config = {
   name: 'blacklistedResources',
   sourcePath: 'rules/blacklistedResources.js',
   parameters: {
-    'blacklistedResourceArns': {
-      'Type': 'String',
-      'Description': 'Comma separated list of ARNs to blacklist. Any policy document that grants access to these ARNs will trigger a notification.',
+    backlistedResourceArns: {
+      Type: 'String',
+      Description: 'Comma separated list of ARNs to blacklist. Any policy document that grants access to these ARNs will trigger a notification.'
     }
   },
   eventRule: {
     eventPattern:{
-      "detail-type": [
-        "AWS API Call via CloudTrail"
+      'detail-type': [
+        'AWS API Call via CloudTrail'
       ],
-      "detail": {
-        "eventSource": [
-          "iam.amazonaws.com"
+      detail: {
+        eventSource: [
+          'iam.amazonaws.com'
         ],
-        "eventName": [
-          "CreatePolicy",
-          "CreatePolicyVersion",
-          "PutGroupPolicy",
-          "PutRolePolicy",
-          "PutUserPolicy"
+        eventName: [
+          'CreatePolicy',
+          'CreatePolicyVersion',
+          'PutGroupPolicy',
+          'PutRolePolicy',
+          'PutUserPolicy'
         ]
       }
     }
@@ -56,6 +56,7 @@ module.exports.fn = function(event, callback) {
       if (policy.Effect == 'Allow' && policy.Action) {
         actions = typeof policy.Action == 'string' ? [policy.Action] : policy.Action;
       }
+
       actions.forEach(function(action) {
         var policyService = action.split(':')[0];
         if (resourceService === policyService) {
@@ -92,10 +93,10 @@ module.exports.fn = function(event, callback) {
       q.defer(message, {
         subject: 'Blacklisted resources rule results truncated',
         summary: 'Blacklisted resources rule results were truncated. Paging ' +
-            'is not currently supported.'
-        }
-      );
+          'is not currently supported.'
+      });
     }
+
     if (matches.length) {
       q.defer(message, {
         subject: 'Policy allows access to blacklisted resources',
@@ -103,6 +104,7 @@ module.exports.fn = function(event, callback) {
         event: event
       });
     }
+
     q.awaitAll(function(err, ret) {
       callback(err, ret);
     });

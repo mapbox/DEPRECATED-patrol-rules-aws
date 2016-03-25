@@ -5,29 +5,29 @@ module.exports.config = {
   name: 'cloudfrontModifyDelete',
   sourcePath: 'rules/cloudfrontModifyDelete.js',
   parameters: {
-    'protectedEvents': {
-      'Type': 'String',
-      'Description': 'Comma separated list of protected CloudFront event names',
+    protectedEvents: {
+      Type: 'String',
+      Description: 'Comma separated list of protected CloudFront event names'
     },
-    'protectedDistributions': {
-      'Type': 'String',
-      'Description': 'Comma separated list of protected CloudFront distributions'
+    protectedDistributions: {
+      Type: 'String',
+      Description: 'Comma separated list of protected CloudFront distributions'
     }
   },
   eventRule: {
     eventPattern:{
-      "detail-type": [
-        "AWS API Call via CloudTrail"
+      'detail-type': [
+        'AWS API Call via CloudTrail'
       ],
-      "detail": {
-        "eventSource": [
-          "cloudfront.amazonaws.com"
+      detail: {
+        eventSource: [
+          'cloudfront.amazonaws.com'
         ],
-        "eventName": [
-          "UpdateDistribution",
-          "DeleteDistribution",
-          "UpdateDistribution2016_01_28",
-          "DeleteDistribution2016_01_28"
+        eventName: [
+          'UpdateDistribution',
+          'DeleteDistribution',
+          'UpdateDistribution2016_01_28',
+          'DeleteDistribution2016_01_28'
         ]
       }
     }
@@ -53,9 +53,9 @@ module.exports.fn = function(event, callback) {
     // Check for fuzzy match for protected CloudFront event names
     var eventsMatch = protectedEvents.filter(function(event) {
       return eventName.indexOf(event) > -1;
-    })
+    });
 
-    if(eventsMatch.length > 0) {
+    if (eventsMatch.length > 0) {
       var notif = {
         subject: eventName + ' called on protected CloudFront distribution ' + eventDistribution,
         summary: eventName + ' called on protected CloudFront distribution ' + eventDistribution,
@@ -65,7 +65,7 @@ module.exports.fn = function(event, callback) {
         callback(err, result);
       });
     } else {
-      callback(null, 'Protected CloudFront event was not called')
+      callback(null, 'Protected CloudFront event was not called');
     }
 
   } else {

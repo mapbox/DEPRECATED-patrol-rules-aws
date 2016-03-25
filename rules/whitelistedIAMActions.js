@@ -5,30 +5,30 @@ module.exports.config = {
   name: 'whitelistedIAMActions',
   sourcePath: 'rules/whitelistedIAMActions.js',
   parameters: {
-    'blacklistedServices': {
-      'Type': 'String',
-      'Description': 'Comma separated list of services to blacklist',
+    blacklistedServices: {
+      Type: 'String',
+      Description: 'Comma separated list of services to blacklist'
     },
-    'whitelistedActions': {
-      'Type': 'String',
-      'Description': 'Comma separated list of actions to whitelist among the blacklisted services',
+    whitelistedActions: {
+      Type: 'String',
+      Description: 'Comma separated list of actions to whitelist among the blacklisted services'
     }
   },
   eventRule: {
-    eventPattern:{
-      "detail-type": [
-        "AWS API Call via CloudTrail"
+    eventPattern: {
+      'detail-type': [
+        'AWS API Call via CloudTrail'
       ],
-      "detail": {
-        "eventSource": [
-          "iam.amazonaws.com"
+      detail: {
+        eventSource: [
+          'iam.amazonaws.com'
         ],
-        "eventName": [
-          "CreatePolicy",
-          "CreatePolicyVersion",
-          "PutGroupPolicy",
-          "PutRolePolicy",
-          "PutUserPolicy"
+        eventName: [
+          'CreatePolicy',
+          'CreatePolicyVersion',
+          'PutGroupPolicy',
+          'PutRolePolicy',
+          'PutUserPolicy'
         ]
       }
     }
@@ -41,7 +41,6 @@ module.exports.fn = function(event, callback) {
 
   var whitelisted = splitOnComma(process.env.whitelistedActions);
   var document = JSON.parse(event.detail.requestParameters.policyDocument);
-  var userName = event.detail.userIdentity.userName;
   var blacklistedServices = splitOnComma(process.env.blacklistedServices);
 
   // build list of actions used.
@@ -57,7 +56,7 @@ module.exports.fn = function(event, callback) {
   actions.forEach(function(pair) {
     var parts = pair.split(':');
     var service = parts[0];
-    var action = parts[1];
+
     // Check if a blacklisted service, and not on the whitelist
     if (blacklistedServices.indexOf(service) > -1 && whitelisted.indexOf(pair) < 0) {
       violations.push(pair);
