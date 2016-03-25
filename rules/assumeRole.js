@@ -5,9 +5,9 @@ module.exports.config = {
   name: 'assumeRole',
   sourcePath: 'rules/assumeRole.js',
   parameters: {
-    blacklistedRoles: {
+    disallowedRoles: {
       Type: 'String',
-      Description: 'Comma separated list of blacklisted roles'
+      Description: 'Comma separated list of disallowed roles'
     }
   },
   eventRule: {
@@ -30,25 +30,25 @@ module.exports.config = {
 module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
-  var blacklisted = splitOnComma(process.env.blacklistedRoles);
+  var disallowed = splitOnComma(process.env.disallowedRoles);
   var assumedRoleArn = event.detail.requestParameters.roleArn;
   var userName = event.detail.userIdentity.userName;
 
   // Check for fuzzy match
-  var match = blacklisted.filter(function(role) {
+  var match = disallowed.filter(function(role) {
     return assumedRoleArn.indexOf(role) > -1;
   });
 
   if (match.length > 0) {
     var notif = {
-      subject: 'Blacklisted role ' + match[0]  + ' assumed',
-      summary: 'Blacklisted role ' + match[0]  + ' assumed by ' + userName,
+      subject: 'Disallowed role ' + match[0]  + ' assumed',
+      summary: 'Disallowed role ' + match[0]  + ' assumed by ' + userName,
       event: event
     };
     message(notif, function(err, result) {
       callback(err, result);
     });
   } else {
-    callback(null, 'Blacklisted role was not assumed');
+    callback(null, 'Disallowed role was not assumed');
   }
 };

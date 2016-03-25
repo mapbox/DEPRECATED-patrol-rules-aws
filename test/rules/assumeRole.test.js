@@ -18,15 +18,15 @@ test('assumeRole rule', function(t) {
     }
   };
 
-  process.env.blacklistedRoles = 'Administrator, DBMaintenance';
+  process.env.disallowedRoles = 'Administrator, DBMaintenance';
 
   fn(event, function(err, message) {
     t.error(err, 'No error when calling ' + name);
 
-    if (JSON.stringify(message.summary).match(/Blacklisted role Administrator assumed by bob/)) {
-      t.pass('Matches blacklisted Administrator role');
+    if (JSON.stringify(message.summary).match(/Disallowed role Administrator assumed by bob/)) {
+      t.pass('Matches disallowed Administrator role');
     } else {
-      t.fail('Does not match blacklisted Administrator role');
+      t.fail('Does not match disallowed Administrator role');
     }
 
   });
@@ -43,12 +43,12 @@ test('assumeRole rule', function(t) {
     }
   };
 
-  process.env.blacklistedRoles = 'Administrator, DBMaintenance';
+  process.env.disallowedRoles = 'Administrator, DBMaintenance';
 
   fn(event, function(err, message) {
     t.error(err, 'No error when calling ' + name);
-    t.equal(message, 'Blacklisted role was not assumed',
-      'Does not match non blacklisted role');
+    t.equal(message, 'Disallowed role was not assumed',
+      'Does not match non disallowed role');
   });
 
   var event = {
@@ -58,7 +58,7 @@ test('assumeRole rule', function(t) {
     }
   };
 
-  process.env.blacklistedRoles = 'Administrator, DBMaintenance';
+  process.env.disallowedRoles = 'Administrator, DBMaintenance';
 
   fn(event, function(err, message) {
     t.error(err, 'No error when calling ' + name);

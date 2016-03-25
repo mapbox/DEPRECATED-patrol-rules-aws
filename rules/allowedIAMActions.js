@@ -2,16 +2,16 @@ var message = require('lambda-cfn').message;
 var splitOnComma = require('lambda-cfn').splitOnComma;
 
 module.exports.config = {
-  name: 'whitelistedIAMActions',
-  sourcePath: 'rules/whitelistedIAMActions.js',
+  name: 'allowedIAMActions',
+  sourcePath: 'rules/allowedIAMActions.js',
   parameters: {
-    blacklistedServices: {
+    restrictedServices: {
       Type: 'String',
-      Description: 'Comma separated list of services to blacklist'
+      Description: 'Comma separated list of services to restrict'
     },
-    whitelistedActions: {
+    allowedActions: {
       Type: 'String',
-      Description: 'Comma separated list of actions to whitelist among the blacklisted services'
+      Description: 'Comma separated list of actions to allow among restricted services'
     }
   },
   eventRule: {
@@ -39,9 +39,9 @@ module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
-  var whitelisted = splitOnComma(process.env.whitelistedActions);
+  var allowedActions = splitOnComma(process.env.allowedActions);
   var document = JSON.parse(event.detail.requestParameters.policyDocument);
-  var blacklistedServices = splitOnComma(process.env.blacklistedServices);
+  var restrictedServices = splitOnComma(process.env.restrictedServices);
 
   // build list of actions used.
   var actions = [];
@@ -57,23 +57,23 @@ module.exports.fn = function(event, callback) {
     var parts = pair.split(':');
     var service = parts[0];
 
-    // Check if a blacklisted service, and not on the whitelist
-    if (blacklistedServices.indexOf(service) > -1 && whitelisted.indexOf(pair) < 0) {
+    // Check if a restricted service, and not on the allowed list.
+    if (restrictedServices.indexOf(service) > -1 && allowedActions.indexOf(pair) < 0) {
       violations.push(pair);
     }
   });
 
   if (violations.length > 0) {
     var notif = {
-      subject: 'Blacklisted actions used in policy',
-      summary: 'Blacklisted actions ' + violations.join(' ') + ' used in policy',
+      subject: 'Disallowed actions used in policy',
+      summary: 'Disallowed actions ' + violations.join(' ') + ' used in policy',
       event: event
     };
     message(notif, function(err, result) {
       callback(err, result);
     });
   } else {
-    callback(null, 'Blacklisted action was not used in policy');
+    callback(null, 'Disallowed action was not used in policy');
   }
 
 };

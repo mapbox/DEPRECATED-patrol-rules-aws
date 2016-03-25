@@ -4,12 +4,12 @@ var message = require('lambda-cfn').message;
 var splitOnComma = require('lambda-cfn').splitOnComma;
 
 module.exports.config = {
-  name: 'blacklistedResources',
-  sourcePath: 'rules/blacklistedResources.js',
+  name: 'disallowedResources',
+  sourcePath: 'rules/disallowedResources.js',
   parameters: {
-    backlistedResourceArns: {
+    disallowedResourceArns: {
       Type: 'String',
-      Description: 'Comma separated list of ARNs to blacklist. Any policy document that grants access to these ARNs will trigger a notification.'
+      Description: 'Comma separated list of ARNs to disallow. Any policy document that grants access to these ARNs will trigger a notification.'
     }
   },
   eventRule: {
@@ -39,7 +39,7 @@ module.exports.fn = function(event, callback) {
   var iam = new AWS.IAM();
   var q = queue(1);
 
-  var blacklisted = splitOnComma(process.env.blacklistedResourceArns);
+  var disallowedResources = splitOnComma(process.env.disallowedResourceArns);
   var document = event.detail.requestParameters.policyDocument;
   var parsed = JSON.parse(document);
 
@@ -49,7 +49,7 @@ module.exports.fn = function(event, callback) {
     });
   };
 
-  blacklisted.forEach(function(resource) {
+  disallowedResources.forEach(function(resource) {
     var resourceService = resource.split(':')[2];
     parsed.Statement.forEach(function(policy) {
       var actions = [];
@@ -60,7 +60,7 @@ module.exports.fn = function(event, callback) {
       actions.forEach(function(action) {
         var policyService = action.split(':')[0];
         if (resourceService === policyService) {
-          // A blacklisted resource's service matches one of the services in
+          // A disallowed resource's service matches one of the services in
           // a policy.  Run through simulator.
           var params = {
             ActionNames: [action],
@@ -91,16 +91,16 @@ module.exports.fn = function(event, callback) {
     var q = queue(1);
     if (truncated) {
       q.defer(message, {
-        subject: 'Blacklisted resources rule results truncated',
-        summary: 'Blacklisted resources rule results were truncated. Paging ' +
+        subject: 'Disallowed resources rule results truncated',
+        summary: 'Disallowed resources rule results were truncated. Paging ' +
           'is not currently supported.'
       });
     }
 
     if (matches.length) {
       q.defer(message, {
-        subject: 'Policy allows access to blacklisted resources',
-        summary: 'Policy allows access to blacklisted resources: ' + matches.join(', '),
+        subject: 'Policy allows access to disallowed resources',
+        summary: 'Policy allows access to disallowed resources: ' + matches.join(', '),
         event: event
       });
     }
