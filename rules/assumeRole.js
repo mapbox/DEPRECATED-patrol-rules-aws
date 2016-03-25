@@ -5,22 +5,22 @@ module.exports.config = {
   name: 'assumeRole',
   sourcePath: 'rules/assumeRole.js',
   parameters: {
-    'blacklistedRoles': {
-      'Type': 'String',
-      'Description': 'Comma separated list of blacklisted roles',
+    blacklistedRoles: {
+      Type: 'String',
+      Description: 'Comma separated list of blacklisted roles'
     }
   },
   eventRule: {
     eventPattern: {
-      "detail-type": [
-        "AWS API Call via CloudTrail"
+      'detail-type': [
+        'AWS API Call via CloudTrail'
       ],
-      "detail": {
-        "eventSource": [
-          "sts.amazonaws.com"
+      detail: {
+        eventSource: [
+          'sts.amazonaws.com'
         ],
-        "eventName": [
-          "AssumeRole"
+        eventName: [
+          'AssumeRole'
         ]
       }
     }

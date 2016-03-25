@@ -5,27 +5,27 @@ module.exports.config = {
   name: 'cloudTrail',
   sourcePath: 'rules/cloudTrail.js',
   parameters: {
-    'blacklistedEvents': {
-      'Type': 'String',
-      'Description': 'Comma separated list of blacklisted CouldTrail event names',
+    blacklistedEvents: {
+      Type: 'String',
+      Description: 'Comma separated list of blacklisted CouldTrail event names'
     }
   },
   eventRule: {
     eventPattern:{
-      "detail-type": [
-        "AWS API Call via CloudTrail"
+      'detail-type': [
+        'AWS API Call via CloudTrail'
       ],
-      "detail": {
-        "eventSource": [
-          "cloudtrail.amazonaws.com"
+      detail: {
+        eventSource: [
+          'cloudtrail.amazonaws.com'
         ],
-      "eventName": [
-        "CreateTrail",
-        "DeleteTrail",
-        "StartLogging",
-        "StopLogging",
-        "UpdateTrail"
-      ]
+        eventName: [
+          'CreateTrail',
+          'DeleteTrail',
+          'StartLogging',
+          'StopLogging',
+          'UpdateTrail'
+        ]
       }
     }
   }
@@ -37,7 +37,6 @@ module.exports.fn = function(event, callback) {
 
   var blacklisted = splitOnComma(process.env.blacklistedEvents);
   var couldTrailEvent = event.detail.eventName;
-  //var cloudTrailARN = event.detail.requestParameters.name;
 
   // Check for fuzzy match
   var match = blacklisted.filter(function(event) {

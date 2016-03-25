@@ -11,7 +11,7 @@
     "url": "https://github.com/mapbox/crowsnest-rules-aws.git"
   },
   "scripts": {
-    "pretest": "jshint index.js && jscs index.js",
+    "pretest": "eslint rules/* && jscs rules/*",
     "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js"
   },
   "dependencies": {
@@ -23,8 +23,9 @@
   "devDependencies": {
     "aws-sdk": "^2.2.35",
     "jscs": "^1.11.3",
-    "jshint": "^2.6.3",
-    "tape": "^3.5.0"
+    "tape": "^3.5.0",
+    "eslint": "^2.4.0",
+    "eslint-config-unstyled": "^1.1.0"
   },
   "jscsConfig": {
     "preset": "airbnb",
