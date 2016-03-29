@@ -6,7 +6,7 @@ var name = rule.config.name;
 
 test('cloudfrontModifyDelete rule', function(t) {
 
-  process.env.protectedEvents = 'UpdateDistribution, DeleteDistribution';
+  process.env.protectedActions = 'UpdateDistribution, DeleteDistribution';
   process.env.protectedDistributions = 'ABCD1234FGHJ56';
 
   var updateDistributionEvent = {

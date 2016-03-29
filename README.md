@@ -30,7 +30,7 @@ The following rules are included with crowsnest-rules-aws.  Each rule is configu
 - **Description** - Checks for disallowed actions on restricted CloudFront distributions.
 - **Trigger** - The specified API calls on the specified distributions
 - **Parameters**
-  - protectedEvents - CloudFront API call on which to alarm
+  - protectedActions - CloudFront API call on which to alarm
   - protectedDistributions - CloudFront distributions on which to alarm
 
 #### cloudTrail
@@ -38,7 +38,7 @@ The following rules are included with crowsnest-rules-aws.  Each rule is configu
 - **Description** - Checks for disallowed CloudTrail actions
 - **Trigger** - The specified API calls
 - **Parameters**
-  - disallowedEvents - CloudTrail API actions to alarm on if called
+  - disallowedActions - CloudTrail API actions to alarm on if called
 
 #### disallowedResources
 
