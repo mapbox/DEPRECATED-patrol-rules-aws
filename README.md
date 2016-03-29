@@ -1,64 +1,52 @@
 # crowsnest-rules-aws
 
-This repo will be made public and renamed to crowsnest.
+A set of rules implemented using [lambda-cfn](https://github.com/mapbox/lambda-cfn) and designed to run on a [crowsnest](https://github.com/mapbox/crowsnest) stack.  The rules in this repository all aim to monitor certain parts of AWS infrastructure for best practices, security, and compliance.  Read more about the crowsnest architecture on the [crowsnest project](https://github.com/mapbox/crowsnest).
 
-# Synopsis
+### Usage
 
-The goal of Crowsnest is to make it easy to define and deploy AWS Lambda functions, as well as offer a base set of Lambda functions aimed at security and best practice monitoring.
+Follow the steps on the [crowsnest](https://github.com/mapbox/crowsnest) readme to set up your own crowsnest stack on AWS which makes use of the crowsnest-rules-aws rules.  Follow instructions on crowsnest on how to enable or disable particular rules, and, how to deploy on your own AWS account.
 
-# How does it make it easy
+### Rules
 
-- Mechanism to quickly define CloudFormation templating for a Lambda function
-- Pass configuration to Lambda functions as CloudFormation parameters.  Uses [streambot](https://github.com/mapbox/streambot)
-- Define basic CloudWatch alarms
-- Define a base IAM role and let you add additional policy statements to it
-- Build a single CloudFormation template and deploy it with `cfn-config`
+The following rules are included with crowsnest-rules-aws.  Each rule is configurable, and you will be prompted to enter configuration values when creating a crowsnest stack as described on the crowsnest readme.
 
-# How to use
+#### allowedIAMActions
 
-The workflow for using Crowsnest is:
+- **Description** - Checks for any IAM policy created which grants actions to restricted services, except for certain allowed actions on those services.  For example, if you specify "iam, cloudtrail" as the restricted resources, and then specify "iam:PassRole" as an allowed action, any policy created which grants IAM actions other than "PassRole" will trigger an alarm.
+- **Trigger** - API call iam:CreatePolicy, iam:CreatePolicyVersion, iam:PutGroupPolicy, iam:PutRolePolicy, iam:PutUserPolicy
+- **Parameters**
+  - restrictedServices - Comma separated list of services on which to disallow all actions
+  - allowedActions - on the restrictedServices, only allow these actions to be granted
 
-- Define functions in the ./rules directory, following the spec. below.
-- Use the `build` command to wrap these functions into a CloudFormation template
-- Upload the package / lambda functions to a designated S3 location
-- Deploy the CloudFormation template
+#### assumeRole
 
-## Define functions
+- **Description** - Checks for when an IAM principal assumes a disallowed role
+- **Trigger** - API call sts:AssumeRole
+- **Parameters**
+  - disallowedRoles - Comma separated list of roles to alarm on if a user assumes said role.
 
-Rules are a .js file in ./rules which:
+#### cloudfrontModifyDelete
 
-- export a function which will be run on AWS Lambda.  The function should be exported to `module.exports.fn`
-  - first param is `event`
-  - second param is `callback`
-  - call `callback` in standard node.js style when the function is done (callback(err, message))
-- define configuration as an object, exported to `module.exports.config`
-  - `name` string name of what you call your function.
-  - `parameters` lets you pass configuration to the specific Lambda function.  Theses parameters become parameters on the CloudFormation template, and environment variables within the Lambda function when it runs.
-  - `statements` an array of IAM policy statements which will be added to the IAM role your Lambda function runs as.
-  - `eventRule` an object which contains an `eventPattern` object
-    - `eventPattern` an object which contains a CloudWatch Event Rule [Event Pattern](http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CloudWatchEventsandEventPatterns.html)
+- **Description** - Checks for disallowed actions on restricted CloudFront distributions.
+- **Trigger** - The specified API calls on the specified distributions
+- **Parameters**
+  - protectedEvents - CloudFront API call on which to alarm
+  - protectedDistributions - CloudFront distributions on which to alarm
 
-See ./examples for an example config and fn.
+#### cloudTrail
 
+- **Description** - Checks for disallowed CloudTrail actions
+- **Trigger** - The specified API calls
+- **Parameters**
+  - disallowedEvents - CloudTrail API actions to alarm on if called
 
-## Build the template
+#### disallowedResources
 
-`node build.js > myCfnTemplate.template`
+- **Description** - Checks for IAM policies that allow access to disallowed resources
+- **Trigger** - AWS API call
+- **Parameters**
+  - disallowedResourceARNs - Comma separated list of AWS ARNs.  An alarm will be triggered if an IAM policy grants any kind of access to these resources.
 
-## Upload the package
+### Tests
 
-Create a .zip of the repo, exclude .git, and upload to the path formed by:
-
-- CodeS3Bucket + CodeS3Prefix + GitSha + .zip
-
-## Deploy as CloudFormation stack
-
-- Deploy with [cfn-config](https://github.com/mapbox/cfn-config)
-
-## Create rules
-
-`node rules.js` will create CloudWatch Event Rules and lambda targets for each rule in `./rules`, so long as that rule specifies an eventRule.eventPattern object
-
-# TODO
-
-- Make this README less cryptic / assume reader knows less / Mapboxisms
+To run tests, clone the repository, run `npm install` and then `npm test`.  However, in order to run the tests with `npm test`, you must have AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY set in your environment.  The "disallowedResources" tests use the AWS IAM policy simulator in their tests.
