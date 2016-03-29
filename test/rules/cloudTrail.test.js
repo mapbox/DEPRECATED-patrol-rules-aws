@@ -7,8 +7,8 @@ var name = rule.config.name;
 
 test('cloudTrail rule', function(t) {
 
-  process.env.disallowedEvents = "CreateTrail, DeleteTrail, StartLogging, StopLogging, UpdateTrail";
-  var disallowed = splitOnComma(process.env.disallowedEvents);
+  process.env.disallowedActions = "CreateTrail, DeleteTrail, StartLogging, StopLogging, UpdateTrail";
+  var disallowed = splitOnComma(process.env.disallowedActions);
 
   // Event for unexpected change to API, especially a new or renamed CloudTrail event
   var newTrailEvent = {

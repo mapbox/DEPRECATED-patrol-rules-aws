@@ -5,9 +5,9 @@ module.exports.config = {
   name: 'cloudTrail',
   sourcePath: 'rules/cloudTrail.js',
   parameters: {
-    disallowedEvents: {
+    disallowedActions: {
       Type: 'String',
-      Description: 'Comma separated list of disallowed CouldTrail event names'
+      Description: 'Comma separated list of disallowed CouldTrail actions'
     }
   },
   eventRule: {
@@ -35,7 +35,7 @@ module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
-  var disallowed = splitOnComma(process.env.disallowedEvents);
+  var disallowed = splitOnComma(process.env.disallowedActions);
   var couldTrailEvent = event.detail.eventName;
 
   // Check for fuzzy match
