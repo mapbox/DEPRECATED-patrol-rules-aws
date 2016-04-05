@@ -1,14 +1,14 @@
-# crowsnest-rules-aws
+# patrol-rules-aws
 
-A set of rules implemented using [lambda-cfn](https://github.com/mapbox/lambda-cfn) and designed to run on a [crowsnest](https://github.com/mapbox/crowsnest) stack.  The rules in this repository all aim to monitor certain parts of AWS infrastructure for best practices, security, and compliance.  Read more about the crowsnest architecture on the [crowsnest project](https://github.com/mapbox/crowsnest).
+A set of rules implemented using [lambda-cfn](https://github.com/mapbox/lambda-cfn) and designed to run on a [patrol](https://github.com/mapbox/patrol) stack.  The rules in this repository all aim to monitor certain parts of AWS infrastructure for best practices, security, and compliance.  Read more about the patrol architecture on the [patrol project](https://github.com/mapbox/patrol).
 
 ### Usage
 
-Follow the steps on the [crowsnest](https://github.com/mapbox/crowsnest) readme to set up your own crowsnest stack on AWS which makes use of the crowsnest-rules-aws rules.  Follow instructions on crowsnest on how to enable or disable particular rules, and, how to deploy on your own AWS account.
+Follow the steps on the [patrol](https://github.com/mapbox/patrol) readme to set up your own patrol stack on AWS which makes use of the patrol-rules-aws rules.  Follow instructions on patrol on how to enable or disable particular rules, and, how to deploy on your own AWS account.
 
 ### Rules
 
-The following rules are included with crowsnest-rules-aws.  Each rule is configurable, and you will be prompted to enter configuration values when creating a crowsnest stack as described on the crowsnest readme.
+The following rules are included with patrol-rules-aws.  Each rule is configurable, and you will be prompted to enter configuration values when creating a patrol stack as described on the patrol readme.
 
 #### allowedIAMActions
 

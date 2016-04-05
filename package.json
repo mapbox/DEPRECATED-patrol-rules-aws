@@ -1,14 +1,14 @@
 {
-  "name": "crowsnest-rules-aws",
+  "name": "patrol-rules-aws",
   "version": "0.0.1",
-  "description": "AWS rules for Crowsnest",
+  "description": "AWS rules for Patrol",
   "main": "index.js",
   "engines": {
     "node": "0.10.38"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mapbox/crowsnest-rules-aws.git"
+    "url": "https://github.com/mapbox/patrol-rules-aws.git"
   },
   "scripts": {
     "pretest": "eslint rules/* && jscs rules/*",
@@ -41,7 +41,7 @@
   "author": "Mapbox, Inc.",
   "license": "BSD",
   "bugs": {
-    "url": "https://github.com/mapbox/crowsnest-rules-aws/issues"
+    "url": "https://github.com/mapbox/patrol-rules-aws/issues"
   },
-  "homepage": "https://github.com/mapbox/crowsnest-rules-aws"
+  "homepage": "https://github.com/mapbox/patrol-rules-aws"
 }
