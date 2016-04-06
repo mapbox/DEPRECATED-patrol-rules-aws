@@ -1,5 +1,7 @@
 # patrol-rules-aws
 
+[![Build Status](https://travis-ci.org/mapbox/patrol-rules-aws.svg?branch=master)](https://travis-ci.org/mapbox/patrol-rules-aws)
+
 A set of rules implemented using [lambda-cfn](https://github.com/mapbox/lambda-cfn) and designed to run on a [patrol](https://github.com/mapbox/patrol) stack.  The rules in this repository all aim to monitor certain parts of AWS infrastructure for best practices, security, and compliance.  Read more about the patrol architecture on the [patrol project](https://github.com/mapbox/patrol).
 
 ### Usage
