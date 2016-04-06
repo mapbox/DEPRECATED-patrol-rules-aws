@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Crow's nest Travis user",
+  "Description": "Patrol Travis user",
   "Resources": {
     "TravisUser": {
       "Type": "AWS::IAM::User",
