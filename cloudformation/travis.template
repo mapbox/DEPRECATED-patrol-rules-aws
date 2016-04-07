@@ -7,7 +7,7 @@
       "Properties": {
         "Policies": [
           {
-            "PolicyName": "BuildPatrol",
+            "PolicyName": "PatrolTests",
             "PolicyDocument": {
               "Version": "2012-10-17",
               "Statement": [
