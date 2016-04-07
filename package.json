@@ -1,6 +1,6 @@
 {
   "name": "patrol-rules-aws",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "AWS rules for Patrol",
   "main": "index.js",
   "engines": {
