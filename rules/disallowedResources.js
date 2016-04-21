@@ -1,7 +1,8 @@
 var AWS = require('aws-sdk');
-var queue = require('queue-async');
+var d3 = require('d3-queue');
 var message = require('lambda-cfn').message;
 var splitOnComma = require('lambda-cfn').splitOnComma;
+var getEnv = require('lambda-cfn').getEnv;
 
 module.exports.config = {
   name: 'disallowedResources',
@@ -37,9 +38,9 @@ module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
   var iam = new AWS.IAM();
-  var q = queue(1);
+  var q = d3.queue(1);
 
-  var disallowedResources = splitOnComma(process.env.disallowedResourceArns);
+  var disallowedResources = splitOnComma(getEnv('disallowedResourceArns'));
   var document = event.detail.requestParameters.policyDocument;
   var parsed = JSON.parse(document);
 
@@ -88,7 +89,7 @@ module.exports.fn = function(event, callback) {
     });
 
     // Report
-    var q = queue(1);
+    var q = d3.queue(1);
     if (truncated) {
       q.defer(message, {
         subject: 'Disallowed resources rule results truncated',

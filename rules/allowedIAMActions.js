@@ -1,5 +1,6 @@
 var message = require('lambda-cfn').message;
 var splitOnComma = require('lambda-cfn').splitOnComma;
+var getEnv = require('lambda-cfn').getEnv;
 
 module.exports.config = {
   name: 'allowedIAMActions',
@@ -39,9 +40,9 @@ module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
-  var allowedActions = splitOnComma(process.env.allowedActions);
+  var allowedActions = splitOnComma(getEnv('allowedActions'));
   var document = JSON.parse(event.detail.requestParameters.policyDocument);
-  var restrictedServices = splitOnComma(process.env.restrictedServices);
+  var restrictedServices = splitOnComma(getEnv('restrictedServices'));
 
   // build list of actions used.
   var actions = [];
