@@ -1,5 +1,6 @@
 var message = require('lambda-cfn').message;
 var splitOnComma = require('lambda-cfn').splitOnComma;
+var getEnv = require('lambda-cfn').getEnv;
 
 module.exports.config = {
   name: 'cloudTrail',
@@ -35,18 +36,18 @@ module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
-  var disallowed = splitOnComma(process.env.disallowedActions);
-  var couldTrailEvent = event.detail.eventName;
+  var disallowed = splitOnComma(getEnv('disallowedActions'));
+  var cloudTrailEvent = event.detail.eventName;
 
   // Check for fuzzy match
   var match = disallowed.filter(function(event) {
-    return couldTrailEvent.indexOf(event) > -1;
+    return cloudTrailEvent.indexOf(event) > -1;
   });
 
   if (match.length > 0) {
     var notif = {
-      subject: 'Disallowed CloudTrail event ' + couldTrailEvent + ' called',
-      summary: 'Disallowed CloudTrail event ' + couldTrailEvent + ' called',
+      subject: 'Disallowed CloudTrail event ' + cloudTrailEvent + ' called',
+      summary: 'Disallowed CloudTrail event ' + cloudTrailEvent + ' called',
       event: event
     };
     message(notif, function(err, result) {

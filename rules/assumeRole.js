@@ -1,5 +1,6 @@
 var message = require('lambda-cfn').message;
 var splitOnComma = require('lambda-cfn').splitOnComma;
+var getEnv = require('lambda-cfn').getEnv;
 
 module.exports.config = {
   name: 'assumeRole',
@@ -30,7 +31,7 @@ module.exports.config = {
 module.exports.fn = function(event, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
-  var disallowed = splitOnComma(process.env.disallowedRoles);
+  var disallowed = splitOnComma(getEnv('disallowedRoles'));
   var assumedRoleArn = event.detail.requestParameters.roleArn;
   var userName = event.detail.userIdentity.userName;
 
