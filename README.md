@@ -49,6 +49,14 @@ The following rules are included with patrol-rules-aws.  Each rule is configurab
 - **Parameters**
   - disallowedResourceARNs - Comma separated list of AWS ARNs.  An alarm will be triggered if an IAM policy grants any kind of access to these resources.
 
+#### serviceLimits
+- **Description** - Queries AWS Trusted Advisor for all supported service limits and the resources approaching those service limits. The utilitization threshold for Trusted Advisor service limit warnings is 80%. Please see the [list of service limits](https://aws.amazon.com/premiumsupport/ta-faqs/#service-limits-check-questions) that are supported by Trusted Advisor.
+- **Trigger** - Scheduled rule every 5 minutes
+- **Parameters**
+  - ignoredResources - Comma separated list of AWS Trusted Advisor resourceIds to ignore. ResourceIds are most easily found using `awscli` and directly querying the support API. For example, this query will return all resourceIds for services close to their limits:
+``aws support describe-trusted-advisor-check-result --check-id eW7HH0l7J9 --query 'result.flaggedResources[?status!=`ok`][resourceId,metadata[1],metadata[2],metadata[0]]' --output table --region us-east-1``
+
+
 ### Tests
 
 To run tests, clone the repository, run `npm install` and then `npm test`.  However, in order to run the tests with `npm test`, you must have AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY set in your environment.  The "disallowedResources" tests use the AWS IAM policy simulator in their tests.
