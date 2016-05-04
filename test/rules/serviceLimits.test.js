@@ -52,8 +52,9 @@ nock('https://support.us-east-1.amazonaws.com:443', {"encodedQueryParams":true})
   }
 );
 
-test('Single service warning found', function(t) {
+test('Single service limit warning found', function(t) {
   fn(event, function(err,message) {
+    t.error(err, 'No error when calling ' + name);
     t.equal(message.subject,'Service limit warning for AutoScaling in us-west-1');
     t.end();
   });
@@ -133,10 +134,10 @@ nock('https://support.us-east-1.amazonaws.com:443', {"encodedQueryParams":true})
       ]
     }
   }
-        );
+);
 
 test('Multiple services in warning', function(t) {
-  delete process.env.ignoredResources;
+  process.env.ignoredResources = '';
   fn(event, function(err,message) {
     t.equal(message.subject,'Service limit warning for multiple services');
     t.end();
