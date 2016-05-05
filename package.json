@@ -18,7 +18,7 @@
     "streambot": "3.4.0",
     "d3-queue": "2.0.3",
     "app-root-path": "1.2.0",
-    "lambda-cfn": "0.1.0"
+    "lambda-cfn": "0.1.1"
   },
   "devDependencies": {
     "aws-sdk": "^2.2.35",
