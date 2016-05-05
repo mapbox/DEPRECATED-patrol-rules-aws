@@ -54,12 +54,18 @@ module.exports.fn = function(event, callback) {
     if (notIgnored.length > 0) {
       var warning = [];
       notIgnored.forEach(function(k, i) {
-        warning[i] = util.format('Service: %s \nResource: %s \nRegion: %s \nLimit: %s \nCurrent: %s \n', k.metadata[1], k.metadata[2], k.metadata[0], k.metadata[3], k.metadata[4]);
+        warning[i] = util.format('Service: %s \nResource: %s \nRegion: %s \nLimit: %s \nCurrent: %s \nResourceId: %s\n\n', k.metadata[1], k.metadata[2], k.metadata[0], k.metadata[3], k.metadata[4], k.resourceId);
       });
 
       if (notIgnored.length == 1) {
+        if (notIgnored[0].metadata[0] == '-') {
+          var region = 'all regions';
+        } else {
+          var region = notIgnored[0].metadata[0];
+        }
+
         var notif = {
-          subject: util.format('Service limit warning for %s in %s', notIgnored[0].metadata[1], notIgnored[0].metadata[0]),
+          subject: util.format('Service limit warning for %s in %s', notIgnored[0].metadata[1], region),
           summary: warning.join(''),
           event: notIgnored
         };
