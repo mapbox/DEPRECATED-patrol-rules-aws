@@ -3,7 +3,23 @@ var message = require('lambda-cfn').message;
 module.exports.config = {
   name: 'loginFromNewDevice',
   sourcePath: 'rules/loginFromNewDevice.js',
-  parameters: {},
+  parameters: {
+    deviceHistory: {
+      Type: 'String',
+      Description: 'ARN of S3 bucket for storing a list of known devices'
+    }
+  },
+  statements: [
+    {
+      Effect: 'Allow',
+      Action: [
+        's3:GetObject',
+        's3:ListBucket',
+        's3:PutObject'
+      ],
+      Resource: { 'Ref': 'deviceHistory' }
+    }
+  ],
   eventRule: {
     eventPattern: {
       'detail-type': [
