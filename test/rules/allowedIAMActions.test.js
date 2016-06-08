@@ -4,7 +4,7 @@ var rule = require('../../rules/allowedIAMActions.js');
 var fn = rule.fn;
 var name = rule.config.name;
 
-test('allowedIAMActions rule', function(t) {
+test('allowedIAMActions rule', { skip: true }, function(t) {
 
   var event = {
     "detail": {
