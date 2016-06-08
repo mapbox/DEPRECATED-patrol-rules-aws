@@ -17,7 +17,7 @@ module.exports.config = {
         's3:ListBucket',
         's3:PutObject'
       ],
-      Resource: { 'Ref': 'deviceHistory' }
+      Resource: { Ref: 'deviceHistory' }
     }
   ],
   eventRule: {
@@ -41,8 +41,13 @@ module.exports.fn = function(evt, cb) {
   var hash = generateDeviceIdentity(evt);
   var note = generateNotification(evt);
 
-  if (isNewDevice(hash)) message(note, function(err, res) { cb(err, res) });
-  else cb(null, ':ok_hand:');
+  if (isNewDevice(hash)) {
+    message(note, function(err, res) {
+      cb(err, res)
+    });
+  } else {
+    cb(null, ':ok_hand:');
+  }
 };
 
 /**
