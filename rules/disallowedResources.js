@@ -52,8 +52,9 @@ module.exports.fn = function(event, callback) {
   //console.log(event);
   if (event['detail-type'] == 'Scheduled Event') {
     //call policy processor
-    policyProcessor(function(err,data) {
+    policyProcessor(function(err, data) {
       batchedPolicies = data;
+
       //console.log(JSON.stringify(batchedPolicies));
       for (var role in batchedPolicies) {
         for (var policy in batchedPolicies[role].policies) {
@@ -65,20 +66,21 @@ module.exports.fn = function(event, callback) {
           if (policyDetail.policyDocument) {
             q.defer(processPolicy, policyDetail);
           } else {
-            console.log('ERROR:%s:%s',policyDetail.roleName, policyDetail.policyName);
+            console.log('ERROR:%s:%s', policyDetail.roleName, policyDetail.policyName);
           }
         }
       }
+
       q.awaitAll(function(err, data) {
-         return callback(err,data);
+        return callback(err, data);
       });
     });
   } else if (event.detail.errorCode) {
     return callback(null, event.detail.errorMessage);
   } else {
-    processPolicy(event.detail.requestParameters, function(err,data) {
+    processPolicy(event.detail.requestParameters, function(err, data) {
       if (err) return callback(err);
-      else return callback(null,data);
+      else return callback(null, data);
     });
   }
 
@@ -89,8 +91,10 @@ module.exports.fn = function(event, callback) {
         cb(err, data);
       });
     };
+
     // try {
-       var parsed = JSON.parse(policyDetail.policyDocument);
+    var parsed = JSON.parse(policyDetail.policyDocument);
+
     // } catch(e) {
     //   console.log(util.format('Error %s parsing %s',e,policyDetail.policyDocument));
     // }
@@ -103,6 +107,7 @@ module.exports.fn = function(event, callback) {
         if (policy.Effect == 'Allow' && policy.Action) {
           actions = typeof policy.Action == 'string' ? [policy.Action] : policy.Action;
         }
+
         //console.log(actions);
         actions.forEach(function(action) {
           var policyService = action.split(':')[0];
@@ -157,6 +162,7 @@ module.exports.fn = function(event, callback) {
         } else {
           notif.event = event;
         }
+
         q.defer(message, notif);
       }
 

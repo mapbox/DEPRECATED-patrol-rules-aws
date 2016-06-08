@@ -47,8 +47,9 @@ module.exports.fn = function(event, callback) {
 
   if (event['detail-type'] == 'Scheduled Event') {
     //call policy processor
-    policyProcessor(function(err,data) {
+    policyProcessor(function(err, data) {
       batchedPolicies = data;
+
       //console.log("BATCHED POLICIES: " + JSON.stringify(batchedPolicies));
       for (var role in batchedPolicies) {
         for (var policy in batchedPolicies[role].policies) {
@@ -57,24 +58,26 @@ module.exports.fn = function(event, callback) {
             policyName: policy,
             policyDocument: batchedPolicies[role].policies[policy]
           };
-         q.defer(processPolicy, policyDetail);
+          q.defer(processPolicy, policyDetail);
         }
       }
+
       q.awaitAll(function(err, data) {
-        return callback(err,data);
+        return callback(err, data);
       });
     });
   } else if (event.detail.errorCode) {
     return callback(null, event.detail.errorMessage);
   } else {
-    processPolicy(event.detail.requestParameters, function(err,data) {
+    processPolicy(event.detail.requestParameters, function(err, data) {
       if (err) return callback(err);
-      else return callback(null,data);
+      else return callback(null, data);
     });
   }
 
   function processPolicy(policyDetail, next) {
     var document = JSON.parse(policyDetail.policyDocument);
+
     // build list of actions used.
     var actions = [];
     document.Statement.forEach(function(policy) {
