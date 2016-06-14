@@ -44,6 +44,12 @@ var evt = {
 	"recipientAccountId": "13371337"
 };
 
+test('loginFromNewDevice.generateDeviceIdentity', function (t) {
+	var found = rule.generateDeviceIdentity(evt);
+	var wants = found.match(/[0-9a-f]{64}/);
+	t.equal(found, wants[0], 'generates a identify hash');
+	t.end();
+});
 
 test('Login from new device', function (t) {
   t.plan(2);

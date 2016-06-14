@@ -1,4 +1,5 @@
 var message = require('lambda-cfn').message;
+var SHA = require('jssha');
 
 module.exports.config = {
   name: 'loginFromNewDevice',
@@ -57,7 +58,9 @@ module.exports.fn = function(evt, cb) {
  * @return {string} hash the identifies a user's device
  */
 function generateDeviceIdentity(evt) {
-  return evt.userIdentity.arn + evt.userAgent;
+  var shaObj = new SHA('SHA-256', 'TEXT');
+  shaObj.update(evt.userIdentity.arn + evt.userAgent);
+  return shaObj.getHash('HEX');
 };
 
 /**
