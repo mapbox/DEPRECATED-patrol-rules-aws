@@ -1,5 +1,8 @@
 var message = require('lambda-cfn').message;
 var SHA = require('jssha');
+var knownDevicesInS3 = {
+  '0637aa30': 1465949176925
+};
 
 module.exports.config = {
   name: 'loginFromNewDevice',
@@ -47,7 +50,7 @@ module.exports.fn = function(evt, cb) {
       cb(err, res)
     });
   } else {
-    cb(null, ':ok_hand:');
+    cb(null, 'Device is known');
   }
 };
 
@@ -85,7 +88,7 @@ function generateNotification(evt) {
  * @return {boolean} to determine if a user's device is new
  */
 function isNewDevice(dhash) {
-  return dhash.match(/Safari/);
+  return !knownDevicesInS3[dhash.substring(0, 8)];
 };
 
 module.exports.generateDeviceIdentity = generateDeviceIdentity;

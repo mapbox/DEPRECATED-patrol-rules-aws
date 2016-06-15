@@ -51,8 +51,19 @@ test('loginFromNewDevice.generateDeviceIdentity', function (t) {
 	t.end();
 });
 
+test('Login from known device', function (t) {
+  t.plan(2);
+
+  fn(evt, function (err, message) {
+    t.error(err, 'No error when calling ' + name);
+    t.equal(message, 'Device is known');
+  });
+});
+
 test('Login from new device', function (t) {
   t.plan(2);
+
+	evt.userAgent = 'Internet Explorer 5.0';
 
   fn(evt, function (err, message) {
     t.error(err, 'No error when calling ' + name);
