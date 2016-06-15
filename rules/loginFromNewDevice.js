@@ -31,15 +31,15 @@ module.exports.config = {
         's3:PutObject'
       ],
       Resource: {
-        "Fn::Join": [
-          "",
+        'Fn::Join': [
+          '',
           [
-            "arn:aws:s3:::",
-            { "Ref": "patrolrulesawsloginFromNewDeviceBucket" },
-            "/",
-            { "Ref": "patrolrulesawsloginFromNewDeviceBucketPrefix" },
-            "/",
-            "*"
+            'arn:aws:s3:::',
+            { Ref: 'patrolrulesawsloginFromNewDeviceBucket' },
+            '/',
+            { Ref: 'patrolrulesawsloginFromNewDeviceBucketPrefix' },
+            '/',
+            '*'
           ]
         ]
       }
