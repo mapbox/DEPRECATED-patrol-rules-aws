@@ -61,12 +61,14 @@ test('Login from known device', function (t) {
 });
 
 test('Login from new device', function (t) {
-  t.plan(2);
+  t.plan(3);
 
 	evt.userAgent = 'Internet Explorer 5.0';
+	var summary = 'First time ABCDEFGHIJKL:lolcat logins from ' + evt.userAgent;
 
   fn(evt, function (err, message) {
     t.error(err, 'No error when calling ' + name);
-    t.equal(message, 'User login from a new device');
+    t.equal(message.subject, 'Login from a new device');
+    t.equal(message.summary, summary);
   });
 });
