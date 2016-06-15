@@ -1,9 +1,9 @@
 var test = require('tape');
-
-var rule = require('../../rules/directLogin');
+var lambdaCfn = require('lambda-cfn');
+var rule = require('../../rules/loginWithPassword');
 var fn = rule.fn;
 
-test('directLogin rule - not allowed', function(t) {
+test('loginWithPassword rule - not allowed', function(t) {
   var event = {
     "eventVersion": "1.02",
     "userIdentity": {
@@ -32,10 +32,27 @@ test('directLogin rule - not allowed', function(t) {
     "eventType": "AwsConsoleSignIn",
     "recipientAccountId": "000000000000"
   };
+
+  t.plan(3);
+
+  var message = lambdaCfn.message;
+  lambdaCfn.message = function(params, callback) {
+    t.deepEqual(params, {
+      subject: 'User logged in with password',
+      summary: 'User rclark logged into the console using a password',
+      event: event
+    }, 'expected notification was sent');
+    callback();
+  };
+
+  fn(event, function(err, message) {
+    t.ifError(err, 'no error message');
+    t.notOk(message, 'no success message');
+  });
 });
 
 
-test('directLogin rule - allowed', function(t) {
+test('loginWithPassword rule - allowed', function(t) {
   var event = {
     "eventVersion": "1.02",
     "userIdentity": {
@@ -75,4 +92,35 @@ test('directLogin rule - allowed', function(t) {
     "eventType": "AwsConsoleSignIn",
     "recipientAccountId": "000000000000"
   };
+
+  var message = lambdaCfn.message;
+  lambdaCfn.message = function(params, callback) {
+    t.fail('no notification should be sent');
+    callback();
+  };
+
+  fn(event, function(err, message) {
+    t.ifError(err, 'no error message');
+    t.equal(message, 'Valid federated login detected', 'expected success message');
+    t.end();
+  });
+});
+
+test('loginWithPassword rule - invalid event type', function(t) {
+  var event = {
+    "detail": {
+      "userIdentity": {
+        "userName": "bob",
+      },
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::12345678901:role/Administrator-123456",
+        "roleSessionName": "bob"
+      }
+    }
+  };
+
+  fn(event, function(err) {
+    t.equal(err.message, 'invalid event');
+    t.end();
+  });
 });
