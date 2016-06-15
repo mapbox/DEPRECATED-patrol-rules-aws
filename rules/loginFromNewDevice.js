@@ -115,8 +115,9 @@ function isNewDevice(s3bucket, iden, done) {
   listDevices(s3bucket, function(err, list) {
     if (err) return done(err);
 
-    var found = list.find(function(elem) {
-      return elem.Key.match(iden)
+    var found = null;
+    list.forEach(function(device) {
+      if (device.Key.match(iden)) found = device;
     });
 
     done(err, !found);
