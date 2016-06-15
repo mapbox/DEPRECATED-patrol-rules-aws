@@ -1,8 +1,13 @@
+var AWS = require('aws-sdk');
+var getEnv = require('lambda-cfn').getEnv;
 var message = require('lambda-cfn').message;
+var s3bucket = new AWS.S3({
+  params: {
+    Bucket: getEnv('Bucket'),
+    Prefix: getEnv('BucketPrefix')
+  }
+});
 var SHA = require('jssha');
-var knownDevicesInS3 = {
-  '0637aa30': 1465949176925
-};
 
 module.exports.config = {
   name: 'loginFromNewDevice',
@@ -10,7 +15,11 @@ module.exports.config = {
   parameters: {
     Bucket: {
       Type: 'String',
-      Description: 'ARN of S3 bucket for storing a list of known devices'
+      Description: 'S3 bucket for storing a list of known devices'
+    },
+    BucketPrefix: {
+      Type: 'String',
+      Description: 'S3 bucket prefix where the list of known devices is stored'
     }
   },
   statements: [
@@ -21,7 +30,19 @@ module.exports.config = {
         's3:ListBucket',
         's3:PutObject'
       ],
-      Resource: { Ref: 'patrolrulesawsloginFromNewDeviceBucket' }
+      Resource: {
+        "Fn::Join": [
+          "",
+          [
+            "arn:aws:s3:::",
+            { "Ref": "patrolrulesawsloginFromNewDeviceBucket" },
+            "/",
+            { "Ref": "patrolrulesawsloginFromNewDeviceBucketPrefix" },
+            "/",
+            "*"
+          ]
+        ]
+      }
     }
   ],
   eventRule: {
@@ -45,13 +66,15 @@ module.exports.fn = function(evt, cb) {
   var hash = generateDeviceIdentity(evt);
   var note = generateNotification(evt);
 
-  if (isNewDevice(hash)) {
-    message(note, function(err, res) {
-      cb(err, res)
-    });
-  } else {
-    cb(null, 'Device is known');
-  }
+  isNewDevice(s3bucket, hash, function(err, isNew) {
+    if (isNew) {
+      message(note, function(err, res) {
+        cb(err, res)
+      });
+    } else {
+      cb(null, 'Device is known');
+    }
+  });
 };
 
 /**
@@ -83,14 +106,38 @@ function generateNotification(evt) {
 
 /**
  * Match a user's device hash against a list of known devices
- * TODO: use an external storage, e.g. S3
- * @param {string} dhash is a hash that identifies a user's device
- * @return {boolean} to determine if a user's device is new
+ * @param {object} s3bucket is an instance of AWS.S3 initialized on a bucket
+ * @param {string} iden is a hash that identifies a user's device
+ * @param {function} done callback to return (err, isNew) to the caller
+ *
  */
-function isNewDevice(dhash) {
-  return !knownDevicesInS3[dhash.substring(0, 8)];
+function isNewDevice(s3bucket, iden, done) {
+  listDevices(s3bucket, function(err, list) {
+    var found = false;
+    if (list) {
+      found = list.find(function(elem) {
+        return elem.Key.match(iden)
+      });
+    }
+
+    done(err, !found);
+  });
 };
+
+/**
+ * List known devices found in a s3 bucket
+ * @param {object} s3bucket is an instance of AWS.S3 initialized on a bucket
+ * @param {function} done callback to return (err, list) to the caller
+ *
+ */
+function listDevices(s3bucket, done) {
+  s3bucket.listObjects({}, function(err, list) {
+    if (err) return done(err);
+    done(null, list.Contents);
+  });
+}
 
 module.exports.generateDeviceIdentity = generateDeviceIdentity;
 module.exports.generateNotification = generateNotification;
 module.exports.isNewDevice = isNewDevice;
+module.exports.listDevices = listDevices;
