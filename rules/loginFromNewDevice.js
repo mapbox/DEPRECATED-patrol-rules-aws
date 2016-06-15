@@ -113,12 +113,11 @@ function generateNotification(evt) {
  */
 function isNewDevice(s3bucket, iden, done) {
   listDevices(s3bucket, function(err, list) {
-    var found = false;
-    if (list) {
-      found = list.find(function(elem) {
-        return elem.Key.match(iden)
-      });
-    }
+    if (err) return done(err);
+
+    var found = list.find(function(elem) {
+      return elem.Key.match(iden)
+    });
 
     done(err, !found);
   });
