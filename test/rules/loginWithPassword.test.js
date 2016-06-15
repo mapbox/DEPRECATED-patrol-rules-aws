@@ -43,6 +43,7 @@ test('loginWithPassword rule - not allowed', function(t) {
       event: event
     }, 'expected notification was sent');
     callback();
+    lambdaCfn.message = message;
   };
 
   fn(event, function(err, message) {
@@ -97,11 +98,13 @@ test('loginWithPassword rule - allowed', function(t) {
   lambdaCfn.message = function(params, callback) {
     t.fail('no notification should be sent');
     callback();
+    lambdaCfn.message = message;
   };
 
   fn(event, function(err, message) {
     t.ifError(err, 'no error message');
     t.equal(message, 'Valid federated login detected', 'expected success message');
+    lambdaCfn.message = message;
     t.end();
   });
 });
