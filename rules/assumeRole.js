@@ -9,7 +9,7 @@ module.exports.config = {
     disallowedRoles: {
       Type: 'String',
       Description: 'Comma separated list of disallowed roles'
-    }
+      ,    }
   },
   eventRule: {
     eventPattern: {
