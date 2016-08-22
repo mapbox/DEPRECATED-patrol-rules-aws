@@ -56,6 +56,9 @@ The following rules are included with patrol-rules-aws.  Each rule is configurab
   - ignoredResources - Comma separated list of AWS Trusted Advisor resourceIds to ignore. ResourceIds are most easily found using `awscli` and directly querying the support API. For example, this query will return all resourceIds for services close to their limits:
 ``aws support describe-trusted-advisor-check-result --check-id eW7HH0l7J9 --query 'result.flaggedResources[?status!=`ok`][resourceId,metadata[1],metadata[2],metadata[0]]' --output table --region us-east-1``
 
+#### rootLogin
+- **Description** - Checks if the root AWS user logged in to the console
+- **Trigger** - AWS Console Sign-in
 
 ### Tests
 
