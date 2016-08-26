@@ -12,7 +12,7 @@
   },
   "scripts": {
     "pretest": "eslint rules/* && jscs rules/*",
-    "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js"
+    "test": "NODE_ENV=test tape test/rules/ec2CreatedByConsole.test.js"
   },
   "dependencies": {
     "streambot": "3.4.0",
