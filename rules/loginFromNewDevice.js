@@ -69,7 +69,7 @@ module.exports.fn = function(evt, cb) {
   isNewDevice(s3bucket, hash, function(err, isNew) {
     if (isNew) {
       message(note, function(err, res) {
-        cb(err, res)
+        cb(err, res);
       });
     } else {
       cb(null, 'Device is known');
@@ -114,8 +114,13 @@ function generateNotification(evt) {
 function isNewDevice(s3bucket, iden, done) {
   s3bucket.listObjects({}, function(err, list) {
     if (err) return done(err);
+
     // Skip the s3 key and grab the hash (the last element in the path)
-    var knownHashes = list.Contents.map((d) => d.Key.split('/').slice(-1)[0]);
+    var knownHashes = list.Contents
+      .map(function(d) {
+        return d.Key.split('/').slice(-1)[0];
+      });
+
     done(null, knownHashes.indexOf(iden) < 0);
   });
 };
