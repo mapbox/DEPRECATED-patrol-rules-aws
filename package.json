@@ -18,10 +18,12 @@
     "streambot": "3.4.0",
     "d3-queue": "2.0.3",
     "app-root-path": "1.2.0",
-    "lambda-cfn": "0.1.4"
+    "lambda-cfn": "0.1.4",
+    "jssha": "^2.1.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.2.35",
+    "aws-sdk-mock": "^1.3.0",
     "jscs": "^1.11.3",
     "tape": "^3.5.0",
     "eslint": "^2.4.0",
