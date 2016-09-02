@@ -112,28 +112,14 @@ function generateNotification(evt) {
  *
  */
 function isNewDevice(s3bucket, iden, done) {
-  listDevices(s3bucket, function(err, list) {
+  s3bucket.listObjects({}, function(err, list) {
     if (err) return done(err);
     // Skip the s3 key and grab the hash (the last element in the path)
-    var knownHashes = list.map((d) => d.Key.split('/').slice(-1)[0]);
+    var knownHashes = list.Contents.map((d) => d.Key.split('/').slice(-1)[0]);
     done(null, knownHashes.indexOf(iden) < 0);
   });
 };
 
-/**
- * List known devices found in a s3 bucket
- * @param {object} s3bucket is an instance of AWS.S3 initialized on a bucket
- * @param {function} done callback to return (err, list) to the caller
- *
- */
-function listDevices(s3bucket, done) {
-  s3bucket.listObjects({}, function(err, list) {
-    if (err) return done(err);
-    done(null, list.Contents);
-  });
-}
-
 module.exports.generateDeviceIdentity = generateDeviceIdentity;
 module.exports.generateNotification = generateNotification;
 module.exports.isNewDevice = isNewDevice;
-module.exports.listDevices = listDevices;

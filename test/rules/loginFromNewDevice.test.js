@@ -112,20 +112,6 @@ test('loginFromNewDevice.isNewDevice', function (t) {
   });
 });
 
-test('loginFromNewDevice.listDevices', function (t) {
-  t.plan(2);
-
-  var stub = sinon.stub(s3bucket, 'listObjects', function (ops, cb) {
-    cb(null, s3mock);
-  });
-
-  rule.listDevices(s3bucket, function (err, list) {
-    t.equal(list.length, 2, 'finds 2 known devices');
-    t.true(list[0].Key.match(/b33f/), 'finds a b33f device');
-    s3bucket.listObjects.restore();
-  });
-});
-
 test('Login from known device', function (t) {
   t.plan(2);
 
