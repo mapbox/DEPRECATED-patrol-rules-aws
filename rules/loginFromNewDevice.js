@@ -1,12 +1,6 @@
 var AWS = require('aws-sdk');
 var getEnv = require('lambda-cfn').getEnv;
 var message = require('lambda-cfn').message;
-var s3bucket = new AWS.S3({
-  params: {
-    Bucket: getEnv('Bucket'),
-    Prefix: getEnv('BucketPrefix')
-  }
-});
 var SHA = require('jssha');
 
 module.exports.config = {
@@ -66,6 +60,12 @@ module.exports.fn = function(evt, cb) {
   var hash = generateDeviceIdentity(evt);
   var note = generateNotification(evt);
 
+  var s3params = {
+    Bucket: getEnv('Bucket'),
+    Prefix: getEnv('BucketPrefix')
+  };
+  var s3bucket = evt.s3bucket || new AWS.S3(s3params);
+
   isNewDevice(s3bucket, hash, function(err, isNew) {
     if (isNew) {
       message(note, function(err, res) {
@@ -114,13 +114,9 @@ function generateNotification(evt) {
 function isNewDevice(s3bucket, iden, done) {
   listDevices(s3bucket, function(err, list) {
     if (err) return done(err);
-
-    var found = null;
-    list.forEach(function(device) {
-      if (device.Key.match(iden)) found = device;
-    });
-
-    done(err, !found);
+    // Skip the s3 key and grab the hash (the last element in the path)
+    var knownHashes = list.map((d) => d.Key.split('/').slice(-1)[0]);
+    done(null, knownHashes.indexOf(iden) < 0);
   });
 };
 

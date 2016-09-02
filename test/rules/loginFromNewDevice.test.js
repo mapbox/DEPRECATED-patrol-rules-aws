@@ -47,6 +47,8 @@ var evt = {
   "recipientAccountId": "13371337"
 };
 
+var generatedIdentity = rule.generateDeviceIdentity(evt);
+
 var s3mock = {
   Contents: [
     {
@@ -56,6 +58,11 @@ var s3mock = {
     },
     {
       Key: "playground/rodowi/known-devices/0xf00000",
+      LastModified: "2016-06-15T01:46:22.000Z",
+      ETag: "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    {
+      Key: "playground/rodowi/known-devices/" + generatedIdentity,
       LastModified: "2016-06-15T01:46:22.000Z",
       ETag: "d41d8cd98f00b204e9800998ecf8427e"
     }
@@ -86,19 +93,22 @@ test('loginFromNewDevice.generateDeviceIdentity', function (t) {
 });
 
 test('loginFromNewDevice.isNewDevice', function (t) {
-  t.plan(2);
-
-  var stub = sinon.stub(s3bucket, 'listObjects', function (ops, cb) {
-    cb(null, s3mock);
-  });
+  t.plan(4);
 
   rule.isNewDevice(s3bucket, 'Random Mozilla', function (err, isNew) {
     t.true(isNew, 'Random Mozilla is a new device');
   });
 
+  rule.isNewDevice(s3bucket, generatedIdentity, function (err, isNew) {
+    t.false(isNew, generatedIdentity + ' is not a new device');
+  });
+
+  rule.isNewDevice(s3bucket, '0x00b33f', function (err, isNew) {
+    t.false(isNew, '0x00b33f is not a new device');
+  });
+
   rule.isNewDevice(s3bucket, 'b33f', function (err, isNew) {
-    t.false(isNew, 'b33f is a known device');
-    s3bucket.listObjects.restore();
+    t.true(isNew, 'but b33f is a new device - enforcing full string match');
   });
 });
 
