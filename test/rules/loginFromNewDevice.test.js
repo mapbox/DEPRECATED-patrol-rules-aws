@@ -124,8 +124,12 @@ test('Login from known device', function (t) {
 test('Login from new device', function (t) {
   t.plan(3);
 
-  evt.userAgent = 'Internet Explorer 5.0';
-  var summary = 'First time ABCDEFGHIJKL:lolcat logins from ' + evt.userAgent;
+  var uarn = 'ABCDEFGHIJKL:lolcat';
+  var agen = 'Internet Explorer 5.0';
+  var summary = 'First time ' + uarn + ' logins from ' + agen;
+
+  evt.userIdentity.arn = uarn;
+  evt.userAgent = agen;
 
   fn(evt, function (err, message) {
     t.error(err, 'No error when calling ' + name);
