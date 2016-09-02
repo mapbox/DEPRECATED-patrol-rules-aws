@@ -76,12 +76,20 @@ test('setup', function (t) {
     cb(null, s3mock);
   });
 
+  AWSMock.mock('S3', 'putObject', function (params, cb) {
+    var response = {
+      data: { ETag: '0x00b33f' }
+    };
+    cb(null, response);
+  });
+
   s3bucket = new AWS.S3({
     params: {
       Bucket: 'evilcorp',
       Prefix: 'rodowi/known-devices'
     }
   });
+
   t.end();
 });
 

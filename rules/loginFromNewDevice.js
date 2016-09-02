@@ -68,8 +68,17 @@ module.exports.fn = function(evt, cb) {
 
   isNewDevice(s3bucket, hash, function(err, isNew) {
     if (isNew) {
-      message(note, function(err, res) {
-        cb(err, res);
+      // Add new hash to s3 bucket + prefix
+      var iden = evt.userIdentity.principalId;
+      var agen = evt.userAgent;
+      var params = {
+        Key: s3params.Prefix + '/' + hash,
+        Body: iden + ' signed in from ' + agen + ' on ' + Date.now()
+      };
+      s3bucket.putObject(params, function(err, _) {
+        if (err) console.log(err);
+
+        message(note, cb);
       });
     } else {
       cb(null, 'Device is known');
