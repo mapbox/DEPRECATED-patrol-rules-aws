@@ -1,4 +1,5 @@
 var AWS = require('aws-sdk');
+var AWSMock = require('aws-sdk-mock');
 var sinon = require('sinon');
 var test = require('tape');
 
@@ -64,6 +65,10 @@ var s3mock = {
 var s3bucket = null;
 
 test('setup', function (t) {
+  AWSMock.mock('S3', 'listObjects', function (params, cb) {
+    cb(null, s3mock);
+  });
+
   s3bucket = new AWS.S3({
     params: {
       Bucket: 'evilcorp',
