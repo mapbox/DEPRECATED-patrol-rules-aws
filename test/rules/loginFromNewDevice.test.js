@@ -117,7 +117,7 @@ test('Login from known device', function (t) {
 
   fn(evt, function (err, message) {
     t.error(err, 'No error when calling ' + name);
-    t.equal(message, 'Device is known');
+    t.equal(message, 'Device is known', 'Logs device is known');
   });
 });
 
