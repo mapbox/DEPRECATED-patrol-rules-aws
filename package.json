@@ -28,8 +28,7 @@
     "tape": "^3.5.0",
     "eslint": "^2.4.0",
     "eslint-config-unstyled": "^1.1.0",
-    "nock": "7.5.0",
-    "sinon": "^1.17.4"
+    "nock": "7.5.0"
   },
   "jscsConfig": {
     "preset": "airbnb",

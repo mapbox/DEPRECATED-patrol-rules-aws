@@ -1,6 +1,5 @@
 var AWS = require('aws-sdk');
 var AWSMock = require('aws-sdk-mock');
-var sinon = require('sinon');
 var test = require('tape');
 
 var rule = require('../../rules/loginFromNewDevice');
