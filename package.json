@@ -12,7 +12,7 @@
   },
   "scripts": {
     "pretest": "eslint rules/* && jscs rules/*",
-    "test": "NODE_ENV=test tape test/rules/userLoginIp.test.js"
+    "test": "NODE_ENV=test tape test/rules/*.test.js"
   },
   "dependencies": {
     "app-root-path": "1.2.0",

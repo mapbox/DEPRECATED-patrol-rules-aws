@@ -1,10 +1,18 @@
 var lcfn = require('lambda-cfn');
 var geoip = require('geoip-country-lite');
+var splitOnComma = require('lambda-cfn').splitOnComma;
+var getEnv = require('lambda-cfn').getEnv;
 var message = lcfn.message;
 module.exports = {};
 
 module.exports.config = {
   name: 'userLoginIp',
+  parameters: {
+    allowedCountries: {
+      Type: 'String',
+      Description: 'Comma separated list of allowed countries'
+    }
+  },
   eventRule: {
     eventPattern: {
       'detail-type': [
@@ -22,17 +30,10 @@ module.exports.config = {
   }
 };
 
-var offices = {
-  US: true,
-  IN: true,
-  DE: true,
-  CN: true,
-  PE: true
-};
-
 module.exports.fn = function(event, callback) {
   var geo = geoip.lookup(event.sourceIPAddress);
-  if (offices[geo.country]) {
+  var offices = splitOnComma(getEnv('allowedCountries'));
+  if (offices.indexOf(geo.country) > -1) {
     callback(null, 'nothing happen');
   } else {
     var notification = {
