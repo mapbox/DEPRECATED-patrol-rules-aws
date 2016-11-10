@@ -1,14 +1,12 @@
 var test = require('tape');
 var rule = require('../../rules/ec2CreatedByConsole.js');
 
-
 test('Detects instance EC2 created by console', function(t) {
   rule.fn(eventCreatedByConsole, function(err, message) {
     t.equal(message.subject, 'User created instance EC2 by console.', 'ALARM!! Detect user created EC2 by console');
     t.end();
   });
 });
-
 
 test('Detects instance EC2 created by cloudformation', function(t) {
   rule.fn(eventCreatedByCloudformation, function(err, message) {

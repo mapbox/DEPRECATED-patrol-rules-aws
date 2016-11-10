@@ -27,12 +27,11 @@ module.exports.fn = function(event, callback) {
     event: event
   };
 
-  if (event.eventName === 'RunInstances' && event.userAgent === 'signin.amazonaws.com') {
+  if (event.userAgent === 'cloudformation.amazonaws.com' || event.userAgent === 'autoscaling.amazonaws.com') {
+    callback(null, 'Not problem');
+  } else {
     message(notification, function(err, result) {
       callback(err, result);
     });
-  } else {
-    callback(null, 'Not problem');
-
   }
 };
