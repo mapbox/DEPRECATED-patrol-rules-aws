@@ -1,6 +1,8 @@
 var tape = require('tape');
 var rule = require('../../rules/userLoginIp.js');
 
+process.env.allowedCountries = 'US,PE,IN';
+
 tape('Detects user from ip login from allowed country', function(t) {
 	rule.fn(ipAllowedCountry, function(err, message) {
 		t.equal(message, 'nothing happen', 'allowed contry');
@@ -8,14 +10,12 @@ tape('Detects user from ip login from allowed country', function(t) {
 	});
 });
 
-
 tape('Detects user from ip login from not allowed country', function(t) {
 	rule.fn(ipnotAllowedCountry, function(err, message) {
 		t.equal(message.subject, 'sign in from unknown country.', 'Detected user login from unknown country');
 		t.end();
 	});
 });
-
 
 var ipAllowedCountry = {
 	"eventVersion": "1.04",
