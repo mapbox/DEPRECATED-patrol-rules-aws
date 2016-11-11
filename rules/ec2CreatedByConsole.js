@@ -22,13 +22,13 @@ module.exports.config = {
 
 module.exports.fn = function(event, callback) {
   var notification = {
-    subject: 'User created instance EC2 by console.',
+    subject: event.userIdentity.userName + ' created an EC2 instance from the console',
     summary: 'Patrol detected that the user created instance by console',
     event: event
   };
 
   if (event.userAgent === 'cloudformation.amazonaws.com' || event.userAgent === 'autoscaling.amazonaws.com') {
-    callback(null, 'Not problem');
+    callback(null, 'EC2 was not created from console');
   } else {
     message(notification, function(err, result) {
       callback(err, result);
