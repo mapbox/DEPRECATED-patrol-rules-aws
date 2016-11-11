@@ -3,21 +3,21 @@ var rule = require('../../rules/ec2CreatedByConsole.js');
 
 test('Detects instance EC2 created by console', function(t) {
   rule.fn(eventCreatedByConsole, function(err, message) {
-    t.equal(message.subject, 'User created instance EC2 by console.', 'ALARM!! Detect user created EC2 by console');
+    t.equal(message.subject, 'jdoe created an EC2 instance from the console', 'ALARM!! Detect user created EC2 by console');
     t.end();
   });
 });
 
 test('Detects instance EC2 created by cloudformation', function(t) {
   rule.fn(eventCreatedByCloudformation, function(err, message) {
-    t.equal(message, 'Not problem', 'Not problem!! Detect user created EC2 by cloudformation');
+    t.equal(message, 'EC2 was not created from console', 'Not problem!! Detect user created EC2 by cloudformation');
     t.end();
   });
 });
 
 test('Detects instance EC2 created by autoscaling', function(t) {
   rule.fn(eventCreatedByAutoscaling, function(err, message) {
-    t.equal(message, 'Not problem', 'Not problem!! Detect user created EC2 by autoscaling');
+    t.equal(message, 'EC2 was not created from console', 'Not problem!! Detect user created EC2 by autoscaling');
     t.end();
   });
 });
@@ -27,10 +27,10 @@ var eventCreatedByConsole = {
   "userIdentity": {
     "type": "IAMUser",
     "principalId": "AAAAAAAAAAAAAAAAAA",
-    "arn": "arn:aws:iam::123456789012:user/iward",
+    "arn": "arn:aws:iam::123456789012:user/jdoe",
     "accountId": "123456789012",
     "accessKeyId": "AAAAAAAAAAAAAAAAAA",
-    "userName": "iward",
+    "userName": "jdoe",
     "sessionContext": {
       "attributes": {
         "mfaAuthenticated": "true",
@@ -51,7 +51,7 @@ var eventCreatedByConsole = {
         "imageId": "ami-aaaaaaaa",
         "minCount": 1,
         "maxCount": 1,
-        "keyName": "iward"
+        "keyName": "jdoe"
       }]
     },
     "groupSet": {
@@ -96,7 +96,7 @@ var eventCreatedByConsole = {
           "name": "pending"
         },
         "privateDnsName": "ip-172-31-29-116.ec2.internal",
-        "keyName": "iward",
+        "keyName": "jdoe",
         "amiLaunchIndex": 0,
         "productCodes": {},
         "instanceType": "m3.large",
@@ -186,10 +186,10 @@ var eventCreatedByCloudformation = {
   "userIdentity": {
     "type": "IAMUser",
     "principalId": "AAAAAAAAAAAAAAAAAA",
-    "arn": "arn:aws:iam::123456789012:user/iward",
+    "arn": "arn:aws:iam::123456789012:user/jdoe",
     "accountId": "123456789012",
     "accessKeyId": "AAAAAAAAAAAAAAAAAA",
-    "userName": "iward",
+    "userName": "jdoe",
     "sessionContext": {
       "attributes": {
         "mfaAuthenticated": "true",
@@ -210,7 +210,7 @@ var eventCreatedByCloudformation = {
         "imageId": "ami-aaaaaaaa",
         "minCount": 1,
         "maxCount": 1,
-        "keyName": "iward"
+        "keyName": "jdoe"
       }]
     },
     "groupSet": {
@@ -255,7 +255,7 @@ var eventCreatedByCloudformation = {
           "name": "pending"
         },
         "privateDnsName": "ip-172-31-29-116.ec2.internal",
-        "keyName": "iward",
+        "keyName": "jdoe",
         "amiLaunchIndex": 0,
         "productCodes": {},
         "instanceType": "m3.large",
@@ -345,10 +345,10 @@ var eventCreatedByAutoscaling = {
   "userIdentity": {
     "type": "IAMUser",
     "principalId": "AAAAAAAAAAAAAAAAAA",
-    "arn": "arn:aws:iam::123456789012:user/iward",
+    "arn": "arn:aws:iam::123456789012:user/jdoe",
     "accountId": "123456789012",
     "accessKeyId": "AAAAAAAAAAAAAAAAAA",
-    "userName": "iward",
+    "userName": "jdoe",
     "sessionContext": {
       "attributes": {
         "mfaAuthenticated": "true",
@@ -369,7 +369,7 @@ var eventCreatedByAutoscaling = {
         "imageId": "ami-aaaaaaaa",
         "minCount": 1,
         "maxCount": 1,
-        "keyName": "iward"
+        "keyName": "jdoe"
       }]
     },
     "groupSet": {
@@ -414,7 +414,7 @@ var eventCreatedByAutoscaling = {
           "name": "pending"
         },
         "privateDnsName": "ip-172-31-29-116.ec2.internal",
-        "keyName": "iward",
+        "keyName": "jdoe",
         "amiLaunchIndex": 0,
         "productCodes": {},
         "instanceType": "m3.large",
