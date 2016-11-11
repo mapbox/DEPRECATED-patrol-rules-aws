@@ -10,7 +10,7 @@ module.exports.config = {
       ],
       detail: {
         eventSource: [
-          'AWS API Call via CloudTrail'
+          'ec2.amazonaws.com'
         ],
         eventName: [
           'RunInstances'
