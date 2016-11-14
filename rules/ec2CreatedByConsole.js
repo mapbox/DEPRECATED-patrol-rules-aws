@@ -6,7 +6,7 @@ module.exports.config = {
   eventRule: {
     eventPattern: {
       'detail-type': [
-        'AWS API Call via CloudTrail'
+        'EC2 Instance Launch Successful'
       ],
       detail: {
         eventSource: [
