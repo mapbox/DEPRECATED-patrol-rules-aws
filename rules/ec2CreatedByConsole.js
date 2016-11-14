@@ -6,7 +6,7 @@ module.exports.config = {
   eventRule: {
     eventPattern: {
       'detail-type': [
-        'AWS Console Sign In via CloudTrail'
+        'AWS API Call via CloudTrail'
       ],
       detail: {
         eventSource: [

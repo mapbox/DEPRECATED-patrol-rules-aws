@@ -60,6 +60,10 @@ The following rules are included with patrol-rules-aws.  Each rule is configurab
 - **Description** - Checks if the root AWS user logged in to the console
 - **Trigger** - AWS Console Sign-in
 
+#### EC2 created by console
+- **Description** - Checks if a EC2 is created by console
+- **Trigger** - AWS API Call via CloudTrail
+
 ### Tests
 
 To run tests, clone the repository, run `npm install` and then `npm test`.  However, in order to run the tests with `npm test`, you must have AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY set in your environment.  The "disallowedResources" tests use the AWS IAM policy simulator in their tests.
