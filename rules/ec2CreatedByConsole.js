@@ -13,7 +13,7 @@ module.exports.config = {
           'ec2.amazonaws.com'
         ],
         eventName: [
-          'StartInstances'
+          'RunInstances'
         ]
       }
     }
