@@ -2,6 +2,7 @@ var message = require('lambda-cfn').message;
 
 module.exports.config = {
   name: 'rootLogin',
+  runtime: 'nodejs4.3',
   sourcePath: 'rules/rootLogin.js',
   eventRule: {
     eventPattern: {

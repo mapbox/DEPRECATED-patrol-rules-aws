@@ -4,6 +4,7 @@ var getEnv = require('lambda-cfn').getEnv;
 
 module.exports.config = {
   name: 'allowedIAMActions',
+  runtime: 'nodejs4.3',
   sourcePath: 'rules/allowedIAMActions.js',
   parameters: {
     restrictedServices: {
