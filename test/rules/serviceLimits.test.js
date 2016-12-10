@@ -22,7 +22,7 @@ nock('https://support.us-east-1.amazonaws.com:443', {"encodedQueryParams":true})
 );
 
 test('No services limit warnings found', function(t) {
-  fn(event, function(err, message) {
+  fn(event, null, function(err, message) {
     t.error(err, 'No error when calling ' + name);
     t.equal(message,'No service limit warning found');
     t.end();
@@ -53,7 +53,7 @@ nock('https://support.us-east-1.amazonaws.com:443', {"encodedQueryParams":true})
 );
 
 test('Single service limit warning found', function(t) {
-  fn(event, function(err,message) {
+  fn(event, null, function(err,message) {
     t.error(err, 'No error when calling ' + name);
     t.equal(message.subject,'Service limit warning for AutoScaling in us-west-1');
     t.end();
@@ -96,7 +96,7 @@ nock('https://support.us-east-1.amazonaws.com:443', {"encodedQueryParams":true})
 
 test('Ignored service found', function(t) {
   process.env.ignoredResources = 'D6t7gRjnfyfSCP-VE2wzAvvRxQfNm9ofQBFuQKfhE4Q';
-  fn(event, function(err,message) {
+  fn(event, null, function(err,message) {
     t.equal(message.subject,'Service limit warning for EC2 in us-east-1');
     t.end();
   });
@@ -138,7 +138,7 @@ nock('https://support.us-east-1.amazonaws.com:443', {"encodedQueryParams":true})
 
 test('Multiple services in warning', function(t) {
   process.env.ignoredResources = '';
-  fn(event, function(err,message) {
+  fn(event, null, function(err,message) {
     t.equal(message.subject,'Service limit warning for multiple services');
     t.end();
   });

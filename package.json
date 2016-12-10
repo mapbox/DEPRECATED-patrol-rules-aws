@@ -15,10 +15,9 @@
     "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js"
   },
   "dependencies": {
-    "streambot": "3.4.0",
     "d3-queue": "2.0.3",
     "app-root-path": "1.2.0",
-    "lambda-cfn": "mapbox/lambda-cfn#configurable-runtime"
+    "lambda-cfn": "mapbox/lambda-cfn#lambda-env-variables"
   },
   "devDependencies": {
     "aws-sdk": "^2.2.35",

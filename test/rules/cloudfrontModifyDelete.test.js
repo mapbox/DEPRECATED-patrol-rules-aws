@@ -19,7 +19,7 @@ test('cloudfrontModifyDelete rule', function(t) {
     }
   };
 
-  fn(updateDistributionEvent, function(err, message) {
+  fn(updateDistributionEvent, null, function(err, message) {
     t.error(err, 'No error when calling ' + name);
     t.deepEqual(message, 'Protected CloudFront distribution was not updated', 
       'Does not match protected CloudFront distribution');
@@ -35,7 +35,7 @@ test('cloudfrontModifyDelete rule', function(t) {
     }
   };
 
-  fn(allowedDistributionEvent, function(err, message) {
+  fn(allowedDistributionEvent, null, function(err, message) {
     t.deepEqual(message, 'Protected CloudFront event was not called', 
       'Protected CloudFront event was not called');
   });
@@ -50,7 +50,7 @@ test('cloudfrontModifyDelete rule', function(t) {
     }
   };
 
-  fn(updateProtectedDistributionEvent, function(err, message) {
+  fn(updateProtectedDistributionEvent, null, function(err, message) {
     t.deepEqual(message, {
       subject: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
       summary: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
@@ -76,7 +76,7 @@ test('cloudfrontModifyDelete rule', function(t) {
     }
   };
 
-  fn(deleteProtectedDistributionEvent, function(err, message) {
+  fn(deleteProtectedDistributionEvent, null, function(err, message) {
     t.deepEqual(message, {
       subject: 'DeleteDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
       summary: 'DeleteDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
@@ -99,7 +99,7 @@ test('cloudfrontModifyDelete rule', function(t) {
     }
   };
 
-  fn(event, function(err, message) {
+  fn(event, null, function(err, message) {
     t.error(err, 'No error when calling ' + name);
     t.equal(message, 'This is the error message',
       'errorMessage is returned in callback');

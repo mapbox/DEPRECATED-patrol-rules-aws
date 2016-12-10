@@ -52,7 +52,7 @@ test('allowedIAMActions rule', function(t) {
   process.env.allowedActions = 'iam:PassRole';
   process.env.restrictedServices = 'iam, cloudtrail';
 
-  fn(event, function(err, message) {
+  fn(event, null, function(err, message) {
     t.equal(message.subject, 'Disallowed actions used in policy',
       'Alarms on multiple disallowed matches');
     t.equal(message.summary, 'Disallowed actions cloudtrail:* iam:* iam:PutUserPolicy used in policy',
@@ -78,7 +78,7 @@ test('allowedIAMActions rule', function(t) {
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docAllowedRestricted);
 
-  fn(event, function(err, message) {
+  fn(event, null, function(err, message) {
     t.equal(message.subject, 'Disallowed actions used in policy',
       'Alarms on multiple disallowed matches');
     t.equal(message.summary, 'Disallowed actions iam:PutUserPolicy used in policy',
@@ -98,7 +98,7 @@ test('allowedIAMActions rule', function(t) {
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docAllowed);
 
-  fn(event, function(err, message) {
+  fn(event, null, function(err, message) {
     t.equal(undefined, undefined, 'No alarm on allowed action');
   });
 
@@ -109,7 +109,7 @@ test('allowedIAMActions rule', function(t) {
     }
   };
 
-  fn(event, function(err, message) {
+  fn(event, null, function(err, message) {
     t.error(err, 'No error when calling ' + name);
     t.equal(message, 'This is the error message',
       'errorMessage is returned in callback');
