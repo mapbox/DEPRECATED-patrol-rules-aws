@@ -6,6 +6,7 @@ var util = require('util');
 
 module.exports.config = {
   name: 'serviceLimits',
+  runtime: 'nodejs4.3',
   sourcePath: 'rules/serviceLimits.js',
   parameters: {
     ignoredResources: {

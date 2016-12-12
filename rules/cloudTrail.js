@@ -4,6 +4,7 @@ var getEnv = require('lambda-cfn').getEnv;
 
 module.exports.config = {
   name: 'cloudTrail',
+  runtime: 'nodejs4.3',
   sourcePath: 'rules/cloudTrail.js',
   parameters: {
     disallowedActions: {

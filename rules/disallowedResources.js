@@ -6,6 +6,7 @@ var getEnv = require('lambda-cfn').getEnv;
 
 module.exports.config = {
   name: 'disallowedResources',
+  runtime: 'nodejs4.3',
   sourcePath: 'rules/disallowedResources.js',
   parameters: {
     disallowedResourceArns: {

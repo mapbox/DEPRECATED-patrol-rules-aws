@@ -4,6 +4,7 @@ var getEnv = require('lambda-cfn').getEnv;
 
 module.exports.config = {
   name: 'cloudfrontModifyDelete',
+  runtime: 'nodejs4.3',
   sourcePath: 'rules/cloudfrontModifyDelete.js',
   parameters: {
     protectedActions: {
