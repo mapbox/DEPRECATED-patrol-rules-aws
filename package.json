@@ -1,5 +1,5 @@
 {
-  "name": "patrol-rules-aws",
+  "name": "@mapbox/patrol-rules-aws",
   "version": "0.1.0",
   "description": "AWS rules for Patrol",
   "main": "index.js",
