@@ -1,47 +1,47 @@
 {
-  "name": "patrol-rules-aws",
-  "version": "0.1.0",
-  "description": "AWS rules for Patrol",
-  "main": "index.js",
+  "license": "BSD-2-Clause", 
   "engines": {
     "node": "4.3.2"
-  },
+  }, 
+  "name": "patrol-rules-aws", 
   "repository": {
-    "type": "git",
-    "url": "https://github.com/mapbox/patrol-rules-aws.git"
-  },
-  "scripts": {
-    "pretest": "eslint rules/* && jscs rules/*",
-    "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js"
-  },
-  "dependencies": {
-    "d3-queue": "2.0.3",
-    "app-root-path": "1.2.0",
-    "lambda-cfn": "0.1.5"
-  },
-  "devDependencies": {
-    "aws-sdk": "^2.2.35",
-    "jscs": "^1.11.3",
-    "tape": "^3.5.0",
-    "eslint": "^2.4.0",
-    "eslint-config-unstyled": "^1.1.0",
-    "nock": "7.5.0"
-  },
-  "jscsConfig": {
-    "preset": "airbnb",
-    "requireCamelCaseOrUpperCaseIdentifiers": null
-  },
-  "jshintConfig": {
-    "node": true,
-    "globalstrict": false,
-    "undef": true,
-    "unused": true,
-    "noarg": true
-  },
-  "author": "Mapbox, Inc.",
-  "license": "BSD",
+    "url": "https://github.com/mapbox/patrol-rules-aws.git", 
+    "type": "git"
+  }, 
+  "author": "Mapbox, Inc.", 
+  "homepage": "https://github.com/mapbox/patrol-rules-aws", 
   "bugs": {
     "url": "https://github.com/mapbox/patrol-rules-aws/issues"
-  },
-  "homepage": "https://github.com/mapbox/patrol-rules-aws"
+  }, 
+  "jscsConfig": {
+    "preset": "airbnb", 
+    "requireCamelCaseOrUpperCaseIdentifiers": null
+  }, 
+  "version": "0.1.0", 
+  "dependencies": {
+    "app-root-path": "1.2.0", 
+    "d3-queue": "2.0.3", 
+    "lambda-cfn": "0.1.5"
+  }, 
+  "scripts": {
+    "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js", 
+    "pretest": "eslint rules/* && jscs rules/*"
+  }, 
+  "devDependencies": {
+    "aws-sdk": "^2.2.35", 
+    "nock": "7.5.0", 
+    "tape": "^3.5.0", 
+    "eslint": "^2.4.0", 
+    "jscs": "^1.11.3", 
+    "eslint-config-unstyled": "^1.1.0"
+  }, 
+  "main": "index.js", 
+  "jshintConfig": {
+    "node": true, 
+    "unused": true, 
+    "globalstrict": false, 
+    "undef": true, 
+    "noarg": true
+  }, 
+  "description": "AWS rules for Patrol"
 }
