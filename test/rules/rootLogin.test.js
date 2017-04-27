@@ -5,14 +5,14 @@ var fn = rule.fn;
 var name = rule.config.name;
 
 test('Detects root login correctly', function(t) {
-  rule.fn(rootLoginEvent, function(err, message) {
+  rule.fn(rootLoginEvent, {}, function(err, message) {
     t.equal(message.subject, 'Root user logged into the console.', 'Detect root user login');
     t.end();
   });
 });
 
 test('Detects any user login', function(t) {
-  rule.fn(rub21LoginEvent, function(err, message) {
+  rule.fn(rub21LoginEvent, {}, function(err, message) {
     t.equal(message, 'rub21 user logged into the console.', 'Detect rub21 user login');
     t.end();
   });

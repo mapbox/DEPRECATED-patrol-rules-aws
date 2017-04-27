@@ -36,7 +36,7 @@ module.exports.config = {
   }
 };
 
-module.exports.fn = function(event, callback) {
+module.exports.fn = function(event, context, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
