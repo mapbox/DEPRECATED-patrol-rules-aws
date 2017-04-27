@@ -35,7 +35,7 @@ test('disallowedResources rule', function(t) {
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docNoMatch);
 
-  fn(event, function(err, message) {
+  fn(event, {}, function(err, message) {
     t.error(err, 'No error when calling ' + name);
     t.deepEqual(message, [], 'No matched disallowed resources');
   });
@@ -56,7 +56,7 @@ test('disallowedResources rule', function(t) {
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docMatch);
 
-  fn(event, function(err, message) {
+  fn(event, {}, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
       'Policy allows access to disallowed resources',
@@ -88,7 +88,7 @@ test('disallowedResources rule', function(t) {
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docMixed);
 
-  fn(event, function(err, message) {
+  fn(event, {}, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
       'Policy allows access to disallowed resources',
@@ -120,7 +120,7 @@ test('disallowedResources rule', function(t) {
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docFuzzyMatch);
 
-  fn(event, function(err, message) {
+  fn(event, {}, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
       'Policy allows access to disallowed resources',
@@ -150,7 +150,7 @@ test('disallowedResources rule', function(t) {
   event.detail.requestParameters.policyDocument = JSON.stringify(docKinesisMatch);
   process.env.disallowedResourceArns = 'arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar';
 
-  fn(event, function(err, message) {
+  fn(event, {}, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
       'Policy allows access to disallowed resources',
@@ -192,7 +192,7 @@ test('disallowedResources rule', function(t) {
   event.detail.requestParameters.policyDocument = JSON.stringify(docTwoMatches);
   process.env.disallowedResourceArns = 'arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar';
 
-  fn(event, function(err, message) {
+  fn(event, {}, function(err, message) {
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
       'Policy allows access to disallowed resources',
@@ -209,7 +209,7 @@ test('disallowedResources rule', function(t) {
     }
   };
 
-  fn(event, function(err, message) {
+  fn(event, {}, function(err, message) {
     t.error(err, 'No error when calling ' + name);
     t.equal(message, 'This is the error message',
       'errorMessage is returned in callback');

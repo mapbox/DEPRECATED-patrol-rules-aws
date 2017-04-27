@@ -18,7 +18,7 @@ test('cloudTrail rule', function(t) {
     }
   };
 
-  fn(newTrailEvent, function(err, message) {
+  fn(newTrailEvent, {}, function(err, message) {
     t.error(err, 'No error when calling ' + name);
     t.equal(message, 'Disallowed CloudTrail event was not called',
       'Disallowed CloudTrail event was not called');
@@ -37,7 +37,7 @@ test('cloudTrail rule', function(t) {
     }
   };
 
-  fn(event, function(err, message) {
+  fn(event, {}, function(err, message) {
     t.error(err, 'No error when calling ' + name);
     t.equal(message, 'This is the error message',
       'errorMessage is returned in callback');
@@ -56,7 +56,7 @@ function createTest(eventName, t) {
     }
   };
 
-  fn(event, function(err, message) {
+  fn(event, {}, function(err, message) {
     t.deepEqual(message, {
       subject: 'Disallowed CloudTrail event ' + eventName + ' called',
       summary: 'Disallowed CloudTrail event ' + eventName + ' called',

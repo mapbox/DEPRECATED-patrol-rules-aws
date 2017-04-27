@@ -20,7 +20,7 @@ test('assumeRole rule', function(t) {
 
   process.env.disallowedRoles = 'Administrator, DBMaintenance';
 
-  fn(event, function(err, message) {
+  fn(event, {}, function(err, message) {
     t.error(err, 'No error when calling ' + name);
 
     if (JSON.stringify(message.summary).match(/Disallowed role Administrator assumed by bob/)) {
@@ -45,7 +45,7 @@ test('assumeRole rule', function(t) {
 
   process.env.disallowedRoles = 'Administrator, DBMaintenance';
 
-  fn(event, function(err, message) {
+  fn(event, {}, function(err, message) {
     t.error(err, 'No error when calling ' + name);
     t.equal(message, 'Disallowed role was not assumed',
       'Does not match non disallowed role');
@@ -60,7 +60,7 @@ test('assumeRole rule', function(t) {
 
   process.env.disallowedRoles = 'Administrator, DBMaintenance';
 
-  fn(event, function(err, message) {
+  fn(event, {}, function(err, message) {
     t.error(err, 'No error when calling ' + name);
     t.equal(message, 'This is the error message',
       'errorMessage is returned in callback');

@@ -26,7 +26,7 @@ module.exports.config = {
   scheduledRule: 'rate(5 minutes)'
 };
 
-module.exports.fn = function(event, callback) {
+module.exports.fn = function(event, context, callback) {
   var ignored = splitOnComma(getEnv('ignoredResources'));
 
   var params = {
