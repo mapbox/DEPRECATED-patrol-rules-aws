@@ -17,7 +17,7 @@
     "preset": "airbnb",
     "requireCamelCaseOrUpperCaseIdentifiers": null
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "dependencies": {
     "app-root-path": "1.2.0",
     "d3-queue": "2.0.3",
