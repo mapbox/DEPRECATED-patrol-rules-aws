@@ -1,38 +1,10 @@
-var message = require('lambda-cfn').message;
-var splitOnComma = require('lambda-cfn').splitOnComma;
-var getEnv = require('lambda-cfn').getEnv;
-
-module.exports.config = {
-  name: 'assumeRole',
-  runtime: 'nodejs4.3',
-  sourcePath: 'rules/assumeRole.js',
-  parameters: {
-    disallowedRoles: {
-      Type: 'String',
-      Description: 'Comma separated list of disallowed roles'
-    }
-  },
-  eventRule: {
-    eventPattern: {
-      'detail-type': [
-        'AWS API Call via CloudTrail'
-      ],
-      detail: {
-        eventSource: [
-          'sts.amazonaws.com'
-        ],
-        eventName: [
-          'AssumeRole'
-        ]
-      }
-    }
-  }
-};
+var message = require('@mapbox/lambda-cfn').message;
+var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 
 module.exports.fn = function(event, context, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
-  var disallowed = splitOnComma(getEnv('disallowedRoles'));
+  var disallowed = splitOnComma(process.env.disallowedRoles);
   var assumedRoleArn = event.detail.requestParameters.roleArn;
   var userName = event.detail.userIdentity.userName;
 

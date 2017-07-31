@@ -1,33 +1,10 @@
 var AWS = require('aws-sdk');
-var message = require('lambda-cfn').message;
-var splitOnComma = require('lambda-cfn').splitOnComma;
-var getEnv = require('lambda-cfn').getEnv;
+var message = require('@mapbox/lambda-cfn').message;
+var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 var util = require('util');
 
-module.exports.config = {
-  name: 'serviceLimits',
-  runtime: 'nodejs4.3',
-  sourcePath: 'rules/serviceLimits.js',
-  parameters: {
-    ignoredResources: {
-      Type: 'String',
-      Description: 'Comma separated list of ignored resourceIds for limit warnings'
-    }
-  },
-  statements: [
-    {
-      Effect: 'Allow',
-      Action: [
-        'support:*'
-      ],
-      Resource: '*'
-    }
-  ],
-  scheduledRule: 'rate(5 minutes)'
-};
-
 module.exports.fn = function(event, context, callback) {
-  var ignored = splitOnComma(getEnv('ignoredResources'));
+  var ignored = splitOnComma(process.env.ignoredResources);
 
   var params = {
     checkId: 'eW7HH0l7J9'

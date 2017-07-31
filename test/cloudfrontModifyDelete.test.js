@@ -1,8 +1,7 @@
 var test = require('tape');
 
-var rule = require('../../rules/cloudfrontModifyDelete');
+var rule = require('../cloudfrontModifyDelete/function.js');
 var fn = rule.fn;
-var name = rule.config.name;
 
 test('cloudfrontModifyDelete rule', function(t) {
 
@@ -20,7 +19,7 @@ test('cloudfrontModifyDelete rule', function(t) {
   };
 
   fn(updateDistributionEvent, {}, function(err, message) {
-    t.error(err, 'No error when calling ' + name);
+    t.error(err, 'No error when calling function');
     t.deepEqual(message, 'Protected CloudFront distribution was not updated',
       'Does not match protected CloudFront distribution');
   });
@@ -100,7 +99,7 @@ test('cloudfrontModifyDelete rule', function(t) {
   };
 
   fn(event, {}, function(err, message) {
-    t.error(err, 'No error when calling ' + name);
+    t.error(err, 'No error when calling function');
     t.equal(message, 'This is the error message',
       'errorMessage is returned in callback');
   });

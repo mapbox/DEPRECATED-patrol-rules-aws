@@ -1,25 +1,4 @@
-var message = require('lambda-cfn').message;
-
-module.exports.config = {
-  name: 'rootLogin',
-  runtime: 'nodejs4.3',
-  sourcePath: 'rules/rootLogin.js',
-  eventRule: {
-    eventPattern: {
-      'detail-type': [
-        'AWS Console Sign In via CloudTrail'
-      ],
-      detail: {
-        eventSource: [
-          'signin.amazonaws.com'
-        ],
-        eventName: [
-          'ConsoleLogin'
-        ]
-      }
-    }
-  }
-};
+var message = require('@mapbox/lambda-cfn').message;
 
 module.exports.fn = function(event, context, callback) {
   if (event.detail.errorCode)

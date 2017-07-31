@@ -2,15 +2,15 @@
 
 [![Build Status](https://travis-ci.org/mapbox/patrol-rules-aws.svg?branch=master)](https://travis-ci.org/mapbox/patrol-rules-aws)
 
-A set of rules implemented using [lambda-cfn](https://github.com/mapbox/lambda-cfn) and designed to run on a [patrol](https://github.com/mapbox/patrol) stack.  The rules in this repository all aim to monitor certain parts of AWS infrastructure for best practices, security, and compliance.  Read more about the patrol architecture on the [patrol project](https://github.com/mapbox/patrol).
+A set of functions implemented using [lambda-cfn](https://github.com/mapbox/lambda-cfn) to monitor an organization's AWS infrastructure for best practices, security and compliance. Part of the Mapbox [Patrol](https://github.com/mapbox/patrol) security framework.
 
-### Usage
+### Deploying
 
-Follow the steps on the [patrol](https://github.com/mapbox/patrol) readme to set up your own patrol stack on AWS which makes use of the patrol-rules-aws rules.  Follow instructions on patrol on how to enable or disable particular rules, and, how to deploy on your own AWS account.
+Please see the [lambda-cfn README](https://github.com/mapbox/lambda-cfn)
 
-### Rules
+### Functions
 
-The following rules are included with patrol-rules-aws.  Each rule is configurable, and you will be prompted to enter configuration values when creating a patrol stack as described on the patrol readme.
+The following functions are included with patrol-rules-aws.  Each rule is configurable, and you will be prompted to enter configuration values when deploying the function with `lambda-cfn`.
 
 #### allowedIAMActions
 
@@ -60,6 +60,6 @@ The following rules are included with patrol-rules-aws.  Each rule is configurab
 - **Description** - Checks if the root AWS user logged in to the console
 - **Trigger** - AWS Console Sign-in
 
-### Tests
+### Contributing
 
-To run tests, clone the repository, run `npm install` and then `npm test`.  However, in order to run the tests with `npm test`, you must have AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY set in your environment.  The "disallowedResources" tests use the AWS IAM policy simulator in their tests.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md)

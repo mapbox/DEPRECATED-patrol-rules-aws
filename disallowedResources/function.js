@@ -1,39 +1,7 @@
 var AWS = require('aws-sdk');
 var d3 = require('d3-queue');
-var message = require('lambda-cfn').message;
-var splitOnComma = require('lambda-cfn').splitOnComma;
-var getEnv = require('lambda-cfn').getEnv;
-
-module.exports.config = {
-  name: 'disallowedResources',
-  runtime: 'nodejs4.3',
-  sourcePath: 'rules/disallowedResources.js',
-  parameters: {
-    disallowedResourceArns: {
-      Type: 'String',
-      Description: 'Comma separated list of ARNs to disallow. Any policy document that grants access to these ARNs will trigger a notification.'
-    }
-  },
-  eventRule: {
-    eventPattern:{
-      'detail-type': [
-        'AWS API Call via CloudTrail'
-      ],
-      detail: {
-        eventSource: [
-          'iam.amazonaws.com'
-        ],
-        eventName: [
-          'CreatePolicy',
-          'CreatePolicyVersion',
-          'PutGroupPolicy',
-          'PutRolePolicy',
-          'PutUserPolicy'
-        ]
-      }
-    }
-  }
-};
+var message = require('@mapbox/lambda-cfn').message;
+var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 
 module.exports.fn = function(event, context, callback) {
   if (event.detail.errorCode)
@@ -41,7 +9,7 @@ module.exports.fn = function(event, context, callback) {
   var iam = new AWS.IAM();
   var q = d3.queue(1);
 
-  var disallowedResources = splitOnComma(getEnv('disallowedResourceArns'));
+  var disallowedResources = splitOnComma(process.env.disallowedResourceArns);
   var document = event.detail.requestParameters.policyDocument;
   var parsed = JSON.parse(document);
 
@@ -111,5 +79,4 @@ module.exports.fn = function(event, context, callback) {
       callback(err, ret);
     });
   });
-
 };

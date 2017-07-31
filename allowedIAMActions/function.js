@@ -1,49 +1,12 @@
-var message = require('lambda-cfn').message;
-var splitOnComma = require('lambda-cfn').splitOnComma;
-var getEnv = require('lambda-cfn').getEnv;
-
-module.exports.config = {
-  name: 'allowedIAMActions',
-  runtime: 'nodejs4.3',
-  sourcePath: 'rules/allowedIAMActions.js',
-  parameters: {
-    restrictedServices: {
-      Type: 'String',
-      Description: 'Comma separated list of services to restrict'
-    },
-    allowedActions: {
-      Type: 'String',
-      Description: 'Comma separated list of actions to allow among restricted services'
-    }
-  },
-  eventRule: {
-    eventPattern: {
-      'detail-type': [
-        'AWS API Call via CloudTrail'
-      ],
-      detail: {
-        eventSource: [
-          'iam.amazonaws.com'
-        ],
-        eventName: [
-          'CreatePolicy',
-          'CreatePolicyVersion',
-          'PutGroupPolicy',
-          'PutRolePolicy',
-          'PutUserPolicy'
-        ]
-      }
-    }
-  }
-};
+var lambdaCfn = require('@mapbox/lambda-cfn');
 
 module.exports.fn = function(event, context, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
-  var allowedActions = splitOnComma(getEnv('allowedActions'));
+  var allowedActions = lambdaCfn.splitOnComma(process.env.allowedActions);
   var document = JSON.parse(event.detail.requestParameters.policyDocument);
-  var restrictedServices = splitOnComma(getEnv('restrictedServices'));
+  var restrictedServices = lambdaCfn.splitOnComma(process.env.restrictedServices);
 
   // build list of actions used.
   var actions = [];
@@ -71,11 +34,10 @@ module.exports.fn = function(event, context, callback) {
       summary: 'Disallowed actions ' + violations.join(' ') + ' used in policy',
       event: event
     };
-    message(notif, function(err, result) {
+    lambdaCfn.message(notif, function(err, result) {
       callback(err, result);
     });
   } else {
     callback(null, 'Disallowed action was not used in policy');
   }
-
 };
