@@ -1,3 +1,11 @@
+## Unreleased
+
+## 1.0.0
+
+* Refactor for lambda-cfn v2.0.0
+* removed nock AWS tests, replaced with @mapbox/mock-aws-sdk-js tests
+* defaults to Node 6.10.2
+
 ## 0.1.2
 
 * Fix lambda function syntax
