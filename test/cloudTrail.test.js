@@ -1,9 +1,9 @@
 var test = require('tape');
-var splitOnComma = require('lambda-cfn').splitOnComma;
+var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 
-var rule = require('../../rules/cloudTrail');
+var rule = require('../cloudTrail/function.js');
 var fn = rule.fn;
-var name = rule.config.name;
+
 
 test('cloudTrail rule', function(t) {
 
@@ -19,7 +19,7 @@ test('cloudTrail rule', function(t) {
   };
 
   fn(newTrailEvent, {}, function(err, message) {
-    t.error(err, 'No error when calling ' + name);
+    t.error(err, 'No error when calling function');
     t.equal(message, 'Disallowed CloudTrail event was not called',
       'Disallowed CloudTrail event was not called');
   });
@@ -38,7 +38,7 @@ test('cloudTrail rule', function(t) {
   };
 
   fn(event, {}, function(err, message) {
-    t.error(err, 'No error when calling ' + name);
+    t.error(err, 'No error when calling function');
     t.equal(message, 'This is the error message',
       'errorMessage is returned in callback');
   });

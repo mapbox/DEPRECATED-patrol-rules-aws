@@ -1,47 +1,12 @@
-var message = require('lambda-cfn').message;
-var splitOnComma = require('lambda-cfn').splitOnComma;
-var getEnv = require('lambda-cfn').getEnv;
-
-module.exports.config = {
-  name: 'cloudfrontModifyDelete',
-  runtime: 'nodejs4.3',
-  sourcePath: 'rules/cloudfrontModifyDelete.js',
-  parameters: {
-    protectedActions: {
-      Type: 'String',
-      Description: 'Comma separated list of protected CloudFront API actions'
-    },
-    protectedDistributions: {
-      Type: 'String',
-      Description: 'Comma separated list of protected CloudFront distributions'
-    }
-  },
-  eventRule: {
-    eventPattern:{
-      'detail-type': [
-        'AWS API Call via CloudTrail'
-      ],
-      detail: {
-        eventSource: [
-          'cloudfront.amazonaws.com'
-        ],
-        eventName: [
-          'UpdateDistribution',
-          'DeleteDistribution',
-          'UpdateDistribution2016_01_28',
-          'DeleteDistribution2016_01_28'
-        ]
-      }
-    }
-  }
-};
+var message = require('@mapbox/lambda-cfn').message;
+var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 
 module.exports.fn = function(event, context, callback) {
   if (event.detail.errorCode)
     return callback(null, event.detail.errorMessage);
 
-  var protectedActions = splitOnComma(getEnv('protectedActions'));
-  var protectedDistributions = splitOnComma(getEnv('protectedDistributions'));
+  var protectedActions = splitOnComma(process.env.protectedActions);
+  var protectedDistributions = splitOnComma(process.env.protectedDistributions);
   var eventDistribution = event.detail.requestParameters.id;
   var eventName = event.detail.eventName;
 

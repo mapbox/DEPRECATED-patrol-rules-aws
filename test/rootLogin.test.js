@@ -1,19 +1,18 @@
 var test = require('tape');
 
-var rule = require('../../rules/rootLogin.js');
+var rule = require('../rootLogin/function.js');
 var fn = rule.fn;
-var name = rule.config.name;
 
 test('Detects root login correctly', function(t) {
   rule.fn(rootLoginEvent, {}, function(err, message) {
-    t.equal(message.subject, 'Root user logged into the console.', 'Detect root user login');
+    t.equal(message.subject, 'Root user logged into the console.', 'Detected root user login');
     t.end();
   });
 });
 
 test('Detects any user login', function(t) {
-  rule.fn(rub21LoginEvent, {}, function(err, message) {
-    t.equal(message, 'rub21 user logged into the console.', 'Detect rub21 user login');
+  rule.fn(testUserLoginEvent, {}, function(err, message) {
+    t.equal(message, 'testUser user logged into the console.', 'Detected testUser user login');
     t.end();
   });
 });
@@ -48,15 +47,15 @@ var rootLoginEvent = {
   }
 };
 
-var rub21LoginEvent = {
+var testUserLoginEvent = {
   "detail": {
     "eventVersion": "1.02",
     "userIdentity": {
       "type": "IAMUser",
       "principalId": "AIDAEZ7VBM6PDZEXAMPLE",
-      "arn": "arn:aws:iam::12345679012:user/rub21",
+      "arn": "arn:aws:iam::12345679012:user/testUser",
       "accountId": "12345679012",
-      "userName": "rub21"
+      "userName": "testUser"
     },
     "eventTime": "2014-07-08T17:36:03Z",
     "eventSource": "signin.amazonaws.com",

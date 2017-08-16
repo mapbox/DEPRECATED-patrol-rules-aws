@@ -1,15 +1,14 @@
 var test = require('tape');
 
-var rule = require('../../rules/allowedIAMActions.js');
-var fn = rule.fn;
-var name = rule.config.name;
+var code = require('../allowedIAMActions/function.js');
+var fn = code.fn;
 
 test('allowedIAMActions rule', function(t) {
 
   var event = {
     "detail": {
       "userIdentity": {
-        "userName": "bob",
+        "userName": "bob"
       },
       "requestParameters": {
         "roleArn": "arn:aws:iam::12345678901:role/Administrator-123456",
@@ -110,7 +109,7 @@ test('allowedIAMActions rule', function(t) {
   };
 
   fn(event, {}, function(err, message) {
-    t.error(err, 'No error when calling ' + name);
+    t.error(err, 'No error when calling allowedIAMActions');
     t.equal(message, 'This is the error message',
       'errorMessage is returned in callback');
   });
