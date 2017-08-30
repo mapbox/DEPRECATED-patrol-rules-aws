@@ -1,5 +1,8 @@
 ## Unreleased
 
+## 1.0.1
+- Fixes for #91, handle non-array based policy Statements
+
 ## 1.0.0
 
 * Refactor for lambda-cfn v2.0.0
