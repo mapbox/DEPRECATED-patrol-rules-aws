@@ -20,28 +20,36 @@ module.exports.fn = function(event, context, callback) {
   };
 
   disallowedResources.forEach(function(resource) {
-    var resourceService = resource.split(':')[2];
-    parsed.Statement.forEach(function(policy) {
-      var actions = [];
-      if (policy.Effect == 'Allow' && policy.Action) {
-        actions = typeof policy.Action == 'string' ? [policy.Action] : policy.Action;
-      }
-
-      actions.forEach(function(action) {
-        var policyService = action.split(':')[0];
-        if (resourceService === policyService) {
-          // A disallowed resource's service matches one of the services in
-          // a policy.  Run through simulator.
-          var params = {
-            ActionNames: [action],
-            PolicyInputList: [document],
-            ResourceArns: [resource]
-          };
-          q.defer(simulate, params);
-        }
+    if (Array.isArray(parsed.Statement)) {
+      parsed.Statement.forEach(function(policy) {
+        policyProcessor(policy, resource);
       });
-    });
+    } else {
+      policyProcessor(parsed.Statement, resource);
+    }
   });
+
+  function policyProcessor(policy, resource) {
+    var resourceService = resource.split(':')[2];
+    var actions = [];
+    if (policy.Effect == 'Allow' && policy.Action) {
+      actions = typeof policy.Action == 'string' ? [policy.Action] : policy.Action;
+    }
+
+    actions.forEach(function(action) {
+      var policyService = action.split(':')[0];
+      if (resourceService === policyService) {
+        // A disallowed resource's service matches one of the services in
+        // a policy.  Run through simulator.
+        var params = {
+          ActionNames: [action],
+          PolicyInputList: [document],
+          ResourceArns: [resource]
+        };
+        q.defer(simulate, params);
+      }
+    });
+  };
 
   q.awaitAll(function(err, data) {
     if (err) return callback(err);

@@ -82,6 +82,50 @@ test('disallowedResources one statement one match', function(t) {
   });
 });
 
+test('disallowedResources one non-array statement', function(t) {
+  var docMatch = {
+    Statement:
+    {
+      Effect: "Allow",
+      Action: [
+        "s3:*"
+      ],
+      Resource: [
+        "*"
+      ]
+    }
+  };
+  var event = eventFixture;
+  event.detail.requestParameters.policyDocument = JSON.stringify(docMatch);
+
+  AWS.stub('IAM', 'simulateCustomPolicy', function(params, callback) {
+    var data = {
+      EvaluationResults: [
+        {
+          EvalResourceName: params.ResourceArns,
+          EvalDecision: 'allowed'
+        }
+
+      ]
+    };
+    callback(null, data);
+  });
+
+  fn(event, {}, function(err, message) {
+    t.equal(message.length, 1, 'There is only one result');
+    t.equal(message[0].subject,
+            'Policy allows access to disallowed resources',
+            'Matches disallowed resources');
+    t.equal(message[0].summary,
+            'Policy allows access to disallowed resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
+            'summary lists matched disallowed resources');
+    AWS.IAM.restore();
+    t.end();
+  });
+});
+
+
+
 test('disallowedResources two statements one match', function(t) {
   var docMixed = {
     Statement: [

@@ -46,6 +46,7 @@ test('allowedIAMActions rule', function(t) {
     ]
   };
 
+
   event.detail.requestParameters.policyDocument = JSON.stringify(docMixed);
 
   process.env.allowedActions = 'iam:PassRole';
@@ -101,7 +102,7 @@ test('allowedIAMActions rule', function(t) {
     t.equal(undefined, undefined, 'No alarm on allowed action');
   });
 
-  var event = {
+  event = {
     "detail": {
       errorCode: "AccessDenied",
       errorMessage: "This is the error message"
@@ -112,6 +113,36 @@ test('allowedIAMActions rule', function(t) {
     t.error(err, 'No error when calling allowedIAMActions');
     t.equal(message, 'This is the error message',
       'errorMessage is returned in callback');
+  });
+
+  var docNonArray = {
+    Statement: {
+      Effect: 'Allow',
+      Action: [
+        'iam:PutUserPolicy'
+      ]
+    }
+  };
+
+  event = {
+    "detail": {
+      "userIdentity": {
+        "userName": "bob"
+      },
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::12345678901:role/Administrator-123456",
+        "roleSessionName": "bob"
+      }
+    }
+  };
+
+  event.detail.requestParameters.policyDocument = JSON.stringify(docNonArray);
+
+  fn(event, {}, function(err, message) {
+    t.equal(message.subject, 'Disallowed actions used in policy',
+            'Alarms on single non-array disallowed match');
+    t.equal(message.summary, 'Disallowed actions iam:PutUserPolicy used in policy',
+            'Alarms on single non-array disallowed match');
   });
 
   t.end();
