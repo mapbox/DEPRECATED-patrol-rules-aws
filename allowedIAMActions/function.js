@@ -10,12 +10,20 @@ module.exports.fn = function(event, context, callback) {
 
   // build list of actions used.
   var actions = [];
-  document.Statement.forEach(function(policy) {
+  if (Array.isArray(document.Statement)) {
+    document.Statement.forEach(function(policy) {
+      policyProcessor(policy);
+    });
+  } else {
+    policyProcessor(document.Statement);
+  }
+
+  function policyProcessor(policy) {
     if (!Array.isArray(policy.Action))
       actions.push(policy.Action);
     else
       actions = actions.concat(policy.Action);
-  });
+  }
 
   var violations = [];
   actions.forEach(function(pair) {
