@@ -49,16 +49,20 @@ The following functions are included with patrol-rules-aws.  Each rule is config
 - **Parameters**
   - disallowedResourceARNs - Comma separated list of AWS ARNs.  An alarm will be triggered if an IAM policy grants any kind of access to these resources.
 
+#### rootLogin
+- **Description** - Checks if the root AWS user logged in to the console
+- **Trigger** - AWS Console Sign-in
+
+#### publicBucketACL
+- **Description** - Checks if a bucket has Public Access.
+- **Trigger** - AWS API Call via CloudTrail
+
 #### serviceLimits
 - **Description** - Queries AWS Trusted Advisor for all supported service limits and the resources approaching those service limits. The utilitization threshold for Trusted Advisor service limit warnings is 80%. Please see the [list of service limits](https://aws.amazon.com/premiumsupport/ta-faqs/#service-limits-check-questions) that are supported by Trusted Advisor.
 - **Trigger** - Scheduled rule every 5 minutes
 - **Parameters**
   - ignoredResources - Comma separated list of AWS Trusted Advisor resourceIds to ignore. ResourceIds are most easily found using `awscli` and directly querying the support API. For example, this query will return all resourceIds for services close to their limits:
 ``aws support describe-trusted-advisor-check-result --check-id eW7HH0l7J9 --query 'result.flaggedResources[?status!=`ok`][resourceId,metadata[1],metadata[2],metadata[0]]' --output table --region us-east-1``
-
-#### rootLogin
-- **Description** - Checks if the root AWS user logged in to the console
-- **Trigger** - AWS Console Sign-in
 
 ### Contributing
 
