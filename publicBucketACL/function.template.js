@@ -4,6 +4,9 @@ module.exports = lambdaCfn.build({
     name: 'publicBucketACL',
     eventSources: {
         cloudwatchEvent: {
+            source: [
+                'aws.s3'
+            ],
             eventPattern: {
                 'detail-type': [
                     'AWS API Call via CloudTrail'
