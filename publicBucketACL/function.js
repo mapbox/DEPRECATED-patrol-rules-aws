@@ -40,3 +40,4 @@ function notify(event, permissions, callback) {
         callback(err, result);
     });
 }
+
