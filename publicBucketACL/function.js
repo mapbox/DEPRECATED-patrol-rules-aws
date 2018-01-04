@@ -28,14 +28,12 @@ function publicPermissions(event) {
 
 function notify(event, permissions, callback) {
     var bucketName = event.detail.requestParameters.bucketName;
-    var permissions = permissions.join(' ,');
+    var permissions = permissions.join(', ');
     var message = {
         subject: 'Bucket Public Access ACL was changed.',
         summary: 'Patrol detected that ' + bucketName + ' Public Access ACL has changed (' + permissions + ').',
         event: event
     };
-
-    console.log(message);
 
     lambdaCfn.message(message, function(err, result) {
         callback(err, result);
