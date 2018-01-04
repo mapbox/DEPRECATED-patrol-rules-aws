@@ -3,10 +3,11 @@ var lambdaCfn = require('@mapbox/lambda-cfn');
 module.exports.fn = function(event, context, callback) {
     if (event.detail.errorCode) return callback(null, event.detail.errorMessage);
 
-    var permissions = publicPermissions(event);
-
-    if (event.detail.eventName === 'PutBucketAcl' && permissions.length) {
-        return notify(event, permissions, callback);
+    if (event.detail.eventName === 'PutBucketAcl') {
+        var permissions = publicPermissions(event);
+        if (permissions.length) {
+            return notify(event, permissions, callback);
+        }
     }
 
     callback(null, 'Bucket Public Access ACL was not changed.');
