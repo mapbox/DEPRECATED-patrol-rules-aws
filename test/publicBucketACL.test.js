@@ -29,7 +29,7 @@ test('Detects if bucket was make public', function(t) {
     };
 
     fn(event, {}, function(err, message) {
-        t.equal(message.subject, 'Bucket ACL was changed.', 'Should detect that Public ACL changes');
+        t.equal(message.subject, 'Bucket Public Access ACL was changed.', 'Should detect that Public ACL changes');
         t.ok(message.summary.includes('READ_ACP'), 'The summary should contain the permissions.');
         t.end();
     });
@@ -58,7 +58,7 @@ test('Do not trigger notification there is nothing public.', function(t) {
     };
 
     fn(event, {}, function(err, message) {
-        t.equal(message, 'Bucket ACL was not changed.', 'It should not send any message');
+        t.equal(message, 'Bucket Public Access ACL was not changed.', 'It should not send any message');
         t.end();
     });
 });
@@ -105,7 +105,7 @@ test('Trigger notification on multiple public access permissions.', function(t) 
     };
 
     fn(event, {}, function(err, message) {
-        t.equal(message.subject, 'Bucket ACL was changed.', 'Should The bucket ACL change');
+        t.equal(message.subject, 'Bucket Public Access ACL was changed.', 'Should The bucket ACL change');
         t.end();
     });
 });

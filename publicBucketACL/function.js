@@ -9,7 +9,7 @@ module.exports.fn = function(event, context, callback) {
         return notify(event, permissions, callback);
     }
 
-    callback(null, 'Bucket ACL was not changed.');
+    callback(null, 'Bucket Public Access ACL was not changed.');
 };
 
 function publicPermissions(event) {
@@ -29,8 +29,8 @@ function notify(event, permissions, callback) {
     var bucketName = event.detail.requestParameters.bucketName;
     var permissions = permissions.join(' ,');
     var message = {
-        subject: 'Bucket ACL was changed.',
-        summary: 'Patrol detected that ' + bucketName + ' ACL has changed (' + permissions + ').',
+        subject: 'Bucket Public Access ACL was changed.',
+        summary: 'Patrol detected that ' + bucketName + ' Public Access ACL has changed (' + permissions + ').',
         event: event
     };
 
