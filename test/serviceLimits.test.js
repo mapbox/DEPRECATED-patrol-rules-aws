@@ -7,7 +7,7 @@ test('Found service limits warning', (t) => {
   let event = {
     'detail': {
       'check-name': 'Auto Scaling Groups',
-      'check-item-detail': '',
+      'check-item-detail': {},
     },
     'region': 'us-west-1',
     'resource_id': '',
