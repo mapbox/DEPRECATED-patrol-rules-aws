@@ -1,27 +1,26 @@
-var AWS = require('aws-sdk');
-var d3 = require('d3-queue');
-var message = require('@mapbox/lambda-cfn').message;
-var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
+const AWS = require('aws-sdk');
+const d3 = require('d3-queue');
+const message = require('@mapbox/lambda-cfn').message;
+const splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 
-module.exports.fn = function(event, context, callback) {
-  if (event.detail.errorCode)
-    return callback(null, event.detail.errorMessage);
-  var iam = new AWS.IAM();
-  var q = d3.queue(1);
+module.exports.fn = (event, context, callback) => {
+  if (event.detail.errorCode) return callback(null, event.detail.errorMessage);
+  let iam = new AWS.IAM();
+  let q = d3.queue(1);
 
-  var disallowedResources = splitOnComma(process.env.disallowedResourceArns);
-  var document = event.detail.requestParameters.policyDocument;
-  var parsed = JSON.parse(document);
+  let disallowedResources = splitOnComma(process.env.disallowedResourceArns);
+  let document = event.detail.requestParameters.policyDocument;
+  let parsed = JSON.parse(document);
 
-  var simulate = function(params, cb) {
-    iam.simulateCustomPolicy(params, function(err, data) {
+  let simulate = function(params, cb) {
+    iam.simulateCustomPolicy(params, (err, data) => {
       cb(err, data);
     });
   };
 
-  disallowedResources.forEach(function(resource) {
+  disallowedResources.forEach((resource) => {
     if (Array.isArray(parsed.Statement)) {
-      parsed.Statement.forEach(function(policy) {
+      parsed.Statement.forEach((policy) => {
         policyProcessor(policy, resource);
       });
     } else {
@@ -30,18 +29,18 @@ module.exports.fn = function(event, context, callback) {
   });
 
   function policyProcessor(policy, resource) {
-    var resourceService = resource.split(':')[2];
-    var actions = [];
-    if (policy.Effect == 'Allow' && policy.Action) {
-      actions = typeof policy.Action == 'string' ? [policy.Action] : policy.Action;
+    let resourceService = resource.split(':')[2];
+    let actions = [];
+    if (policy.Effect === 'Allow' && policy.Action) {
+      actions = typeof policy.Action === 'string' ? [policy.Action] : policy.Action;
     }
 
     actions.forEach(function(action) {
-      var policyService = action.split(':')[0];
+      let policyService = action.split(':')[0];
       if (resourceService === policyService) {
         // A disallowed resource's service matches one of the services in
         // a policy.  Run through simulator.
-        var params = {
+        let params = {
           ActionNames: [action],
           PolicyInputList: [document],
           ResourceArns: [resource]
@@ -49,16 +48,16 @@ module.exports.fn = function(event, context, callback) {
         q.defer(simulate, params);
       }
     });
-  };
+  }
 
   q.awaitAll(function(err, data) {
     if (err) return callback(err);
-    var matches = [];
-    var truncated = false;
+    let matches = [];
+    let truncated = false;
     data.forEach(function(response) {
       // Warn on truncation.  Build paging support if this is hit.
       if (response.IsTruncated) truncated = true;
-      response.EvaluationResults.forEach(function(result) {
+      response.EvaluationResults.forEach((result) => {
         if (result.EvalDecision === 'allowed') {
           matches.push(result.EvalResourceName);
         }
@@ -66,7 +65,7 @@ module.exports.fn = function(event, context, callback) {
     });
 
     // Report
-    var q = d3.queue(1);
+    let q = d3.queue(1);
     if (truncated) {
       q.defer(message, {
         subject: 'Disallowed resources rule results truncated',
@@ -83,7 +82,7 @@ module.exports.fn = function(event, context, callback) {
       });
     }
 
-    q.awaitAll(function(err, ret) {
+    q.awaitAll((err, ret) => {
       callback(err, ret);
     });
   });

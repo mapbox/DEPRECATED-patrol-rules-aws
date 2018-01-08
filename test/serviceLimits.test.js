@@ -102,6 +102,7 @@ test('Ignored service found', function(t) {
   });
 
   fn(event, {}, function(err,message) {
+    t.error(err, 'does not error');
     t.equal(message.subject,'Service limit warning for EC2 in us-east-1');
     AWS.Support.restore();
     t.end();
@@ -147,6 +148,7 @@ test('Multiple services in warning', function(t) {
   });
 
   fn(event, {}, function(err,message) {
+    t.error(err, 'does not error');
     t.equal(message.subject,'Service limit warning for multiple services');
     AWS.Support.restore();
     t.end();
