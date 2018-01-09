@@ -5,13 +5,13 @@ var fn = rule.fn;
 
 test('assumeRole rule', function(t) {
   var event = {
-    "detail": {
-      "userIdentity": {
-        "userName": "bob"
+    'detail': {
+      'userIdentity': {
+        'userName': 'bob'
       },
-      "requestParameters": {
-        "roleArn": "arn:aws:iam::12345678901:role/Administrator-123456",
-        "roleSessionName": "bob"
+      'requestParameters': {
+        'roleArn': 'arn:aws:iam::12345678901:role/Administrator-123456',
+        'roleSessionName': 'bob'
       }
     }
   };
@@ -30,13 +30,13 @@ test('assumeRole rule', function(t) {
   });
 
   var event = {
-    "detail": {
-      "userIdentity": {
-        "userName": "bob"
+    'detail': {
+      'userIdentity': {
+        'userName': 'bob'
       },
-      "requestParameters": {
-        "roleArn": "arn:aws:iam::12345678901:role/basic-123456",
-        "roleSessionName": "bob"
+      'requestParameters': {
+        'roleArn': 'arn:aws:iam::12345678901:role/basic-123456',
+        'roleSessionName': 'bob'
       }
     }
   };
@@ -50,9 +50,9 @@ test('assumeRole rule', function(t) {
   });
 
   var event = {
-    "detail": {
-      errorCode: "AccessDenied",
-      errorMessage: "This is the error message"
+    'detail': {
+      errorCode: 'AccessDenied',
+      errorMessage: 'This is the error message'
     }
   };
 

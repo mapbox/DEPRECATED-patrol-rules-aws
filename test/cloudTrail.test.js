@@ -7,14 +7,14 @@ var fn = rule.fn;
 
 test('cloudTrail rule', function(t) {
 
-  process.env.disallowedActions = "CreateTrail, DeleteTrail, StartLogging, StopLogging, UpdateTrail";
+  process.env.disallowedActions = 'CreateTrail, DeleteTrail, StartLogging, StopLogging, UpdateTrail';
   var disallowed = splitOnComma(process.env.disallowedActions);
 
   // Event for unexpected change to API, especially a new or renamed CloudTrail event
   var newTrailEvent = {
-    "detail": {
-      "eventSource": "cloudtrail.amazonaws.com",
-      "eventName": "UndocumentedEvent"
+    'detail': {
+      'eventSource': 'cloudtrail.amazonaws.com',
+      'eventName': 'UndocumentedEvent'
     }
   };
 
@@ -31,9 +31,9 @@ test('cloudTrail rule', function(t) {
   });
 
   var event = {
-    "detail": {
-      errorCode: "AccessDenied",
-      errorMessage: "This is the error message"
+    'detail': {
+      errorCode: 'AccessDenied',
+      errorMessage: 'This is the error message'
     }
   };
 
@@ -50,20 +50,21 @@ test('cloudTrail rule', function(t) {
 function createTest(eventName, t) {
 
   var event = {
-    "detail": {
-      "eventSource": "cloudtrail.amazonaws.com",
-      "eventName": eventName
+    'detail': {
+      'eventSource': 'cloudtrail.amazonaws.com',
+      'eventName': eventName
     }
   };
 
   fn(event, {}, function(err, message) {
+    t.error(err, 'does not error');
     t.deepEqual(message, {
       subject: 'Disallowed CloudTrail event ' + eventName + ' called',
       summary: 'Disallowed CloudTrail event ' + eventName + ' called',
       event: {
-        "detail": {
-          "eventSource": "cloudtrail.amazonaws.com",
-          "eventName": eventName
+        'detail': {
+          'eventSource': 'cloudtrail.amazonaws.com',
+          'eventName': eventName
         }
       }
     }, 'Matches ' + eventName + ' CloudTrail event');

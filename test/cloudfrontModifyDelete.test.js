@@ -9,11 +9,11 @@ test('cloudfrontModifyDelete rule', function(t) {
   process.env.protectedDistributions = 'ABCD1234FGHJ56';
 
   var updateDistributionEvent = {
-    "detail": {
-      "eventSource": "cloudfront.amazonaws.com",
-      "eventName": "UpdateDistribution",
-      "requestParameters": {
-        "id": "NOTPROTECTED"
+    'detail': {
+      'eventSource': 'cloudfront.amazonaws.com',
+      'eventName': 'UpdateDistribution',
+      'requestParameters': {
+        'id': 'NOTPROTECTED'
       }
     }
   };
@@ -25,40 +25,42 @@ test('cloudfrontModifyDelete rule', function(t) {
   });
 
   var allowedDistributionEvent = {
-    "detail": {
-      "eventSource": "cloudfront.amazonaws.com",
-      "eventName": "CreateInvalidation",
-      "requestParameters": {
-        "id": "ABCD1234FGHJ56"
+    'detail': {
+      'eventSource': 'cloudfront.amazonaws.com',
+      'eventName': 'CreateInvalidation',
+      'requestParameters': {
+        'id': 'ABCD1234FGHJ56'
       }
     }
   };
 
   fn(allowedDistributionEvent, {}, function(err, message) {
+    t.error(err, 'does not error');
     t.deepEqual(message, 'Protected CloudFront event was not called',
       'Protected CloudFront event was not called');
   });
 
   var updateProtectedDistributionEvent = {
-    "detail": {
-      "eventSource": "cloudfront.amazonaws.com",
-      "eventName": "UpdateDistribution",
-      "requestParameters": {
-        "id": "ABCD1234FGHJ56"
+    'detail': {
+      'eventSource': 'cloudfront.amazonaws.com',
+      'eventName': 'UpdateDistribution',
+      'requestParameters': {
+        'id': 'ABCD1234FGHJ56'
       }
     }
   };
 
   fn(updateProtectedDistributionEvent, {}, function(err, message) {
+    t.error(err, 'does not error');
     t.deepEqual(message, {
       subject: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
       summary: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
       event: {
-        "detail": {
-          "eventSource": "cloudfront.amazonaws.com",
-          "eventName": "UpdateDistribution",
-          "requestParameters": {
-            "id": "ABCD1234FGHJ56"
+        'detail': {
+          'eventSource': 'cloudfront.amazonaws.com',
+          'eventName': 'UpdateDistribution',
+          'requestParameters': {
+            'id': 'ABCD1234FGHJ56'
           }
         }
       }
@@ -66,25 +68,26 @@ test('cloudfrontModifyDelete rule', function(t) {
   });
 
   var deleteProtectedDistributionEvent = {
-    "detail": {
-      "eventSource": "cloudfront.amazonaws.com",
-      "eventName": "DeleteDistribution",
-      "requestParameters": {
-        "id": "ABCD1234FGHJ56"
+    'detail': {
+      'eventSource': 'cloudfront.amazonaws.com',
+      'eventName': 'DeleteDistribution',
+      'requestParameters': {
+        'id': 'ABCD1234FGHJ56'
       }
     }
   };
 
   fn(deleteProtectedDistributionEvent, {}, function(err, message) {
+    t.error(err, 'does not error');
     t.deepEqual(message, {
       subject: 'DeleteDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
       summary: 'DeleteDistribution called on protected CloudFront distribution ABCD1234FGHJ56',
       event: {
-        "detail": {
-          "eventSource": "cloudfront.amazonaws.com",
-          "eventName": "DeleteDistribution",
-          "requestParameters": {
-            "id": "ABCD1234FGHJ56"
+        'detail': {
+          'eventSource': 'cloudfront.amazonaws.com',
+          'eventName': 'DeleteDistribution',
+          'requestParameters': {
+            'id': 'ABCD1234FGHJ56'
           }
         }
       }
@@ -92,9 +95,9 @@ test('cloudfrontModifyDelete rule', function(t) {
   });
 
   var event = {
-    "detail": {
-      errorCode: "AccessDenied",
-      errorMessage: "This is the error message"
+    'detail': {
+      errorCode: 'AccessDenied',
+      errorMessage: 'This is the error message'
     }
   };
 

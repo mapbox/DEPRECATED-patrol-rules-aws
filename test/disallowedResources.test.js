@@ -7,13 +7,13 @@ var fn = rule.fn;
 process.env.disallowedResourceArns = 'arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar';
 
 var eventFixture = {
-  "detail": {
-    "userIdentity": {
-      "userName": "bob"
+  'detail': {
+    'userIdentity': {
+      'userName': 'bob'
     },
-    "requestParameters": {
-      "roleArn": "arn:aws:iam::12345678901:role/Administrator-123456",
-      "roleSessionName": "bob"
+    'requestParameters': {
+      'roleArn': 'arn:aws:iam::12345678901:role/Administrator-123456',
+      'roleSessionName': 'bob'
     }
   }
 };
@@ -22,9 +22,9 @@ test('disallowedResources no matches', function(t) {
   var docNoMatch = {
     Statement: [
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "cloudtrail:*"
+          'cloudtrail:*'
         ]
       },
     ]
@@ -43,12 +43,12 @@ test('disallowedResources one statement one match', function(t) {
   var docMatch = {
     Statement: [
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "s3:*"
+          's3:*'
         ],
         Resource: [
-          "*"
+          '*'
         ]
       },
     ]
@@ -70,13 +70,14 @@ test('disallowedResources one statement one match', function(t) {
   });
 
   fn(event, {}, function(err, message) {
+    t.error(err, 'does not error');
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-            'Policy allows access to disallowed resources',
-            'Matches disallowed resources');
+      'Policy allows access to disallowed resources',
+      'Matches disallowed resources');
     t.equal(message[0].summary,
-            'Policy allows access to disallowed resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
-            'summary lists matched disallowed resources');
+      'Policy allows access to disallowed resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
+      'summary lists matched disallowed resources');
     AWS.IAM.restore();
     t.end();
   });
@@ -86,12 +87,12 @@ test('disallowedResources one non-array statement', function(t) {
   var docMatch = {
     Statement:
     {
-      Effect: "Allow",
+      Effect: 'Allow',
       Action: [
-        "s3:*"
+        's3:*'
       ],
       Resource: [
-        "*"
+        '*'
       ]
     }
   };
@@ -112,36 +113,36 @@ test('disallowedResources one non-array statement', function(t) {
   });
 
   fn(event, {}, function(err, message) {
+    t.error(err, 'does not error');
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-            'Policy allows access to disallowed resources',
-            'Matches disallowed resources');
+      'Policy allows access to disallowed resources',
+      'Matches disallowed resources');
     t.equal(message[0].summary,
-            'Policy allows access to disallowed resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
-            'summary lists matched disallowed resources');
+      'Policy allows access to disallowed resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
+      'summary lists matched disallowed resources');
     AWS.IAM.restore();
     t.end();
   });
 });
 
 
-
 test('disallowedResources two statements one match', function(t) {
   var docMixed = {
     Statement: [
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "cloudtrail:*"
+          'cloudtrail:*'
         ]
       },
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "s3:*"
+          's3:*'
         ],
         Resource: [
-          "*"
+          '*'
         ]
       }
     ]
@@ -163,13 +164,14 @@ test('disallowedResources two statements one match', function(t) {
   });
 
   fn(event, {}, function(err, message) {
+    t.error(err, 'does not error');
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
       'Policy allows access to disallowed resources',
       'No matched disallowed resources');
     t.equal(message[0].summary,
       'Policy allows access to disallowed resources: arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo/bar',
-            'subject lists matched disallowed resources');
+      'subject lists matched disallowed resources');
     AWS.IAM.restore();
     t.end();
   });
@@ -179,18 +181,18 @@ test('disallowedResources fuzzy match', function(t) {
   var docFuzzyMatch = {
     Statement: [
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "cloudtrail:*"
+          'cloudtrail:*'
         ]
       },
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "s3:*"
+          's3:*'
         ],
         Resource: [
-          "arn:aws:s3:::fo*"
+          'arn:aws:s3:::fo*'
         ]
       }
     ]
@@ -212,10 +214,11 @@ test('disallowedResources fuzzy match', function(t) {
   });
 
   fn(event, {}, function(err, message) {
+    t.error(err, 'does not error');
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
-            'Policy allows access to disallowed resources',
-            'Matches fuzzy match S3 disallowed resources');
+      'Policy allows access to disallowed resources',
+      'Matches fuzzy match S3 disallowed resources');
     AWS.IAM.restore();
     t.end();
   });
@@ -225,18 +228,18 @@ test('disallowedResources two statements one fuzzy match', function(t) {
   var docKinesisMatch = {
     Statement: [
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "cloudtrail:*"
+          'cloudtrail:*'
         ]
       },
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "kinesis:*"
+          'kinesis:*'
         ],
         Resource: [
-          "arn:aws:kinesis:us-east-1:123456789012:stream/*-bar-*"
+          'arn:aws:kinesis:us-east-1:123456789012:stream/*-bar-*'
         ]
       }
     ]
@@ -261,13 +264,14 @@ test('disallowedResources two statements one fuzzy match', function(t) {
 
 
   fn(event, {}, function(err, message) {
+    t.error(err, 'does not error');
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
       'Policy allows access to disallowed resources',
       'Matches kinesis disallowed resources');
     t.equal(message[0].summary,
       'Policy allows access to disallowed resources: arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*',
-            'subject lists matched disallowed resources');
+      'subject lists matched disallowed resources');
     AWS.IAM.restore();
     t.end();
   });
@@ -277,27 +281,27 @@ test('disallowedResources three statements two matches', function(t) {
   var docTwoMatches = {
     Statement: [
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "cloudtrail:*"
+          'cloudtrail:*'
         ]
       },
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "kinesis:*"
+          'kinesis:*'
         ],
         Resource: [
-          "arn:aws:kinesis:us-east-1:123456789012:stream/foo*"
+          'arn:aws:kinesis:us-east-1:123456789012:stream/foo*'
         ]
       },
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "s3:*"
+          's3:*'
         ],
         Resource: [
-          "*"
+          '*'
         ]
       }
     ]
@@ -307,7 +311,7 @@ test('disallowedResources three statements two matches', function(t) {
   event.detail.requestParameters.policyDocument = JSON.stringify(docTwoMatches);
   process.env.disallowedResourceArns = 'arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar';
 
-    AWS.stub('IAM', 'simulateCustomPolicy', function(params, callback) {
+  AWS.stub('IAM', 'simulateCustomPolicy', function(params, callback) {
     var data = {
       EvaluationResults: [
         {
@@ -321,13 +325,14 @@ test('disallowedResources three statements two matches', function(t) {
   });
 
   fn(event, {}, function(err, message) {
+    t.error(err, 'does not error');
     t.equal(message.length, 1, 'There is only one result');
     t.equal(message[0].subject,
       'Policy allows access to disallowed resources',
       'Matches kinesis and s3 disallowed resources');
     t.equal(message[0].summary,
       'Policy allows access to disallowed resources: arn:aws:kinesis:us-east-1:123456789012:stream/foo-bar-KinesisStream-ABC*, arn:aws:s3:::foo/bar',
-            'subjectFull lists matched disallowed resources');
+      'subjectFull lists matched disallowed resources');
     AWS.IAM.restore();
     t.end();
   });
@@ -335,16 +340,16 @@ test('disallowedResources three statements two matches', function(t) {
 
 test('disallowedResources AccessDenied', function(t) {
   var event = {
-    "detail": {
-      errorCode: "AccessDenied",
-      errorMessage: "This is the error message"
+    'detail': {
+      errorCode: 'AccessDenied',
+      errorMessage: 'This is the error message'
     }
   };
 
   fn(event, {}, function(err, message) {
     t.error(err, 'No error when calling function');
     t.equal(message, 'This is the error message',
-            'errorMessage is returned in callback');
+      'errorMessage is returned in callback');
     t.end();
   });
 

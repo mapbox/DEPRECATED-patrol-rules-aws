@@ -3,16 +3,16 @@ var test = require('tape');
 var code = require('../allowedIAMActions/function.js');
 var fn = code.fn;
 
-test('allowedIAMActions rule', function(t) {
+test('allowedIAMActions rule', (t) => {
 
   var event = {
-    "detail": {
-      "userIdentity": {
-        "userName": "bob"
+    'detail': {
+      'userIdentity': {
+        'userName': 'bob'
       },
-      "requestParameters": {
-        "roleArn": "arn:aws:iam::12345678901:role/Administrator-123456",
-        "roleSessionName": "bob"
+      'requestParameters': {
+        'roleArn': 'arn:aws:iam::12345678901:role/Administrator-123456',
+        'roleSessionName': 'bob'
       }
     }
   };
@@ -20,27 +20,27 @@ test('allowedIAMActions rule', function(t) {
   var docMixed = {
     Statement: [
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "cloudtrail:*"
+          'cloudtrail:*'
         ]
       },
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "iam:*"
+          'iam:*'
         ]
       },
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "ec2:*"
+          'ec2:*'
         ]
       },
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "iam:PutUserPolicy"
+          'iam:PutUserPolicy'
         ]
       },
     ]
@@ -52,7 +52,8 @@ test('allowedIAMActions rule', function(t) {
   process.env.allowedActions = 'iam:PassRole';
   process.env.restrictedServices = 'iam, cloudtrail';
 
-  fn(event, {}, function(err, message) {
+  fn(event, {}, (err, message) => {
+    t.error(err, 'does not error');
     t.equal(message.subject, 'Disallowed actions used in policy',
       'Alarms on multiple disallowed matches');
     t.equal(message.summary, 'Disallowed actions cloudtrail:* iam:* iam:PutUserPolicy used in policy',
@@ -62,15 +63,15 @@ test('allowedIAMActions rule', function(t) {
   var docAllowedRestricted = {
     Statement: [
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "iam:PassRole"
+          'iam:PassRole'
         ]
       },
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "iam:PutUserPolicy"
+          'iam:PutUserPolicy'
         ]
       },
     ]
@@ -78,7 +79,8 @@ test('allowedIAMActions rule', function(t) {
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docAllowedRestricted);
 
-  fn(event, {}, function(err, message) {
+  fn(event, {}, (err, message) => {
+    t.error(err, 'does not error');
     t.equal(message.subject, 'Disallowed actions used in policy',
       'Alarms on multiple disallowed matches');
     t.equal(message.summary, 'Disallowed actions iam:PutUserPolicy used in policy',
@@ -88,9 +90,9 @@ test('allowedIAMActions rule', function(t) {
   var docAllowed = {
     Statement: [
       {
-        Effect: "Allow",
+        Effect: 'Allow',
         Action: [
-          "iam:PassRole"
+          'iam:PassRole'
         ]
       }
     ]
@@ -98,18 +100,19 @@ test('allowedIAMActions rule', function(t) {
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docAllowed);
 
-  fn(event, {}, function(err, message) {
+  fn(event, {}, (err, _message) => {
+    t.error(err, 'does not error');
     t.equal(undefined, undefined, 'No alarm on allowed action');
   });
 
   event = {
-    "detail": {
-      errorCode: "AccessDenied",
-      errorMessage: "This is the error message"
+    'detail': {
+      errorCode: 'AccessDenied',
+      errorMessage: 'This is the error message'
     }
   };
 
-  fn(event, {}, function(err, message) {
+  fn(event, {}, (err, message) => {
     t.error(err, 'No error when calling allowedIAMActions');
     t.equal(message, 'This is the error message',
       'errorMessage is returned in callback');
@@ -125,26 +128,26 @@ test('allowedIAMActions rule', function(t) {
   };
 
   event = {
-    "detail": {
-      "userIdentity": {
-        "userName": "bob"
+    'detail': {
+      'userIdentity': {
+        'userName': 'bob'
       },
-      "requestParameters": {
-        "roleArn": "arn:aws:iam::12345678901:role/Administrator-123456",
-        "roleSessionName": "bob"
+      'requestParameters': {
+        'roleArn': 'arn:aws:iam::12345678901:role/Administrator-123456',
+        'roleSessionName': 'bob'
       }
     }
   };
 
   event.detail.requestParameters.policyDocument = JSON.stringify(docNonArray);
 
-  fn(event, {}, function(err, message) {
+  fn(event, {}, (err, message) => {
+    t.error(err, 'does not error');
     t.equal(message.subject, 'Disallowed actions used in policy',
-            'Alarms on single non-array disallowed match');
+      'Alarms on single non-array disallowed match');
     t.equal(message.summary, 'Disallowed actions iam:PutUserPolicy used in policy',
-            'Alarms on single non-array disallowed match');
+      'Alarms on single non-array disallowed match');
   });
 
   t.end();
-
 });

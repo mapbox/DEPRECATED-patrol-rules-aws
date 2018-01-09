@@ -1,25 +1,24 @@
-var message = require('@mapbox/lambda-cfn').message;
-var splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
+const message = require('@mapbox/lambda-cfn').message;
+const splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 
-module.exports.fn = function(event, context, callback) {
-  if (event.detail.errorCode)
-    return callback(null, event.detail.errorMessage);
+module.exports.fn = (event, context, callback) => {
+  if (event.detail.errorCode) return callback(null, event.detail.errorMessage);
 
-  var disallowed = splitOnComma(process.env.disallowedActions);
-  var cloudTrailEvent = event.detail.eventName;
+  let disallowed = splitOnComma(process.env.disallowedActions);
+  let cloudTrailEvent = event.detail.eventName;
 
   // Check for fuzzy match
-  var match = disallowed.filter(function(event) {
+  let match = disallowed.filter((event) => {
     return cloudTrailEvent.indexOf(event) > -1;
   });
 
   if (match.length > 0) {
-    var notif = {
+    let notif = {
       subject: 'Disallowed CloudTrail event ' + cloudTrailEvent + ' called',
       summary: 'Disallowed CloudTrail event ' + cloudTrailEvent + ' called',
       event: event
     };
-    message(notif, function(err, result) {
+    message(notif, (err, result) => {
       callback(err, result);
     });
   } else {
