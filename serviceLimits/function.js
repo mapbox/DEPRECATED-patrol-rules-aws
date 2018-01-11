@@ -11,7 +11,7 @@ module.exports.fn = (event, context, callback) => {
 
 function notify(event, callback) {
   let message = {
-    subject: util.format('Service Limit Warning for %s in %s', event.detail['check-name'], event.region),
+    subject: util.format('Service Limit %s for %s in %s', event.status, event.detail['check-name'], event.region),
     summary: JSON.stringify(event, null, 4),
     event: event
   };
