@@ -1,25 +1,22 @@
-var lambdaCfn = require('@mapbox/lambda-cfn');
+const lambdaCfn = require('@mapbox/lambda-cfn');
 
 module.exports = lambdaCfn.build({
-  name: 'serviceLimits',
-  parameters: {
-    ignoredResources: {
-      Type: 'String',
-      Description: 'Comma separated list of ignored resourceIds for limit warnings'
-    }
-  },
-  statements: [
-    {
-      Effect: 'Allow',
-      Action: [
-        'support:*'
-      ],
-      Resource: '*'
-    }
-  ],
+  name: 'ServiceLimits',
   eventSources: {
-    schedule: {
-      expression: 'rate(5 minutes)'
+    cloudwatchEvent: {
+      eventPattern: {
+        'detail-type': [
+          'Trusted Advisor Check Item Refresh Notification'
+        ],
+        detail: {
+          eventSource: [
+            'aws.trustedadvisor'
+          ],
+          eventName: [
+            'Service Limits'
+          ]
+        }
+      }
     }
   }
 });
