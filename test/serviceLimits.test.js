@@ -49,7 +49,7 @@ test('No service limits warning in event', (t) => {
   };
 
   fn(event, {}, (error, message) => {
-    t.equal(message, 'No Service Limit Warning');
+    t.equal(message, 'No Service Limit Warning or Error');
     t.end();
   });
 });

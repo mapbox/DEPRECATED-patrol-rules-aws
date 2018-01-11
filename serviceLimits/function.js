@@ -6,7 +6,7 @@ module.exports.fn = (event, context, callback) => {
   if (event.status !== 'OK') {
     return notify(event, callback);
   }
-  callback(null, 'No Service Limit Warning');
+  callback(null, 'No Service Limit Warning or Error');
 };
 
 function notify(event, callback) {
