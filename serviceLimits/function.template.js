@@ -1,4 +1,4 @@
-var lambdaCfn = require('@mapbox/lambda-cfn');
+const lambdaCfn = require('@mapbox/lambda-cfn');
 
 module.exports = lambdaCfn.build({
   name: 'ServiceLimits',
