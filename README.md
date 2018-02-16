@@ -49,6 +49,11 @@ The following functions are included with patrol-rules-aws.  Each rule is config
 - **Parameters**
   - disallowedResourceARNs - Comma separated list of AWS ARNs.  An alarm will be triggered if an IAM policy grants any kind of access to these resources.
 
+#### removeS3AccessLogging
+
+- **Description** - Checks for removing server access logging from an S3 bucket
+- **Trigger** - `PutBucketLogging` AWS API call
+
 #### rootLogin
 - **Description** - Checks if the root AWS user logged in to the console
 - **Trigger** - AWS Console Sign-in
