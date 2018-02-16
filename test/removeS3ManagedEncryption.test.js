@@ -17,7 +17,6 @@ test('Alerts if S3 managed encryption removed from bucket', (t) => {
   };
 
   fn(event, {}, (err, message) => {
-    console.log(err);
     t.error(err, 'does not error');
     t.equal(message.subject, 'Bucket encryption removed from i-has-a-bucket', 'Should alarm when encryption removed');
     t.end();
