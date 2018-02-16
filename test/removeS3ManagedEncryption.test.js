@@ -5,7 +5,7 @@ const fn = rule.fn;
 
 test('Alerts if S3 managed encryption removed from bucket', (t) => {
 
-  let event = {
+  const event = {
     'detail': {
       'eventSource': 's3.amazonaws.com',
       'eventName': 'DeleteBucketEncryption',
