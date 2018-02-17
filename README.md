@@ -54,6 +54,11 @@ The following functions are included with patrol-rules-aws.  Each rule is config
 - **Description** - Checks for removing server access logging from an S3 bucket
 - **Trigger** - `PutBucketLogging` AWS API call
 
+#### removeS3ManagedEncryption
+
+- **Description** - Checks for removing encryption from an S3 bucket.
+- **Trigger** - `DeleteBucketEncryption` AWS API call
+
 #### rootLogin
 - **Description** - Checks if the root AWS user logged in to the console
 - **Trigger** - AWS Console Sign-in
