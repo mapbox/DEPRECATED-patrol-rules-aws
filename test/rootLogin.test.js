@@ -22,11 +22,10 @@ var rootLoginEvent = {
   'detail': {
     'eventVersion': '1.02',
     'userIdentity': {
-      'type': 'IAMUser',
+      'type': 'Root',
       'principalId': 'AIDAEZ7VBM6PDZEXAMPLE',
       'arn': 'arn:aws:iam::12345679012:user/root',
       'accountId': '12345679012',
-      'userName': 'root'
     },
     'eventTime': '2014-07-08T17:36:03Z',
     'eventSource': 'signin.amazonaws.com',
@@ -44,7 +43,7 @@ var rootLoginEvent = {
       'MFAUsed': 'Yes'
     },
     'eventID': '5d2c2f55-3d1e-4336-b940-dbf8e66f588c',
-    'eventType': 'AwsConsoleSignin'
+    'eventType': 'AwsConsoleSignIn'
   }
 };
 
@@ -52,7 +51,7 @@ var testUserLoginEvent = {
   'detail': {
     'eventVersion': '1.02',
     'userIdentity': {
-      'type': 'IAMUser',
+      'type': 'AssumedRole',
       'principalId': 'AIDAEZ7VBM6PDZEXAMPLE',
       'arn': 'arn:aws:iam::12345679012:user/testUser',
       'accountId': '12345679012',
@@ -74,6 +73,6 @@ var testUserLoginEvent = {
       'MFAUsed': 'Yes'
     },
     'eventID': '5d2c2f55-3d1e-4336-b940-dbf8e66f588c',
-    'eventType': 'AwsConsoleSignin'
+    'eventType': 'AwsConsoleSignIn'
   }
 };
