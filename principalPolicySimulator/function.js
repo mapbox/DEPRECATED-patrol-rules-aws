@@ -11,7 +11,7 @@ module.exports.fn = (event, context, callback) => {
   let fullPrincipal;
 
 
-  if (!process.env.principalRegex.toLower() == 'none') {
+  if (!process.env.principalRegex.toLowerCase() == 'none' || !process.env.principalRegex == '') {
     try {
       let arnRegex = new RegExp(process.env.principalRegex, 'i');
     } catch (e) {
