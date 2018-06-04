@@ -10,6 +10,10 @@ module.exports = lambdaCfn.build({
     protectedDistributions: {
       Type: 'String',
       Description: 'Comma separated list of protected CloudFront distributions'
+    },
+    DispatchSnsArn: {
+      Type: 'String',
+      Description: 'SNS ARN for Dispatch service (optional)'
     }
   },
   eventSources: {

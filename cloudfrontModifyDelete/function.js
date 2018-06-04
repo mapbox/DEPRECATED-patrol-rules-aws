@@ -22,11 +22,7 @@ module.exports.fn = (event, context, callback) => {
     });
 
     if (eventsMatch.length > 0) {
-      let notif = {
-        subject: eventName + ' called on protected CloudFront distribution ' + eventDistribution,
-        summary: eventName + ' called on protected CloudFront distribution ' + eventDistribution,
-        event: event
-      };
+      let notif = eventMessage(eventName, eventDistribution, event);
       message(notif, (err, result) => {
         callback(err, result);
       });
@@ -35,5 +31,42 @@ module.exports.fn = (event, context, callback) => {
     }
   } else {
     callback(null, 'Protected CloudFront distribution was not updated');
+  }
+};
+
+function eventMessage(eventName, eventDistribution, event) {
+  let principal;
+  try {
+    principal = event.detail.userIdentity.arn ? event.detail.userIdentity.arn.split('/').slice(-1)[0] : event.detail.userIdentity.sessionContext.sessionIssuer.arn.split(':').slice(-1)[0];
+  } catch (e) {
+    console.log(`Principal not found: ${e}`);
+    principal = 'unknown';
+  };
+
+  if (process.env.DispatchSnsArn) {
+    return {
+      type: 'broadcast',
+      retrigger: 'false',
+      users: [
+        {
+          slackId: '' //default to dispatches fallback channel
+        }
+      ],
+      body: {
+        github: {
+          title: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal}`,
+          body: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal} \n\n\n ${JSON.stringify(event)}`
+        },
+        slack: {
+          message: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal}`
+        }
+      }
+    };
+  } else {
+    return {
+      subject: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal}`,
+      summary: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal}`,
+      event: event
+    };
   }
 };
