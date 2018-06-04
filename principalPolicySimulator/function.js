@@ -84,7 +84,7 @@ module.exports.fn = (event, context, callback) => {
       });
     }
 
-    let iamResource = parsed.requestParameters.policyArn ? parsed.requestParameters.policy : parsed.requestParameters.roleName;
+    let iamResource = event.detail.requestParameters.policyArn ? event.detail.requestParameters.policyArn : event.detail.requestParameters.roleName;
 
     if (matches.length) {
       q.defer(message, {
