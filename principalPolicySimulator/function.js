@@ -19,17 +19,17 @@ module.exports.fn = (event, context, callback) => {
       return callback(e);
     }
 
-    if (arnRegex.test(event.userIdentity.sessionIssuer.arn)) {
-      principal = event.userIdentity.sessionIssuer.arn;
+    if (arnRegex.test(event.detail.userIdentity.sessionIssuer.arn)) {
+      principal = event.detail.userIdentity.sessionIssuer.arn;
 
     } else {
-      console.log(`INFO: skipping principal ${event.userIdentity.sessionIssuer.arn}`);
+      console.log(`INFO: skipping principal ${event.detail.userIdentity.sessionIssuer.arn}`);
       return callback();
     }
   } else {
-    principal = event.userIdentity.sessionIssuer.arn;
+    principal = event.detail.userIdentity.sessionIssuer.arn;
   }
-  fullPrincipal = event.userIdentity.arn;
+  fullPrincipal = event.detail.userIdentity.arn;
 
   let document = event.detail.requestParameters.policyDocument;
   let parsed = JSON.parse(document);
