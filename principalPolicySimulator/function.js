@@ -8,20 +8,28 @@ module.exports.fn = (event, context, callback) => {
   let iam = new AWS.IAM();
   let q = d3.queue(1);
   let principal;
+  let fullPrincipal;
 
-  try {
-    let arnRegex = new RegExp(process.env.principalRegex, 'i');
-  } catch (e) {
-    console.log(`ERROR: Invalid regex ${process.env.principalRegex}, ${e}`);
-    return callback(e);
-  }
 
-  if (arnRegex.test(event.userIdentity.sessionContext.sessionIssuer.arn)) {
-    principal = event.userIdentity.sessionContext.sessionIssuer.arn;
+  if (!process.env.principalRegex.toLower() == 'none') {
+    try {
+      let arnRegex = new RegExp(process.env.principalRegex, 'i');
+    } catch (e) {
+      console.log(`ERROR: Invalid regex ${process.env.principalRegex}, ${e}`);
+      return callback(e);
+    }
+
+    if (arnRegex.test(event.userIdentity.sessionContext.sessionIssuer.arn)) {
+      principal = event.userIdentity.sessionContext.sessionIssuer.arn;
+
+    } else {
+      console.log(`INFO: skipping principal ${event.userIdentity.sessionContext.sessionIssuer.arn}`);
+      return callback();
+    }
   } else {
-    console.log(`INFO: skipping principal ${event.userIdentity.sessionContext.sessionIssuer.arn}`);
-    return callback();
+    principal = event.userIdentity.sessionContext.sessionIssuer.arn;
   }
+  fullPrincipal = event.userIdentity.arn;
 
   let document = event.detail.requestParameters.policyDocument;
   let parsed = JSON.parse(document);
@@ -71,7 +79,7 @@ module.exports.fn = (event, context, callback) => {
     if (truncated) {
       q.defer(message, {
         subject: 'Principal policy rule results truncated',
-        summary: 'Principal policy  rule results were truncated. Paging ' +
+        summary: 'Principal policy rule results were truncated. Paging ' +
           'is not currently supported.'
       });
     }
@@ -80,8 +88,8 @@ module.exports.fn = (event, context, callback) => {
 
     if (matches.length) {
       q.defer(message, {
-        subject: `Principcal ${principal} allowed access to restricted resource via ${iamResource}`,
-        summary: `Principcal ${principal} allowed access to restricted resource via ${iamResource}:  ${matches.join(', ')}`,
+        subject: `Principcal ${fullPrincipal} allowed access to restricted resource via ${iamResource}`,
+        summary: `Principcal ${fullPrincipal} allowed access to restricted resource via ${iamResource}:  ${matches.join(', ')}`,
         event: event
       });
     }
