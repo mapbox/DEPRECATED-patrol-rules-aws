@@ -11,6 +11,7 @@ module.exports.fn = (event, context, callback) => {
   let fullPrincipal;
   let arnRegex;
 
+  let arn = event.detail.userIdentity.sessionContext.sessionIssuer.arn;
   if (!process.env.principalRegex.toLowerCase() == 'none' || !process.env.principalRegex == '') {
     try {
       arnRegex = new RegExp(process.env.principalRegex, 'i');
@@ -18,16 +19,15 @@ module.exports.fn = (event, context, callback) => {
       console.log(`ERROR: Invalid regex ${process.env.principalRegex}, ${e}`);
       return callback(e);
     }
-
-    if (arnRegex.test(event.detail.userIdentity.sessionIssuer.arn)) {
-      principal = event.detail.userIdentity.sessionIssuer.arn;
+    if (arnRegex.test(arn)) {
+      principal = arn;
 
     } else {
-      console.log(`INFO: skipping principal ${event.detail.userIdentity.sessionIssuer.arn}`);
+      console.log(`INFO: skipping principal ${arn}`);
       return callback();
     }
   } else {
-    principal = event.detail.userIdentity.sessionIssuer.arn;
+    principal = arn;
   }
   fullPrincipal = event.detail.userIdentity.arn;
 
