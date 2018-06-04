@@ -19,15 +19,15 @@ module.exports.fn = (event, context, callback) => {
       return callback(e);
     }
 
-    if (arnRegex.test(event.userIdentity.sessionContext.sessionIssuer.arn)) {
-      principal = event.userIdentity.sessionContext.sessionIssuer.arn;
+    if (arnRegex.test(event.userIdentity.sessionIssuer.arn)) {
+      principal = event.userIdentity.sessionIssuer.arn;
 
     } else {
-      console.log(`INFO: skipping principal ${event.userIdentity.sessionContext.sessionIssuer.arn}`);
+      console.log(`INFO: skipping principal ${event.userIdentity.sessionIssuer.arn}`);
       return callback();
     }
   } else {
-    principal = event.userIdentity.sessionContext.sessionIssuer.arn;
+    principal = event.userIdentity.sessionIssuer.arn;
   }
   fullPrincipal = event.userIdentity.arn;
 
