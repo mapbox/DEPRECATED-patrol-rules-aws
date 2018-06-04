@@ -55,7 +55,7 @@ module.exports.fn = (event, context, callback) => {
     let params = {
       PolicySourceArn: principal,
       ActionNames: actions,
-      ResourceNames: resources
+      ResourceArns: resources
     };
     q.defer(simulate, params);
   }
