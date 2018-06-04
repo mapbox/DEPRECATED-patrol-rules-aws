@@ -8,6 +8,13 @@ module.exports = lambdaCfn.build({
       Description: 'IAM Principal ARN matching regex, or "none" to test all principals'
     }
   },
+  statements: [
+    {
+      Effect: 'Allow',
+      Action: ['iam:SimulatePrincipalPolicy'],
+      Resource: '*'
+    }
+  ],
   eventSources: {
     cloudwatchEvent: {
       eventPattern:{
