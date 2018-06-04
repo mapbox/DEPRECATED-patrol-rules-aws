@@ -12,7 +12,9 @@ module.exports.fn = (event, context, callback) => {
   let arnRegex;
 
   let arn = event.detail.userIdentity.sessionContext.sessionIssuer.arn;
-  if (!process.env.principalRegex.toLowerCase() == 'none' || !process.env.principalRegex == '') {
+  if (process.env.principalRegex.toLowerCase() == 'none' || process.env.principalRegex == '') {
+    principal = arn;
+  } else {
     try {
       arnRegex = new RegExp(process.env.principalRegex, 'i');
     } catch (e) {
@@ -26,8 +28,6 @@ module.exports.fn = (event, context, callback) => {
       console.log(`INFO: skipping principal ${arn}`);
       return callback();
     }
-  } else {
-    principal = arn;
   }
   fullPrincipal = event.detail.userIdentity.arn;
 
