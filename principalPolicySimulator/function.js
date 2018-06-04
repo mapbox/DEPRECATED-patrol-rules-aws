@@ -9,11 +9,11 @@ module.exports.fn = (event, context, callback) => {
   let q = d3.queue(1);
   let principal;
   let fullPrincipal;
-
+  let arnRegex;
 
   if (!process.env.principalRegex.toLowerCase() == 'none' || !process.env.principalRegex == '') {
     try {
-      let arnRegex = new RegExp(process.env.principalRegex, 'i');
+      arnRegex = new RegExp(process.env.principalRegex, 'i');
     } catch (e) {
       console.log(`ERROR: Invalid regex ${process.env.principalRegex}, ${e}`);
       return callback(e);
