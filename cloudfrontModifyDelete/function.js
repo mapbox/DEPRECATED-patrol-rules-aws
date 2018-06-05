@@ -22,11 +22,7 @@ module.exports.fn = (event, context, callback) => {
     });
 
     if (eventsMatch.length > 0) {
-      let notif = {
-        subject: eventName + ' called on protected CloudFront distribution ' + eventDistribution,
-        summary: eventName + ' called on protected CloudFront distribution ' + eventDistribution,
-        event: event
-      };
+      let notif = eventMessage(eventName, event);
       message(notif, (err, result) => {
         callback(err, result);
       });
@@ -35,5 +31,35 @@ module.exports.fn = (event, context, callback) => {
     }
   } else {
     callback(null, 'Protected CloudFront distribution was not updated');
+  }
+};
+
+function eventMessage(eventName, event) {
+  let principal = event.detail.userIdentity.arn ? event.detail.userIdentity.arn : event.detail.userIdentity.sessionContext.sessionIssuer.arn;
+  if (process.env.DispatchSnsArn) {
+    return {
+      type: 'broadcast',
+      retrigger: 'false',
+      users: [
+        {
+          slackId: process.env.DispatchChannelId
+        }
+      ],
+      body: {
+        github: {
+          title: `${eventName} called on protected CloudFront distribuction ${eventDistribution} by ${principal}`,
+          body: `${eventName} called on protected CloudFront distribuction ${eventDistribution} by ${principal} /n/n/n ${event}`
+        },
+        slack: {
+          message: `${eventName} called on protected CloudFront distribuction ${eventDistribution} by ${principal}`
+        }
+      }
+    };
+  } else {
+    return {
+      subject: eventName + ' called on protected CloudFront distribution ' + eventDistribution,
+      summary: eventName + ' called on protected CloudFront distribution ' + eventDistribution,
+      event: event
+    };
   }
 };
