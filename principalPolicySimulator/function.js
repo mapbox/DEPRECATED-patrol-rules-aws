@@ -91,7 +91,7 @@ module.exports.fn = (event, context, callback) => {
 
     if (matches.length) {
       q.defer(message, {
-        subject: `Principal allowed access to restricted resource`,
+        subject: `Principal ${fullPrincipal} allowed access to restricted resource`,
         summary: `Principal ${fullPrincipal} allowed access to restricted resource via ${iamResource}:  ${matches.join(', ')}`,
         event: event
       });
