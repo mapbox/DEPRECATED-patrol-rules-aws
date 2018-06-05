@@ -23,12 +23,12 @@ module.exports.fn = (event, context, callback) => {
     }
     if (arnRegex.test(arn)) {
       principal = arn;
-
     } else {
       console.log(`INFO: skipping principal ${arn}`);
       return callback();
     }
   }
+
   fullPrincipal = event.detail.userIdentity.arn;
 
   let document = event.detail.requestParameters.policyDocument;
@@ -75,6 +75,7 @@ module.exports.fn = (event, context, callback) => {
         console.log(`Result: ${JSON.stringify(result)}`);
       });
     });
+    console.log(JSON.stringify(matches));
 
     // Report
     let q = d3.queue(1);
@@ -90,8 +91,8 @@ module.exports.fn = (event, context, callback) => {
 
     if (matches.length) {
       q.defer(message, {
-        subject: `Principcal ${fullPrincipal} allowed access to restricted resource via ${iamResource}`,
-        summary: `Principcal ${fullPrincipal} allowed access to restricted resource via ${iamResource}:  ${matches.join(', ')}`,
+        subject: `Principal allowed access to restricted resource`,
+        summary: `Principal ${fullPrincipal} allowed access to restricted resource via ${iamResource}:  ${matches.join(', ')}`,
         event: event
       });
     }
