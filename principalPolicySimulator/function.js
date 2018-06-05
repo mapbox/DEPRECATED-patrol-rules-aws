@@ -69,7 +69,7 @@ module.exports.fn = (event, context, callback) => {
       // Warn on truncation.  Build paging support if this is hit.
       if (response.IsTruncated) truncated = true;
       response.EvaluationResults.forEach((result) => {
-        if (result.EvalDecision === 'denied' || result.EvalDecision === 'implicitDeny') {
+        if (/Deny/.test(result.EvalDecision)) {
            matches.push(result.EvalResourceName);
         }
         console.log(`Result: ${JSON.stringify(result)}`);
