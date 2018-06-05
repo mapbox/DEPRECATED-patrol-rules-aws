@@ -22,7 +22,7 @@ module.exports.fn = (event, context, callback) => {
     });
 
     if (eventsMatch.length > 0) {
-      let notif = eventMessage(eventName, event);
+      let notif = eventMessage(eventName, eventDistribution, event);
       message(notif, (err, result) => {
         callback(err, result);
       });
@@ -34,7 +34,7 @@ module.exports.fn = (event, context, callback) => {
   }
 };
 
-function eventMessage(eventName, event) {
+function eventMessage(eventName, eventDistribution, event) {
   let principal = event.detail.userIdentity.arn ? event.detail.userIdentity.arn : event.detail.userIdentity.sessionContext.sessionIssuer.arn;
   if (process.env.DispatchSnsArn) {
     return {
@@ -47,11 +47,11 @@ function eventMessage(eventName, event) {
       ],
       body: {
         github: {
-          title: `${eventName} called on protected CloudFront distribuction ${eventDistribution} by ${principal}`,
-          body: `${eventName} called on protected CloudFront distribuction ${eventDistribution} by ${principal} /n/n/n ${event}`
+          title: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal}`,
+          body: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal} /n/n/n ${event}`
         },
         slack: {
-          message: `${eventName} called on protected CloudFront distribuction ${eventDistribution} by ${principal}`
+          message: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal}`
         }
       }
     };
