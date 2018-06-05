@@ -42,13 +42,13 @@ function eventMessage(eventName, eventDistribution, event) {
       retrigger: 'false',
       users: [
         {
-          slackId: process.env.DispatchChannelId
+          slackId: '' //default to dispatchs fallback channel
         }
       ],
       body: {
         github: {
           title: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal}`,
-          body: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal} /n/n/n ${event}`
+          body: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal} \n\n\n ${JSON.stringify(event)}`
         },
         slack: {
           message: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal}`

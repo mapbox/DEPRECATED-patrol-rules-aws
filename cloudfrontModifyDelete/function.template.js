@@ -14,10 +14,6 @@ module.exports = lambdaCfn.build({
     DispatchSnsArn: {
       Type: 'String',
       Description: 'SNS ARN for Dispatch service (optional)'
-    },
-    DispatchChannelId: {
-      Type: 'String',
-      Description: 'Slack channel id to send dispatch'
     }
   },
   eventSources: {
