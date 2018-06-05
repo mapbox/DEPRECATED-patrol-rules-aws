@@ -69,9 +69,9 @@ module.exports.fn = (event, context, callback) => {
       // Warn on truncation.  Build paging support if this is hit.
       if (response.IsTruncated) truncated = true;
       response.EvaluationResults.forEach((result) => {
-        // if (result.EvalDecision === 'denied') {
-        //   matches.push(result.EvalResourceName);
-        // }
+        if (result.EvalDecision === 'denied' || result.EvalDecision === 'implicitDeny') {
+           matches.push(result.EvalResourceName);
+        }
         console.log(`Result: ${JSON.stringify(result)}`);
       });
     });
