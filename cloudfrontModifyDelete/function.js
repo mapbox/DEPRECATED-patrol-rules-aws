@@ -35,14 +35,17 @@ module.exports.fn = (event, context, callback) => {
 };
 
 function eventMessage(eventName, eventDistribution, event) {
-  let principal = event.detail.userIdentity.arn ? event.detail.userIdentity.arn : event.detail.userIdentity.sessionContext.sessionIssuer.arn;
+  if (event.detail.userIdentity.arn) {
+
+  }
+  let principal = event.detail.userIdentity.arn ? event.detail.userIdentity.arn.split('/').slice(-1)[0] : event.detail.userIdentity.sessionContext.sessionIssuer.arn;
   if (process.env.DispatchSnsArn) {
     return {
       type: 'broadcast',
       retrigger: 'false',
       users: [
         {
-          slackId: '' //default to dispatchs fallback channel
+          slackId: '' //default to dispatches fallback channel
         }
       ],
       body: {
