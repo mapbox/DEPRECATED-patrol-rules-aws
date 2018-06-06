@@ -112,3 +112,25 @@ test('Trigger notification on multiple public access permissions.', (t) => {
     t.end();
   });
 });
+
+test('Doesn\'t error if Grant field doesn\'t exist.', (t) => {
+  var event = {
+    'detail': {
+      'eventSource': 's3.amazonaws.com',
+      'eventName': 'PutBucketAcl',
+      'requestParameters': {
+        'bucketName': 'mapbox',
+        'AccessControlPolicy': {
+          'AccessControlList': {
+          }
+        }
+      }
+    }
+  };
+
+  fn(event, {}, (err, message) => {
+    t.error(err, 'does not error');
+    t.equal(message, 'Bucket Public Access ACL was not changed.', 'It should not send any message');
+    t.end();
+  });
+});
