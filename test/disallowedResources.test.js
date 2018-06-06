@@ -9,11 +9,14 @@ process.env.disallowedResourceArns = 'arn:aws:s3:::foo/bar/baz, arn:aws:s3:::foo
 var eventFixture = {
   'detail': {
     'userIdentity': {
-      'userName': 'bob'
+      'sessionContext': {
+        'sessionIssuer': {
+          'userName': 'bob'
+        }
+      }
     },
     'requestParameters': {
-      'roleArn': 'arn:aws:iam::12345678901:role/Administrator-123456',
-      'roleSessionName': 'bob'
+      'policyArn': 'arn:aws:iam::12345678901:role/Administrator-123456'
     }
   }
 };
@@ -352,5 +355,58 @@ test('disallowedResources AccessDenied', function(t) {
       'errorMessage is returned in callback');
     t.end();
   });
+});
 
+test('disallowedResources Role:policy ignore tests', function(t) {
+  var event = {
+    'detail': {
+      'userIdentity': {
+        'sessionContext': {
+          'sessionIssuer': {
+            'userName': 'bob'
+          }
+        }
+      },
+      'requestParameters': {
+        'policyArn': 'arn:aws:iam::12345678901:role/Administrator-123456'
+      }
+    }
+  };
+
+  var docNoMatch = {
+    Statement: [
+      {
+        Effect: 'Allow',
+        Action: [
+          'cloudtrail:*'
+        ]
+      },
+    ]
+  };
+  event.detail.requestParameters.policyDocument = JSON.stringify(docNoMatch);
+
+
+  process.env.ignoredRolePolicy = 'ROLE:Policy';
+
+  fn(event, {}, (err, message) => {
+    t.error(err, 'does not error');
+    t.deepEqual(message, [], 'No matched disallowed resources');
+  });
+
+  process.env.ignoredRolePolicy = 'BOB:Adminis';
+
+  fn(event, {}, (err, message) => {
+    t.error(err, 'does not error');
+    t.equal(message, 'Matched role \'bob\' and policyArn \'arn:aws:iam::12345678901:role/Administrator-123456\' to ignoredRolePolicy value \'BOB:Adminis\', skipping', 'Role:Policy matches correctly');
+  });
+
+  process.env.ignoredRolePolicy = 'jaNe:Super,BOB:Adminis';
+
+  fn(event, {}, (err, message) => {
+    t.error(err, 'does not error');
+    t.equal(message, 'Matched role \'bob\' and policyArn \'arn:aws:iam::12345678901:role/Administrator-123456\' to ignoredRolePolicy value \'BOB:Adminis\', skipping', 'Multiple Role:Policy, with one match, passes correctly');
+  });
+
+  delete process.env.ignoredRolePolicy;
+  t.end();
 });

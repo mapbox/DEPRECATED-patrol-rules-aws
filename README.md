@@ -50,6 +50,7 @@ The following functions are included with patrol-rules-aws.  Each rule is config
 - **Trigger** - AWS API call
 - **Parameters**
   - disallowedResourceARNs - Comma separated list of AWS ARNs.  An alarm will be triggered if an IAM policy grants any kind of access to these resources.
+  - ignoredRolePolicy - Comma separated list of colon delimited role:policy combinations that should be ignored if matched. The "role:policy" values are case-insensitively matched against the policy event.
 
 #### removeS3AccessLogging
 

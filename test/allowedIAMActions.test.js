@@ -176,5 +176,6 @@ test('allowedIAMActions rule', (t) => {
     t.equal(message, 'Matched role \'bob\' and policyArn \'arn:aws:iam::12345678901:role/Administrator-123456\' to ignoredRolePolicy value \'BOB:Adminis\', skipping', 'Multiple Role:Policy, with one match, passes correctly');
   });
 
+  delete process.env.ignoredRolePolicy;
   t.end();
 });

@@ -11,6 +11,26 @@ module.exports.fn = (event, context, callback) => {
   let disallowedResources = splitOnComma(process.env.disallowedResourceArns);
   let document = event.detail.requestParameters.policyDocument;
   let parsed = JSON.parse(document);
+  const ignoredRolePolicy = splitOnComma(process.env.ignoredRolePolicy);
+
+  const role = event.detail.userIdentity.sessionContext.sessionIssuer.userName ? event.detail.userIdentity.sessionContext.sessionIssuer.userName : 'unknown';
+  const policyArn = event.detail.requestParameters.policyArn ? event.detail.requestParameters.policyArn : 'unknown';
+
+  if (ignoredRolePolicy.length > 0) {
+    let skipMsg;
+    let matched;
+    ignoredRolePolicy.forEach((pair) => {
+      const ignoredRole = new RegExp(pair.split(':')[0], 'i');
+      const ignoredPolicy = new RegExp(pair.split(':')[1], 'i');
+
+      if (ignoredRole.test(role) && ignoredPolicy.test(policyArn)) {
+        skipMsg = `Matched role '${role}' and policyArn '${policyArn}' to ignoredRolePolicy value '${pair}', skipping`;
+        console.log(skipMsg);
+        matched = true;
+      }
+    });
+    if (matched) return callback(null, skipMsg);
+  };
 
   let simulate = function(params, cb) {
     iam.simulateCustomPolicy(params, (err, data) => {
