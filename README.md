@@ -34,6 +34,7 @@ The following functions are included with patrol-rules-aws.  Each rule is config
 - **Parameters**
   - protectedActions - CloudFront API call on which to alarm
   - protectedDistributions - CloudFront distributions on which to alarm
+- **Note** - If a Dispatch SNS Arn is provided, this alarm defaults to the Dispatch fallback channel by passing an empty slackId to Dispatch.
 
 #### cloudTrail
 
@@ -70,6 +71,14 @@ The following functions are included with patrol-rules-aws.  Each rule is config
 #### serviceLimits
 - **Description** - Checks for Service Limit events which does not have status equal to "OK".
 - **Trigger** - Trusted Advisor Check Item Refresh Notification
+
+#### principalPolicySimulator
+- **Description** - WIP, beta quality and super noisy. Uses the `simulatePrincipalPolicy` functionality to report on policies created or updated which give the calling IAM Principal evalated access beyond their assign iAM policies. For example, if a user has access to create Cloudformation stacks, the user can start a stack with policies giving the stack (and therefore the user) access to resources the user would not have if they directly accessed them.
+- **Trigger** - API call iam:CreatePolicy, iam:CreatePolicyVersion, iam:PutGroupPolicy, iam:PutRolePolicy, iam:PutUserPolicy
+- **Parameters**
+  - `principalRegex` - only Principals matching this regex will be testsed
+  - `ignoredServices` - a comma separated list of AWS service prefixes to skip when testing. For example, to skip policies for Cloudwatch logs and ECS: `logs,ecs`
+  - `ignoredResources` - Not implemented, a comma separated list of AWS resources to skip during testing.
 
 ### Contributing
 

@@ -15,19 +15,19 @@
   },
   "version": "1.0.2",
   "dependencies": {
-    "d3-queue": "^3.0.0",
-    "@mapbox/lambda-cfn": "^2.0.0"
+    "@mapbox/lambda-cfn": "^3.0.0",
+    "d3-queue": "^3.0.0"
   },
   "scripts": {
     "test": "NODE_ENV=test tape test/*.test.js test/**/*.test.js",
     "pretest": "eslint **/*.js"
   },
   "devDependencies": {
-    "aws-sdk": "^2.95.0",
-    "tape": "^4.0.0",
-    "eslint": "^4.0.0",
+    "@mapbox/mock-aws-sdk-js": "^0.0.5",
+    "aws-sdk": "^2.250.1",
+    "eslint": "^4.19.1",
     "eslint-config-unstyled": "^1.1.0",
-    "@mapbox/mock-aws-sdk-js": "^0.0.5"
+    "tape": "^4.9.0"
   },
   "description": "AWS rules for Patrol"
 }
