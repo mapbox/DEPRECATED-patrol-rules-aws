@@ -159,8 +159,7 @@ test('allowedIAMActions rule', (t) => {
 
   fn(event, {}, (err, message) => {
     t.error(err, 'does not error');
-    t.equal(message.subject, 'Disallowed actions used in policy',
-            'Role:Policy, correctly, does not match');
+    t.equal(message.subject, 'Disallowed actions used in policy', 'Role:Policy, correctly, does not match');
   });
 
   process.env.ignoredRolePolicy = 'BOB:Adminis';
