@@ -3,7 +3,7 @@
   "engines": {
     "node": "6.10.2"
   },
-  "name": "patrol-rules-aws",
+  "name": "@mapbox/patrol-rules-aws",
   "repository": {
     "url": "https://github.com/mapbox/patrol-rules-aws.git",
     "type": "git"
