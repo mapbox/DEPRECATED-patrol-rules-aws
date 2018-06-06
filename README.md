@@ -19,6 +19,7 @@ The following functions are included with patrol-rules-aws.  Each rule is config
 - **Parameters**
   - restrictedServices - Comma separated list of services on which to disallow all actions
   - allowedActions - on the restrictedServices, only allow these actions to be granted
+  - ignoredRolePolicy - Comma separated list of colon delimited role:policy combinations that should be ignored if matched. The "role:policy" values are case-insensitively matched against the policy event.
 
 #### assumeRole
 
