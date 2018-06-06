@@ -16,6 +16,9 @@ module.exports.fn = function(event, context, callback) {
 function publicPermissions(event) {
   let permissions = [];
   let grants = event.detail.requestParameters.AccessControlPolicy.AccessControlList.Grant;
+  if (typeof grants === 'undefined') { // Catches edge case in which a bucket is created that nobody has permissions to
+    return permissions;
+  }
 
   for (let i = 0; i < grants.length; i++) {
     if (grants[i].Grantee.URI === 'http://acs.amazonaws.com/groups/global/AllUsers') {
