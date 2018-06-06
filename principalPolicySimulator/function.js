@@ -1,7 +1,6 @@
 const AWS = require('aws-sdk');
 const d3 = require('d3-queue');
 const message = require('@mapbox/lambda-cfn').message;
-const splitOnComma = require('@mapbox/lambda-cfn').splitOnComma;
 
 module.exports.fn = (event, context, callback) => {
   if (event.detail.errorCode) return callback(null, event.detail.errorMessage);
@@ -70,7 +69,7 @@ module.exports.fn = (event, context, callback) => {
       if (response.IsTruncated) truncated = true;
       response.EvaluationResults.forEach((result) => {
         if (/Deny/.test(result.EvalDecision)) {
-           matches.push(result.EvalResourceName);
+          matches.push(result.EvalResourceName);
         }
         console.log(`Result: ${JSON.stringify(result)}`);
       });

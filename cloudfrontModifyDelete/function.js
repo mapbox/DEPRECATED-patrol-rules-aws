@@ -35,10 +35,14 @@ module.exports.fn = (event, context, callback) => {
 };
 
 function eventMessage(eventName, eventDistribution, event) {
-  if (event.detail.userIdentity.arn) {
+  let principal;
+  try {
+    principal = event.detail.userIdentity.arn ? event.detail.userIdentity.arn.split('/').slice(-1)[0] : event.detail.userIdentity.sessionContext.sessionIssuer.arn.split(':').slice(-1)[0];
+  } catch (e) {
+    console.log(`Principal not found: ${e}`);
+    principal = 'unknown';
+  };
 
-  }
-  let principal = event.detail.userIdentity.arn ? event.detail.userIdentity.arn.split('/').slice(-1)[0] : event.detail.userIdentity.sessionContext.sessionIssuer.arn;
   if (process.env.DispatchSnsArn) {
     return {
       type: 'broadcast',
@@ -60,8 +64,8 @@ function eventMessage(eventName, eventDistribution, event) {
     };
   } else {
     return {
-      subject: eventName + ' called on protected CloudFront distribution ' + eventDistribution,
-      summary: eventName + ' called on protected CloudFront distribution ' + eventDistribution,
+      subject: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal}`,
+      summary: `${eventName} called on protected CloudFront distribution ${eventDistribution} by ${principal}`,
       event: event
     };
   }
