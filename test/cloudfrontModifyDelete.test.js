@@ -166,8 +166,18 @@ test('cloudfrontModifyDelete rule', function(t) {
     }, 'Generates default alarm topic email to sessionIssuer arn');
   });
 
+  var noUserIdentityEvent = {
+    'detail': {
+      'eventSource': 'cloudfront.amazonaws.com',
+      'eventName': 'UpdateDistribution',
+      'requestParameters': {
+        'id': 'ABCD1234FGHJ56'
+      }
+    }
+  };
+
   process.env.DispatchSnsArn = 'someSnsArn';
-  fn(noUserIdentityArnEvent, {}, function(err, message) {
+  fn(noUserIdentityEvent, {}, function(err, message) {
     t.error(err, 'does not error');
     t.deepEqual(message, {
       type: 'broadcast',
@@ -175,10 +185,10 @@ test('cloudfrontModifyDelete rule', function(t) {
       users: [ { slackId: '' } ],
       body: {
         github: {
-          title: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56 by role/SomeRole',
-          body: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56 by role/SomeRole \n\n\n {"detail":{"userIdentity":{"sessionContext":{"sessionIssuer":{"arn":"arn:aws:sts::12345657890:role/SomeRole"}}},"eventSource":"cloudfront.amazonaws.com","eventName":"UpdateDistribution","requestParameters":{"id":"ABCD1234FGHJ56"}}}' },
+          title: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56 by unknown',
+          body: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56 by unknown \n\n\n {"detail":{"eventSource":"cloudfront.amazonaws.com","eventName":"UpdateDistribution","requestParameters":{"id":"ABCD1234FGHJ56"}}}' },
         slack: {
-          message: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56 by role/SomeRole'
+          message: 'UpdateDistribution called on protected CloudFront distribution ABCD1234FGHJ56 by unknown'
         }
       }
     }, 'Generates dispatch message when DispatchSnsArn is set');
