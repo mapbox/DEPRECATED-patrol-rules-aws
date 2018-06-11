@@ -10,6 +10,10 @@ module.exports = lambdaCfn.build({
     allowedActions: {
       Type: 'String',
       Description: 'Comma separated list of actions to allow among restricted services'
+    },
+    ignoredRolePolicy: {
+      Type: 'String',
+      Description: 'Comma separated list of colon delimited role:policy pairs to ignore'
     }
   },
   eventSources: {

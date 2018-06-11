@@ -6,6 +6,10 @@ module.exports = lambdaCfn.build({
     disallowedResourceArns: {
       Type: 'String',
       Description: 'Comma separated list of ARNs to disallow. Any policy document that grants access to these ARNs will trigger a notification.'
+    },
+    ignoredRolePolicy: {
+      Type: 'String',
+      Description: 'Comma separated list of colon delimited role:policy pairs to ignore'
     }
   },
   eventSources: {
