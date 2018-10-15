@@ -2,6 +2,7 @@ var lambdaCfn = require('@mapbox/lambda-cfn');
 
 module.exports = lambdaCfn.build({
   name: 'disallowedResources',
+  timeout: '120',
   parameters: {
     disallowedResourceArns: {
       Type: 'String',
