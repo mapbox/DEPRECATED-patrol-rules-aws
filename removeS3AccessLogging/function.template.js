@@ -5,7 +5,7 @@ module.exports = lambdaCfn.build({
   parameters: {
     bucketFilter: {
       Type: 'String',
-      Description: 'Comma separated list of buckets the rule will ignore'
+      Description: 'Comma separated list of bucket names or name patterns the rule will ignore'
     }
   },
   eventSources: {
