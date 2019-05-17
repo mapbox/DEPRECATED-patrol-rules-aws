@@ -1,7 +1,7 @@
 {
   "license": "BSD-2-Clause",
   "engines": {
-    "node": "6.10.2"
+    "node": ">=8.0.0"
   },
   "name": "@mapbox/patrol-rules-aws",
   "repository": {
