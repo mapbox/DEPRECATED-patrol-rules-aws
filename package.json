@@ -1,7 +1,7 @@
 {
   "license": "BSD-2-Clause",
   "engines": {
-    "node": "6.10.2"
+    "node": ">=8.0.0"
   },
   "name": "@mapbox/patrol-rules-aws",
   "repository": {
@@ -15,7 +15,7 @@
   },
   "version": "1.0.2",
   "dependencies": {
-    "@mapbox/lambda-cfn": "^3.0.0",
+    "@mapbox/lambda-cfn": "^3.0.1",
     "d3-queue": "^3.0.0"
   },
   "scripts": {
