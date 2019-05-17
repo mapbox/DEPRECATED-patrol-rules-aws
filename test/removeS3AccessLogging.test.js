@@ -55,7 +55,7 @@ test('Do not trigger notification when access logging is enabled', (t) => {
 });
 
 test('Do not trigger notification for bucket listed in bucketFilter', (t) => {
-  process.env.bucketFilter = 'unlogged';
+  process.env.bucketFilter = 'unlogged-.*';
   const event = {
     'detail': {
       'eventSource': 's3.amazonaws.com',

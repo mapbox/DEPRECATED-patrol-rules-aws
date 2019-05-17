@@ -5,9 +5,9 @@ module.exports.fn = function(event, context, callback) {
   if (event.detail.errorCode) return callback(null, event.detail.errorMessage);
 
   const bucketFilter = process.env.bucketFilter ? splitOnComma(process.env.bucketFilter) : [];
-  const filtered = bucketFilter.filter((b) => event.detail.requestParameters.bucketName.includes(b));
+  const ignore = bucketFilter.find((regex) => new RegExp(regex).test(event.detail.requestParameters.bucketName));
 
-  if (filtered.length > 0) {
+  if (ignore) {
     callback(null, `S3 bucket ${event.detail.requestParameters.bucketName} filtered, encryption change ignored`);
   } else {
     const message = {

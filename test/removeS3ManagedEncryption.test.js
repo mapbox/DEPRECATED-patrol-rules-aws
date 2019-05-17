@@ -22,7 +22,7 @@ test('Alerts if S3 managed encryption removed from bucket', (t) => {
 });
 
 test('Do not trigger notification for bucket listed in bucketFilter', (t) => {
-  process.env.bucketFilter = 'unencrypted';
+  process.env.bucketFilter = 'unencrypted-.*';
   const event = {
     'detail': {
       'eventSource': 's3.amazonaws.com',

@@ -8,9 +8,9 @@ module.exports.fn = function(event, context, callback) {
   const accessLoggingStatus = requestParameters.BucketLoggingStatus.LoggingEnabled;
 
   const bucketFilter = process.env.bucketFilter ? splitOnComma(process.env.bucketFilter) : [];
-  const filtered = bucketFilter.filter((b) => requestParameters.bucketName.includes(b));
+  const ignore = bucketFilter.find((regex) => new RegExp(regex).test(requestParameters.bucketName));
 
-  if (filtered.length > 0) {
+  if (ignore) {
     callback(null, `S3 bucket ${requestParameters.bucketName} filtered, access logging change ignored`);
   } else {
     if (accessLoggingStatus === undefined) {
