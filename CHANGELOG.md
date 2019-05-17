@@ -1,6 +1,13 @@
 ## Unreleased
 
+## 1.2.0
+
+- Add S3 bucket filters to removeS3AccessLogging and removeS3ManagedEncryption rules
+- Update to Node.js version >=8.0.0
+- Update to lambda-cfn version 3.0.1
+
 ## 1.0.1
+
 - Fixes for #91, handle non-array based policy Statements
 
 ## 1.0.0

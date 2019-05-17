@@ -13,7 +13,7 @@
   "bugs": {
     "url": "https://github.com/mapbox/patrol-rules-aws/issues"
   },
-  "version": "1.0.2",
+  "version": "1.2.0",
   "dependencies": {
     "@mapbox/lambda-cfn": "^3.0.1",
     "d3-queue": "^3.0.0"
