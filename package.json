@@ -1,7 +1,7 @@
 {
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.13.0"
   },
   "name": "@mapbox/patrol-rules-aws",
   "repository": {
@@ -15,7 +15,7 @@
   },
   "version": "1.2.0",
   "dependencies": {
-    "@mapbox/lambda-cfn": "^3.0.1",
+    "@mapbox/lambda-cfn": "^3.1.0",
     "d3-queue": "^3.0.0"
   },
   "scripts": {
@@ -23,11 +23,11 @@
     "pretest": "eslint **/*.js"
   },
   "devDependencies": {
-    "@mapbox/mock-aws-sdk-js": "^0.0.5",
-    "aws-sdk": "^2.250.1",
-    "eslint": "^4.19.1",
+    "@mapbox/mock-aws-sdk-js": "^1.0.0",
+    "aws-sdk": "^2.485.0",
+    "eslint": "^6.0.1",
     "eslint-config-unstyled": "^1.1.0",
-    "tape": "^4.9.0"
+    "tape": "^4.10.2"
   },
   "description": "AWS rules for Patrol"
 }
