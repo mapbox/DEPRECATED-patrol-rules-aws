@@ -1,5 +1,11 @@
 ## Unreleased
 
+## 1.3.0
+
+- Update to nodejs 10.x
+- Update to lambda-cfn v3.1.0
+
+
 ## 1.2.0
 
 - Add S3 bucket filters to removeS3AccessLogging and removeS3ManagedEncryption rules
