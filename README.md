@@ -1,3 +1,5 @@
+:warning: **DEPRECATED** :warning:
+
 # patrol-rules-aws
 
 [![Build Status](https://travis-ci.org/mapbox/patrol-rules-aws.svg?branch=master)](https://travis-ci.org/mapbox/patrol-rules-aws)
