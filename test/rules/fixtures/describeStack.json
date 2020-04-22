@@ -1,0 +1,18 @@
+{
+    "ResponseMetadata": {
+        "RequestId ": "d0000 - abcd - 12e6 - b466 - 975195 fghh"
+    },
+    "Stacks": [{
+        "StackId": "arn:aws:cloudformation:something-production",
+        "StackName": "something-production",
+        "Description": "something",
+        "Parameters": [{}],
+        "CreationTime": "Wed Nov 09 2016 14: 18: 09 GMT - 0500(EST)",
+        "StackStatus": "UPDATE_ROLLBACK_FAILED",
+        "DisableRollback": true,
+        "NotificationARNs": [],
+        "Capabilities": [{}],
+        "Outputs": [{}],
+        "Tags": []
+    }]
+}
